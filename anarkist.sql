@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:8889
--- Generation Time: May 09, 2023 at 07:01 AM
+-- Generation Time: May 09, 2023 at 08:03 AM
 -- Server version: 5.7.39
 -- PHP Version: 8.2.0
 
@@ -137,7 +137,8 @@ CREATE TABLE `pizza_ingredients` (
 
 CREATE TABLE `sessions` (
   `session_id` bigint(20) UNSIGNED NOT NULL,
-  `fk_user_id` bigint(20) UNSIGNED NOT NULL
+  `fk_user_id` bigint(20) UNSIGNED NOT NULL,
+  `session_iat` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -150,8 +151,9 @@ CREATE TABLE `taps` (
   `tap_id` bigint(20) UNSIGNED NOT NULL,
   `tap_number` tinyint(100) DEFAULT NULL,
   `fk_beer_id` bigint(20) UNSIGNED NOT NULL,
-  `tap_off_the_wall` tinyint(1) NOT NULL,
-  `fk_bar_id` bigint(20) UNSIGNED NOT NULL
+  `tap_off_the_wall` tinyint(1) NOT NULL DEFAULT '0',
+  `fk_bar_id` bigint(20) UNSIGNED NOT NULL,
+  `tap_unavailable` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -187,85 +189,92 @@ CREATE TABLE `user_roles` (
 -- Indexes for table `bars`
 --
 ALTER TABLE `bars`
-  ADD PRIMARY KEY (`bar_id`),
-  ADD UNIQUE KEY `bar_id` (`bar_id`);
+  ADD PRIMARY KEY (`bar_id`);
 
 --
 -- Indexes for table `bar_access`
 --
 ALTER TABLE `bar_access`
-  ADD PRIMARY KEY (`fk_bar_id`,`fk_user_id`);
+  ADD PRIMARY KEY (`fk_bar_id`,`fk_user_id`),
+  ADD KEY `cascade_users_on_bar_access` (`fk_user_id`);
 
 --
 -- Indexes for table `beers`
 --
 ALTER TABLE `beers`
   ADD PRIMARY KEY (`beer_id`),
-  ADD UNIQUE KEY `beer_id` (`beer_id`);
+  ADD KEY `users_on_created_by` (`fk_beer_created_by`),
+  ADD KEY `users_on_updated_by` (`fk_beer_updated_by`),
+  ADD KEY `style_on_fk_style` (`fk_beer_style_id`),
+  ADD KEY `brewery_on_fk_brewery` (`fk_brewery_id`);
 
 --
 -- Indexes for table `beer_styles`
 --
 ALTER TABLE `beer_styles`
   ADD PRIMARY KEY (`beer_style_id`),
-  ADD UNIQUE KEY `beer_style_id` (`beer_style_id`);
+  ADD UNIQUE KEY `beer_style_title` (`beer_style_title`);
 
 --
 -- Indexes for table `breweries`
 --
 ALTER TABLE `breweries`
   ADD PRIMARY KEY (`brewery_id`),
-  ADD UNIQUE KEY `brewery_id` (`brewery_id`);
+  ADD UNIQUE KEY `brewery_name` (`brewery_name`),
+  ADD UNIQUE KEY `brewery_menu_name` (`brewery_menu_name`);
 
 --
 -- Indexes for table `ingredients`
 --
 ALTER TABLE `ingredients`
   ADD PRIMARY KEY (`ingredient_id`),
-  ADD UNIQUE KEY `ingredient_id` (`ingredient_id`);
+  ADD UNIQUE KEY `ingredient_name_en` (`ingredient_name_en`),
+  ADD UNIQUE KEY `ingredient_name_dk` (`ingredient_name_dk`);
 
 --
 -- Indexes for table `pizzas`
 --
 ALTER TABLE `pizzas`
   ADD PRIMARY KEY (`pizza_id`),
-  ADD UNIQUE KEY `pizza_id` (`pizza_id`),
-  ADD UNIQUE KEY `pizza_number` (`pizza_number`);
+  ADD UNIQUE KEY `pizza_number` (`pizza_number`),
+  ADD KEY `cascade_bar_on_fk_bar` (`fk_bar_id`);
 
 --
 -- Indexes for table `pizza_ingredients`
 --
 ALTER TABLE `pizza_ingredients`
-  ADD PRIMARY KEY (`fk_pizza_id`,`fk_ingredient_id`);
+  ADD PRIMARY KEY (`fk_pizza_id`,`fk_ingredient_id`),
+  ADD KEY `ingredient_on_fk_ingredient` (`fk_ingredient_id`);
 
 --
 -- Indexes for table `sessions`
 --
 ALTER TABLE `sessions`
   ADD PRIMARY KEY (`session_id`),
-  ADD UNIQUE KEY `session_id` (`session_id`);
+  ADD KEY `cascade_user_on_session_user_id` (`fk_user_id`);
 
 --
 -- Indexes for table `taps`
 --
 ALTER TABLE `taps`
   ADD PRIMARY KEY (`tap_id`),
-  ADD UNIQUE KEY `tap_id` (`tap_id`),
-  ADD UNIQUE KEY `tap_number` (`tap_number`);
+  ADD UNIQUE KEY `tap_number` (`tap_number`),
+  ADD KEY `cascade_bars_on_taps` (`fk_bar_id`),
+  ADD KEY `cascade_beers_on_taps` (`fk_beer_id`);
 
 --
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`user_id`),
-  ADD UNIQUE KEY `user_id` (`user_id`);
+  ADD UNIQUE KEY `user_email` (`user_email`),
+  ADD KEY `user_role_on_user` (`fk_user_role_id`);
 
 --
 -- Indexes for table `user_roles`
 --
 ALTER TABLE `user_roles`
-  ADD PRIMARY KEY (`user_role_id`),
-  ADD UNIQUE KEY `user_role_id` (`user_role_id`);
+  ADD PRIMARY KEY (`user_role_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -330,6 +339,58 @@ ALTER TABLE `users`
 --
 ALTER TABLE `user_roles`
   MODIFY `user_role_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `bar_access`
+--
+ALTER TABLE `bar_access`
+  ADD CONSTRAINT `cascade_bars_on_bar_access` FOREIGN KEY (`fk_bar_id`) REFERENCES `bars` (`bar_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `cascade_users_on_bar_access` FOREIGN KEY (`fk_user_id`) REFERENCES `users` (`user_id`);
+
+--
+-- Constraints for table `beers`
+--
+ALTER TABLE `beers`
+  ADD CONSTRAINT `brewery_on_fk_brewery` FOREIGN KEY (`fk_brewery_id`) REFERENCES `breweries` (`brewery_id`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `style_on_fk_style` FOREIGN KEY (`fk_beer_style_id`) REFERENCES `beer_styles` (`beer_style_id`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `users_on_created_by` FOREIGN KEY (`fk_beer_created_by`) REFERENCES `users` (`user_id`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `users_on_updated_by` FOREIGN KEY (`fk_beer_updated_by`) REFERENCES `users` (`user_id`) ON DELETE NO ACTION ON UPDATE CASCADE;
+
+--
+-- Constraints for table `pizzas`
+--
+ALTER TABLE `pizzas`
+  ADD CONSTRAINT `cascade_bar_on_fk_bar` FOREIGN KEY (`fk_bar_id`) REFERENCES `bars` (`bar_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `pizza_ingredients`
+--
+ALTER TABLE `pizza_ingredients`
+  ADD CONSTRAINT `cascade_pizza_on_fk_pizza` FOREIGN KEY (`fk_pizza_id`) REFERENCES `pizzas` (`pizza_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `ingredient_on_fk_ingredient` FOREIGN KEY (`fk_ingredient_id`) REFERENCES `ingredients` (`ingredient_id`) ON DELETE NO ACTION ON UPDATE CASCADE;
+
+--
+-- Constraints for table `sessions`
+--
+ALTER TABLE `sessions`
+  ADD CONSTRAINT `cascade_user_on_session_user_id` FOREIGN KEY (`fk_user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `taps`
+--
+ALTER TABLE `taps`
+  ADD CONSTRAINT `cascade_bars_on_taps` FOREIGN KEY (`fk_bar_id`) REFERENCES `bars` (`bar_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `cascade_beers_on_taps` FOREIGN KEY (`fk_beer_id`) REFERENCES `beers` (`beer_id`) ON DELETE NO ACTION ON UPDATE CASCADE;
+
+--
+-- Constraints for table `users`
+--
+ALTER TABLE `users`
+  ADD CONSTRAINT `user_role_on_user` FOREIGN KEY (`fk_user_role_id`) REFERENCES `user_roles` (`user_role_id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
