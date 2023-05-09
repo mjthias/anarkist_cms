@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:8889
--- Generation Time: May 09, 2023 at 09:43 AM
+-- Generation Time: May 09, 2023 at 11:01 AM
 -- Server version: 5.7.39
 -- PHP Version: 8.2.0
 
@@ -81,9 +81,9 @@ CREATE TABLE `beers` (
   `beer_image` varchar(41) DEFAULT NULL,
   `beer_description_en` varchar(500) DEFAULT NULL,
   `beer_description_dk` varchar(500) DEFAULT NULL,
-  `beer_created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `beer_created_at` int(10) UNSIGNED NOT NULL,
   `fk_beer_created_by` bigint(20) UNSIGNED DEFAULT NULL,
-  `beer_updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `beer_updated_at` int(10) UNSIGNED NOT NULL,
   `fk_beer_updated_by` bigint(20) UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -92,8 +92,8 @@ CREATE TABLE `beers` (
 --
 
 INSERT INTO `beers` (`beer_id`, `beer_name`, `fk_brewery_id`, `beer_ebc`, `beer_ibu`, `beer_alc`, `fk_beer_style_id`, `beer_price`, `beer_image`, `beer_description_en`, `beer_description_dk`, `beer_created_at`, `fk_beer_created_by`, `beer_updated_at`, `fk_beer_updated_by`) VALUES
-(1, 'American Haze', 1, '20', '15', '4,0', 2, 55, '', 'Nice beer', 'God øl', '2023-05-09 09:10:29', 3, '2023-05-09 09:10:29', 3),
-(2, 'Great Grandpa', 2, '50', '15', '5,2', 1, 75, '', 'Very nice beer', 'Rigtig god øl', '2023-05-09 09:10:29', 2, '2023-05-09 09:10:29', 2);
+(1, 'American Haze', 1, '20', '15', '4,0', 2, 55, '', 'Nice beer', 'God øl', 1683627451, 3, 1683627451, 3),
+(2, 'Great Grandpa', 2, '50', '15', '5,2', 1, 75, '', 'Very nice beer', 'Rigtig god øl', 1683627451, 2, 1683627451, 2);
 
 -- --------------------------------------------------------
 
@@ -203,7 +203,7 @@ INSERT INTO `pizza_ingredients` (`fk_pizza_id`, `fk_ingredient_id`) VALUES
 CREATE TABLE `sessions` (
   `session_id` bigint(20) UNSIGNED NOT NULL,
   `fk_user_id` bigint(20) UNSIGNED NOT NULL,
-  `session_iat` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `session_iat` int(10) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
