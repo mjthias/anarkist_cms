@@ -12,7 +12,8 @@ def _():
         cursor = db.cursor()
         # cursor.execute("SELECT * FROM beers")
         # cursor.execute("SELECT * FROM beer_list")
-        cursor.execute("CALL get_beer_by_name (%s)", ("american haze",))
+        # cursor.execute("CALL get_beer_by_name (%s)", ("american haze",))
+        cursor.execute("CALL get_beer_by_fuzzy_name (%s)", ("amricn hase",))
         beers = cursor.fetchall()
         return json.dumps(beers)
     
