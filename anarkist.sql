@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:8889
--- Generation Time: May 09, 2023 at 08:03 AM
+-- Generation Time: May 09, 2023 at 09:43 AM
 -- Server version: 5.7.39
 -- PHP Version: 8.2.0
 
@@ -35,6 +35,14 @@ CREATE TABLE `bars` (
   `bar_city` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `bars`
+--
+
+INSERT INTO `bars` (`bar_id`, `bar_name`, `bar_street`, `bar_zip_code`, `bar_city`) VALUES
+(1, 'Anarkist Bar', 'Bernstorffsgade 7', '1786', 'København V'),
+(2, 'Anarkist Beer & Food Lab', 'Albanigade 20', '5000', 'Odense C');
+
 -- --------------------------------------------------------
 
 --
@@ -45,6 +53,15 @@ CREATE TABLE `bar_access` (
   `fk_bar_id` bigint(20) UNSIGNED NOT NULL,
   `fk_user_id` bigint(20) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `bar_access`
+--
+
+INSERT INTO `bar_access` (`fk_bar_id`, `fk_user_id`) VALUES
+(1, 2),
+(2, 2),
+(1, 3);
 
 -- --------------------------------------------------------
 
@@ -57,18 +74,26 @@ CREATE TABLE `beers` (
   `beer_name` varchar(50) NOT NULL,
   `fk_brewery_id` bigint(20) UNSIGNED NOT NULL,
   `beer_ebc` varchar(3) DEFAULT NULL,
-  `beer_ibu` varchar(3) NOT NULL,
+  `beer_ibu` varchar(3) DEFAULT NULL,
   `beer_alc` varchar(5) NOT NULL,
   `fk_beer_style_id` bigint(20) UNSIGNED NOT NULL,
   `beer_price` double UNSIGNED NOT NULL,
-  `beer_image` varchar(41) NOT NULL,
-  `beer_description_en` varchar(500) NOT NULL,
-  `beer_description_dk` varchar(500) NOT NULL,
+  `beer_image` varchar(41) DEFAULT NULL,
+  `beer_description_en` varchar(500) DEFAULT NULL,
+  `beer_description_dk` varchar(500) DEFAULT NULL,
   `beer_created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `fk_beer_created_by` bigint(20) UNSIGNED NOT NULL,
+  `fk_beer_created_by` bigint(20) UNSIGNED DEFAULT NULL,
   `beer_updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `fk_beer_updated_by` bigint(20) UNSIGNED NOT NULL
+  `fk_beer_updated_by` bigint(20) UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `beers`
+--
+
+INSERT INTO `beers` (`beer_id`, `beer_name`, `fk_brewery_id`, `beer_ebc`, `beer_ibu`, `beer_alc`, `fk_beer_style_id`, `beer_price`, `beer_image`, `beer_description_en`, `beer_description_dk`, `beer_created_at`, `fk_beer_created_by`, `beer_updated_at`, `fk_beer_updated_by`) VALUES
+(1, 'American Haze', 1, '20', '15', '4,0', 2, 55, '', 'Nice beer', 'God øl', '2023-05-09 09:10:29', 3, '2023-05-09 09:10:29', 3),
+(2, 'Great Grandpa', 2, '50', '15', '5,2', 1, 75, '', 'Very nice beer', 'Rigtig god øl', '2023-05-09 09:10:29', 2, '2023-05-09 09:10:29', 2);
 
 -- --------------------------------------------------------
 
@@ -80,6 +105,15 @@ CREATE TABLE `beer_styles` (
   `beer_style_id` bigint(20) UNSIGNED NOT NULL,
   `beer_style_title` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `beer_styles`
+--
+
+INSERT INTO `beer_styles` (`beer_style_id`, `beer_style_title`) VALUES
+(2, 'Hazy IPA'),
+(1, 'IPA'),
+(3, 'Sour');
 
 -- --------------------------------------------------------
 
@@ -93,6 +127,14 @@ CREATE TABLE `breweries` (
   `brewery_menu_name` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `breweries`
+--
+
+INSERT INTO `breweries` (`brewery_id`, `brewery_name`, `brewery_menu_name`) VALUES
+(1, 'Anarkist', 'Anarkist'),
+(2, 'Too Old To Die Young', 'TOTDY');
+
 -- --------------------------------------------------------
 
 --
@@ -104,6 +146,14 @@ CREATE TABLE `ingredients` (
   `ingredient_name_en` varchar(50) NOT NULL,
   `ingredient_name_dk` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `ingredients`
+--
+
+INSERT INTO `ingredients` (`ingredient_id`, `ingredient_name_en`, `ingredient_name_dk`) VALUES
+(1, 'Onion', 'Løg'),
+(2, 'Rosemary', 'Rosmarin');
 
 -- --------------------------------------------------------
 
@@ -118,6 +168,13 @@ CREATE TABLE `pizzas` (
   `fk_bar_id` bigint(20) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `pizzas`
+--
+
+INSERT INTO `pizzas` (`pizza_id`, `pizza_name`, `pizza_number`, `fk_bar_id`) VALUES
+(1, 'Nasty Rosy', 1, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -128,6 +185,14 @@ CREATE TABLE `pizza_ingredients` (
   `fk_pizza_id` bigint(20) UNSIGNED NOT NULL,
   `fk_ingredient_id` bigint(20) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `pizza_ingredients`
+--
+
+INSERT INTO `pizza_ingredients` (`fk_pizza_id`, `fk_ingredient_id`) VALUES
+(1, 1),
+(1, 2);
 
 -- --------------------------------------------------------
 
@@ -150,11 +215,21 @@ CREATE TABLE `sessions` (
 CREATE TABLE `taps` (
   `tap_id` bigint(20) UNSIGNED NOT NULL,
   `tap_number` tinyint(100) DEFAULT NULL,
-  `fk_beer_id` bigint(20) UNSIGNED NOT NULL,
-  `tap_off_the_wall` tinyint(1) NOT NULL DEFAULT '0',
+  `fk_beer_id` bigint(20) UNSIGNED DEFAULT NULL,
   `fk_bar_id` bigint(20) UNSIGNED NOT NULL,
   `tap_unavailable` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `taps`
+--
+
+INSERT INTO `taps` (`tap_id`, `tap_number`, `fk_beer_id`, `fk_bar_id`, `tap_unavailable`) VALUES
+(10, 1, 1, 1, 0),
+(11, 2, 2, 1, 0),
+(12, NULL, 2, 1, 0),
+(13, NULL, 1, 1, 0),
+(14, 1, 2, 2, 0);
 
 -- --------------------------------------------------------
 
@@ -170,6 +245,15 @@ CREATE TABLE `users` (
   `fk_user_role_id` bigint(20) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`user_id`, `user_email`, `user_name`, `user_password`, `fk_user_role_id`) VALUES
+(1, 'super@user.dk', 'Super User', 'ASDasd123!', 1),
+(2, 'bar@admin.dk', 'Bar Admin', 'ASDasd123!', 2),
+(3, 'bar@staff.dk', 'Bar Staff', 'ASDasd123!', 3);
+
 -- --------------------------------------------------------
 
 --
@@ -180,6 +264,15 @@ CREATE TABLE `user_roles` (
   `user_role_id` bigint(20) UNSIGNED NOT NULL,
   `user_role_title` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `user_roles`
+--
+
+INSERT INTO `user_roles` (`user_role_id`, `user_role_title`) VALUES
+(1, 'superuser'),
+(2, 'bar admin'),
+(3, 'bar staff');
 
 --
 -- Indexes for dumped tables
@@ -203,10 +296,10 @@ ALTER TABLE `bar_access`
 --
 ALTER TABLE `beers`
   ADD PRIMARY KEY (`beer_id`),
-  ADD KEY `users_on_created_by` (`fk_beer_created_by`),
-  ADD KEY `users_on_updated_by` (`fk_beer_updated_by`),
+  ADD KEY `brewery_on_fk_brewery` (`fk_brewery_id`),
   ADD KEY `style_on_fk_style` (`fk_beer_style_id`),
-  ADD KEY `brewery_on_fk_brewery` (`fk_brewery_id`);
+  ADD KEY `set_null_user_on_created_by` (`fk_beer_created_by`),
+  ADD KEY `set_null_user_on_updated_by` (`fk_beer_updated_by`);
 
 --
 -- Indexes for table `beer_styles`
@@ -236,7 +329,8 @@ ALTER TABLE `ingredients`
 --
 ALTER TABLE `pizzas`
   ADD PRIMARY KEY (`pizza_id`),
-  ADD UNIQUE KEY `pizza_number` (`pizza_number`),
+  ADD UNIQUE KEY `pizza_number` (`pizza_number`,`fk_bar_id`),
+  ADD UNIQUE KEY `pizza_name` (`pizza_name`,`fk_bar_id`),
   ADD KEY `cascade_bar_on_fk_bar` (`fk_bar_id`);
 
 --
@@ -258,7 +352,7 @@ ALTER TABLE `sessions`
 --
 ALTER TABLE `taps`
   ADD PRIMARY KEY (`tap_id`),
-  ADD UNIQUE KEY `tap_number` (`tap_number`),
+  ADD UNIQUE KEY `tap_number` (`tap_number`,`fk_bar_id`),
   ADD KEY `cascade_bars_on_taps` (`fk_bar_id`),
   ADD KEY `cascade_beers_on_taps` (`fk_beer_id`);
 
@@ -284,37 +378,37 @@ ALTER TABLE `user_roles`
 -- AUTO_INCREMENT for table `bars`
 --
 ALTER TABLE `bars`
-  MODIFY `bar_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `bar_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `beers`
 --
 ALTER TABLE `beers`
-  MODIFY `beer_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `beer_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `beer_styles`
 --
 ALTER TABLE `beer_styles`
-  MODIFY `beer_style_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `beer_style_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `breweries`
 --
 ALTER TABLE `breweries`
-  MODIFY `brewery_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `brewery_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `ingredients`
 --
 ALTER TABLE `ingredients`
-  MODIFY `ingredient_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `ingredient_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `pizzas`
 --
 ALTER TABLE `pizzas`
-  MODIFY `pizza_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `pizza_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `sessions`
@@ -326,19 +420,19 @@ ALTER TABLE `sessions`
 -- AUTO_INCREMENT for table `taps`
 --
 ALTER TABLE `taps`
-  MODIFY `tap_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `tap_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `user_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `user_roles`
 --
 ALTER TABLE `user_roles`
-  MODIFY `user_role_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `user_role_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables
@@ -349,16 +443,16 @@ ALTER TABLE `user_roles`
 --
 ALTER TABLE `bar_access`
   ADD CONSTRAINT `cascade_bars_on_bar_access` FOREIGN KEY (`fk_bar_id`) REFERENCES `bars` (`bar_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `cascade_users_on_bar_access` FOREIGN KEY (`fk_user_id`) REFERENCES `users` (`user_id`);
+  ADD CONSTRAINT `cascade_users_on_bar_access` FOREIGN KEY (`fk_user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `beers`
 --
 ALTER TABLE `beers`
-  ADD CONSTRAINT `brewery_on_fk_brewery` FOREIGN KEY (`fk_brewery_id`) REFERENCES `breweries` (`brewery_id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `style_on_fk_style` FOREIGN KEY (`fk_beer_style_id`) REFERENCES `beer_styles` (`beer_style_id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `users_on_created_by` FOREIGN KEY (`fk_beer_created_by`) REFERENCES `users` (`user_id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `users_on_updated_by` FOREIGN KEY (`fk_beer_updated_by`) REFERENCES `users` (`user_id`) ON DELETE NO ACTION ON UPDATE CASCADE;
+  ADD CONSTRAINT `brewery_on_fk_brewery` FOREIGN KEY (`fk_brewery_id`) REFERENCES `breweries` (`brewery_id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `set_null_user_on_created_by` FOREIGN KEY (`fk_beer_created_by`) REFERENCES `users` (`user_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `set_null_user_on_updated_by` FOREIGN KEY (`fk_beer_updated_by`) REFERENCES `users` (`user_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `style_on_fk_style` FOREIGN KEY (`fk_beer_style_id`) REFERENCES `beer_styles` (`beer_style_id`) ON UPDATE CASCADE;
 
 --
 -- Constraints for table `pizzas`
@@ -371,7 +465,7 @@ ALTER TABLE `pizzas`
 --
 ALTER TABLE `pizza_ingredients`
   ADD CONSTRAINT `cascade_pizza_on_fk_pizza` FOREIGN KEY (`fk_pizza_id`) REFERENCES `pizzas` (`pizza_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `ingredient_on_fk_ingredient` FOREIGN KEY (`fk_ingredient_id`) REFERENCES `ingredients` (`ingredient_id`) ON DELETE NO ACTION ON UPDATE CASCADE;
+  ADD CONSTRAINT `ingredient_on_fk_ingredient` FOREIGN KEY (`fk_ingredient_id`) REFERENCES `ingredients` (`ingredient_id`) ON UPDATE CASCADE;
 
 --
 -- Constraints for table `sessions`
@@ -384,7 +478,7 @@ ALTER TABLE `sessions`
 --
 ALTER TABLE `taps`
   ADD CONSTRAINT `cascade_bars_on_taps` FOREIGN KEY (`fk_bar_id`) REFERENCES `bars` (`bar_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `cascade_beers_on_taps` FOREIGN KEY (`fk_beer_id`) REFERENCES `beers` (`beer_id`) ON DELETE NO ACTION ON UPDATE CASCADE;
+  ADD CONSTRAINT `cascade_beers_on_taps` FOREIGN KEY (`fk_beer_id`) REFERENCES `beers` (`beer_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `users`
