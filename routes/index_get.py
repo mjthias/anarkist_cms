@@ -2,7 +2,6 @@ from bottle import get, response
 from vars import DB_CONFIG
 import json
 import pymysql
-from datetime import datetime
 
 ##############################
 
@@ -11,14 +10,10 @@ def _():
     try:
         db = pymysql.connect(**DB_CONFIG)
         cursor = db.cursor()
-        cursor.execute("SELECT * FROM beers")
+        # cursor.execute("SELECT * FROM beers")
+        # cursor.execute("SELECT * FROM beer_list")
+        cursor.execute("CALL get_beer_by_name (%s)", ("american haze",))
         beers = cursor.fetchall()
-
-        for beer in beers:
-            beer["beer_created_at"] = beer["beer_created_at"].strftime("%m %d %Y")
-            beer["beer_updated_at"] = beer["beer_updated_at"].strftime("%m %d %Y")
-
-        print(beers)
         return json.dumps(beers)
     
     except Exception as ex:

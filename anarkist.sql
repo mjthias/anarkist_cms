@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:8889
--- Generation Time: May 09, 2023 at 11:01 AM
+-- Generation Time: May 09, 2023 at 12:40 PM
 -- Server version: 5.7.39
--- PHP Version: 8.2.0
+-- PHP Version: 7.4.33
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -20,6 +20,15 @@ SET time_zone = "+00:00";
 --
 -- Database: `anarkist`
 --
+
+DELIMITER $$
+--
+-- Procedures
+--
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_beer_by_name` (IN `_beer_name` VARCHAR(50))   SELECT * FROM beers
+WHERE beer_name = _beer_name$$
+
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -94,6 +103,16 @@ CREATE TABLE `beers` (
 INSERT INTO `beers` (`beer_id`, `beer_name`, `fk_brewery_id`, `beer_ebc`, `beer_ibu`, `beer_alc`, `fk_beer_style_id`, `beer_price`, `beer_image`, `beer_description_en`, `beer_description_dk`, `beer_created_at`, `fk_beer_created_by`, `beer_updated_at`, `fk_beer_updated_by`) VALUES
 (1, 'American Haze', 1, '20', '15', '4,0', 2, 55, '', 'Nice beer', 'God øl', 1683627451, 3, 1683627451, 3),
 (2, 'Great Grandpa', 2, '50', '15', '5,2', 1, 75, '', 'Very nice beer', 'Rigtig god øl', 1683627451, 2, 1683627451, 2);
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `beer_list`
+-- (See below for the actual view)
+--
+CREATE TABLE `beer_list` (
+`beer_name` varchar(50)
+);
 
 -- --------------------------------------------------------
 
@@ -273,6 +292,15 @@ INSERT INTO `user_roles` (`user_role_id`, `user_role_title`) VALUES
 (1, 'superuser'),
 (2, 'bar admin'),
 (3, 'bar staff');
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `beer_list`
+--
+DROP TABLE IF EXISTS `beer_list`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `beer_list`  AS SELECT `beers`.`beer_name` AS `beer_name` FROM `beers``beers`  ;
 
 --
 -- Indexes for dumped tables
