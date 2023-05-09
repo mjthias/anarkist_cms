@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:8889
--- Generation Time: May 09, 2023 at 01:36 PM
+-- Generation Time: May 09, 2023 at 04:17 PM
 -- Server version: 5.7.39
--- PHP Version: 7.4.33
+-- PHP Version: 8.2.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -25,7 +25,10 @@ DELIMITER $$
 --
 -- Procedures
 --
-CREATE DEFINER=`mathiasjensen`@`%` PROCEDURE `get_beer_by_name` (IN `_beer_name` VARCHAR(50))   SELECT * FROM beers
+CREATE DEFINER=`mathiasjensen`@`10.0.0.199` PROCEDURE `get_beer_by_fuzzy_name` (IN `_beer_name` VARCHAR(50))   SELECT * FROM beers
+WHERE SOUNDEX(beer_name) LIKE CONCAT('%', SOUNDEX(_beer_name), '%')$$
+
+CREATE DEFINER=`mathiasjensen`@`10.0.0.199` PROCEDURE `get_beer_by_name` (IN `_beer_name` VARCHAR(50))   SELECT * FROM beers
 WHERE beer_name = _beer_name$$
 
 DELIMITER ;
@@ -300,7 +303,7 @@ INSERT INTO `user_roles` (`user_role_id`, `user_role_title`) VALUES
 --
 DROP TABLE IF EXISTS `beer_list`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`mathiasjensen`@`%` SQL SECURITY DEFINER VIEW `beer_list`  AS SELECT `beers`.`beer_name` AS `beer_name` FROM `beers``beers`  ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`mathiasjensen`@`10.0.0.199` SQL SECURITY DEFINER VIEW `beer_list`  AS SELECT `beers`.`beer_name` AS `beer_name` FROM `beers` ;
 
 --
 -- Indexes for dumped tables
@@ -412,7 +415,7 @@ ALTER TABLE `bars`
 -- AUTO_INCREMENT for table `beers`
 --
 ALTER TABLE `beers`
-  MODIFY `beer_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `beer_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `beer_styles`
@@ -454,7 +457,7 @@ ALTER TABLE `taps`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `user_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `user_roles`
