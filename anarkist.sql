@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:8889
--- Generation Time: May 09, 2023 at 12:40 PM
+-- Generation Time: May 09, 2023 at 01:36 PM
 -- Server version: 5.7.39
 -- PHP Version: 7.4.33
 
@@ -25,7 +25,7 @@ DELIMITER $$
 --
 -- Procedures
 --
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_beer_by_name` (IN `_beer_name` VARCHAR(50))   SELECT * FROM beers
+CREATE DEFINER=`mathiasjensen`@`%` PROCEDURE `get_beer_by_name` (IN `_beer_name` VARCHAR(50))   SELECT * FROM beers
 WHERE beer_name = _beer_name$$
 
 DELIMITER ;
@@ -300,7 +300,7 @@ INSERT INTO `user_roles` (`user_role_id`, `user_role_title`) VALUES
 --
 DROP TABLE IF EXISTS `beer_list`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `beer_list`  AS SELECT `beers`.`beer_name` AS `beer_name` FROM `beers``beers`  ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`mathiasjensen`@`%` SQL SECURITY DEFINER VIEW `beer_list`  AS SELECT `beers`.`beer_name` AS `beer_name` FROM `beers``beers`  ;
 
 --
 -- Indexes for dumped tables
