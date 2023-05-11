@@ -1,22 +1,22 @@
-from bottle import get, response
+from bottle import get, view, response
 from utils.vars import DB_CONFIG
-import json
 import pymysql
+import json
 
 ##############################
 
 @get("/beers")
+@view("beers")
 def _():
     try:
         db = pymysql.connect(**DB_CONFIG)
         cursor = db.cursor()
-        # cursor.execute("SELECT * FROM beers")
-        # cursor.execute("SELECT * FROM beer_list")
-        # cursor.execute("CALL get_beer_by_name (%s)", ("american haze",))
-        cursor.execute("CALL get_beer_by_fuzzy_name (%s)", ("amricn hase",))
+        cursor.execute("SELECT * FROM beers")
         beers = cursor.fetchall()
-        return json.dumps(beers)
-    
+        # return json.dumps(beers)
+        print(beers)
+        return dict(beers = beers)
+
     except Exception as ex:
         print(str(ex))
         response.status = 500
@@ -25,3 +25,4 @@ def _():
     finally:
         cursor.close()
         db.close()
+    

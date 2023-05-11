@@ -5,6 +5,7 @@ from bottle import run, default_app
 import routes.sign_in
 import routes.sign_in_post
 import routes.home
+import routes.beers
 
 ##############################
 
