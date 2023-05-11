@@ -14,3 +14,5 @@ except:
         "database" : "anarkist",
         "cursorclass":pymysql.cursors.DictCursor
     }
+
+JWT_SECRET = hidden.JWT_SECRET
