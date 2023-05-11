@@ -1,5 +1,5 @@
 from bottle import get, response
-from vars import DB_CONFIG
+from utils.vars import DB_CONFIG
 import json
 import pymysql
 

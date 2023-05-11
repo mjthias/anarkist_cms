@@ -2,7 +2,7 @@ from bottle import run, default_app
 
 ##############################
 
-import routes.index_get
+import routes.home
 
 ##############################
 
