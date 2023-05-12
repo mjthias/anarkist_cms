@@ -1,16 +1,14 @@
 from bottle import get, view, redirect, request
 from utils.g import _RESPOND
-from utils.vars import JWT_SECRET
-import jwt
+import utils.validation as validate
 
 ##############################
 @get("/sign-in")
 @view("sign_in")
 def _():
-    if request.get_cookie("anarkist"):
-        cookie = request.get_cookie("anarkist")
-        decoded_jwt = jwt.decode(cookie, JWT_SECRET, algorithms=["HS256"])
+    is_signed_in = validate.jwt_cookie()
 
+    if is_signed_in: 
         return redirect("/")
 
-    return 
+    return
