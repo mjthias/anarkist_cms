@@ -6,7 +6,7 @@ from utils.vars import _DB_CONFIG, _JWT_SECRET
 from utils.g import _DELETE_SESSION, _UPDATE_SESSION, _RESPOND
 
 ##############################
-def jwt_cookie():
+def _SESSION():
     now = int(time.time())
     day_in_seconds = 864000
 
