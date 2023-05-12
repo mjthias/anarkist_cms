@@ -1,4 +1,4 @@
-% setdefault('render_menu', True)
+% setdefault('render_navigation', True)
 
 <!DOCTYPE html>
 <html lang="en">
@@ -10,8 +10,8 @@
     <title>{{page_title or 'Anarkist'}}</title>
 </head>
 <body>
-    % if render_menu:
-        % include("components/menu")
+    % if render_navigation:
+        % include("components/side_menu")
     % end
     <main>
         {{!base}}
