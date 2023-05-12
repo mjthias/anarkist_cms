@@ -1,39 +1,18 @@
 <aside>
     <ul>
-        % menu_item_href = "/users"
-        % menu_item_text = "Users"
-        % include("components/menu_item")
-
-        % menu_item_href = "/bars"
-        % menu_item_text = "Bars"
-        % include("components/menu_item")
+        % include("components/menu_item", href="/users", text="Users", icon="fa-solid fa-users")
+        % include("components/menu_item", href="/bars", text="Bars", icon="fa-solid fa-location-dot")
     </ul>
     <span></span>
     <ul>
-        % menu_item_href = "/beers"
-        % menu_item_text = "Beers"
-        % include("components/menu_item")
-
-        % menu_item_href = "/breweries"
-        % menu_item_text = "Breweries"
-        % include("components/menu_item")
-
-        % menu_item_href = "/taps"
-        % menu_item_text = "Taps"
-        % include("components/menu_item")
-
-        % menu_item_href = "/beer-styles"
-        % menu_item_text = "Beer styles"
-        % include("components/menu_item")
+        % include("components/menu_item", href="/beers", text="Beers", icon="fa-solid fa-beer-mug-empty")
+        % include("components/menu_item", href="/breweries", text="Breweries", icon="fa-solid fa-city")
+        % include("components/menu_item", href="/taps", text="Taps", icon="fa-solid fa-faucet")
+        % include("components/menu_item", href="/beer-styles", text="Beer styles", icon="fa-solid fa-wheat-awn")
     </ul>
     <span></span>
     <ul>
-        % menu_item_href = "/pizzas"
-        % menu_item_text = "Pizzas"
-        % include("components/menu_item")
-
-        % menu_item_href = "/ingredients"
-        % menu_item_text = "Ingredients"
-        % include("components/menu_item")
+        % include("components/menu_item", href="pizzas", text="Pizzas", icon="fa-solid fa-pizza-slice")
+        % include("components/menu_item", href="/ingredients", text="Ingredients", icon="fa-solid fa-pepper-hot")
     </ul>
 </aside>
