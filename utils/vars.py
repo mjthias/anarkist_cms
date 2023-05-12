@@ -16,3 +16,5 @@ except:
     }
 
 _JWT_SECRET = hidden._JWT_SECRET
+
+_VERCEL_DEPLOY_HOOK = hidden._VERCEL_DEPLOY_HOOK
