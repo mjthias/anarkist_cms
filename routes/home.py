@@ -1,6 +1,8 @@
-from bottle import get
+from bottle import get, view
 
 ##############################
 @get("/")
+@view("home")
 def _():
-    return "Welcome!"
+    user = {"user_name": "Super User"}
+    return dict(user=user)
