@@ -1,14 +1,26 @@
-from bottle import run, default_app
+from bottle import get, static_file, run, default_app
 
 ##############################
 
+# Routes
 import routes.sign_in
 import routes.sign_in_post
 import routes.sign_out
 import routes.home
 import routes.beers
 
+# API
+...
+
 ##############################
+
+# Static files
+@get("/static/<dir_name>/<file_name>")
+def _(dir_name, file_name):
+    return static_file(file_name, root=f"./static/{dir_name}")
+
+##############################
+
 
 try:
     # Prod
