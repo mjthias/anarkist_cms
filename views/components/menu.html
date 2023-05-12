@@ -1,58 +1,39 @@
 <aside>
     <ul>
-        <li>
-            <a href="/users">
-                <span></span>
-                <span>Users</span>   
-            </a>
-        </li>
-        <li>
-            <a href="/bars">
-                <span></span>
-                <span>Bars</span>   
-            </a>
-        </li>
+        % menu_item_href = "/users"
+        % menu_item_text = "Users"
+        % include("components/menu_item")
+
+        % menu_item_href = "/bars"
+        % menu_item_text = "Bars"
+        % include("components/menu_item")
     </ul>
     <span></span>
     <ul>
-        <li>
-            <a href="/beers">
-                <span></span>
-                <span>Beers</span>   
-            </a>
-        </li>
-        <li>
-            <a href="/breweries">
-                <span></span>
-                <span>Breweries</span>   
-            </a>
-        </li>
-        <li>
-            <a href="/taps">
-                <span></span>
-                <span>Taps</span>   
-            </a>
-        </li>
-        <li>
-            <a href="/beer-styles">
-                <span></span>
-                <span>Beer Styles</span>   
-            </a>
-        </li>
+        % menu_item_href = "/beers"
+        % menu_item_text = "Beers"
+        % include("components/menu_item")
+
+        % menu_item_href = "/breweries"
+        % menu_item_text = "Breweries"
+        % include("components/menu_item")
+
+        % menu_item_href = "/taps"
+        % menu_item_text = "Taps"
+        % include("components/menu_item")
+
+        % menu_item_href = "/beer-styles"
+        % menu_item_text = "Beer styles"
+        % include("components/menu_item")
     </ul>
     <span></span>
     <ul>
-        <li>
-            <a href="/pizzas">
-                <span></span>
-                <span>Pizzas</span>   
-            </a>
-        </li>
-        <li>
-            <a href="/ingredients">
-                <span></span>
-                <span>Ingredients</span>   
-            </a>
-        </li>
+        % menu_item_href = "/pizzas"
+        % menu_item_text = "Pizzas"
+        % include("components/menu_item")
+
+        % menu_item_href = "/ingredients"
+        % menu_item_text = "Ingredients"
+        % include("components/menu_item")
     </ul>
 </aside>
