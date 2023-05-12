@@ -13,9 +13,10 @@ def _():
         cursor = db.cursor()
         cursor.execute("SELECT * FROM beers")
         beers = cursor.fetchall()
+        user = {"user_name": "Super User"}
         # return json.dumps(beers)
         print(beers)
-        return dict(beers = beers)
+        return dict(beers = beers, user=user)
 
     except Exception as ex:
         print(str(ex))
