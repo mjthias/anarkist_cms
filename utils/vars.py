@@ -4,9 +4,9 @@ import hidden
 # DB CONFIGURATION
 try:
     import production
-    DB_CONFIG = hidden.DB_CONFIG
+    _DB_CONFIG = hidden._DB_CONFIG
 except:
-    DB_CONFIG = {
+    _DB_CONFIG = {
         "host" : "localhost",
         "user" : "root",
         "port" : 8889,
@@ -15,4 +15,4 @@ except:
         "cursorclass":pymysql.cursors.DictCursor
     }
 
-JWT_SECRET = hidden.JWT_SECRET
+_JWT_SECRET = hidden._JWT_SECRET
