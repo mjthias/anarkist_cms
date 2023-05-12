@@ -1,6 +1,6 @@
 from bottle import post, redirect, request, response
 from utils.g import _RESPOND
-from utils.vars import DB_CONFIG, JWT_SECRET
+from utils.vars import _DB_CONFIG, _JWT_SECRET
 import pymysql
 import time
 import jwt
@@ -12,7 +12,7 @@ def _():
         user_email = request.forms.get("user_email")
         user_password = request.forms.get("user_password")
 
-        db_connect = pymysql.connect(**DB_CONFIG)
+        db_connect = pymysql.connect(**_DB_CONFIG)
         db_connect.begin()
         cursor = db_connect.cursor()
 
@@ -35,7 +35,7 @@ def _():
         cursor.execute(query, (session["fk_user_id"], session["session_iat"]))
         session["session_id"] = cursor.lastrowid
 
-        encoded_jwt = jwt.encode(session, JWT_SECRET, algorithm="HS256")
+        encoded_jwt = jwt.encode(session, _JWT_SECRET, algorithm="HS256")
         response.set_cookie("anarkist", encoded_jwt, path="/")
 
         db_connect.commit()

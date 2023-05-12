@@ -2,7 +2,7 @@ from bottle import response, request
 import jwt
 import time
 import pymysql
-from utils.vars import DB_CONFIG, JWT_SECRET
+from utils.vars import _DB_CONFIG, _JWT_SECRET
 from utils.g import _DELETE_SESSION, _UPDATE_SESSION, _RESPOND
 
 ##############################
@@ -12,10 +12,10 @@ def jwt_cookie():
 
     if request.get_cookie("anarkist"):
         cookie = request.get_cookie("anarkist")
-        decoded_jwt = jwt.decode(cookie, JWT_SECRET, algorithms=["HS256"])
+        decoded_jwt = jwt.decode(cookie, _JWT_SECRET, algorithms=["HS256"])
 
         try:
-            db_connect = pymysql.connect(**DB_CONFIG)
+            db_connect = pymysql.connect(**_DB_CONFIG)
             cursor = db_connect.cursor()
 
             cursor.execute("SELECT * FROM sessions WHERE session_id = %s LIMIT 1", (decoded_jwt["session_id"],))
@@ -39,7 +39,7 @@ def jwt_cookie():
         else:
             _UPDATE_SESSION(now, decoded_jwt)
             decoded_jwt["session_iat"] = now
-            encoded_jwt = jwt.encode(decoded_jwt, JWT_SECRET, algorithm="HS256")
+            encoded_jwt = jwt.encode(decoded_jwt, _JWT_SECRET, algorithm="HS256")
             response.set_cookie("anarkist", encoded_jwt, path="/")
             return True
 
