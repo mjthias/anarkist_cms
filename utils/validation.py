@@ -71,3 +71,23 @@ def _ID(value):
     invalid_message = "ID must be a positive integer."
     if not re.match(pattern, value): return None, invalid_message
     return int(value), None
+
+##############################
+def _EMAIL(value):
+    pattern = '^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$'
+    missing_message = "Email is missing."
+    invalid_message = "Email is invalid"
+
+    if not value: return None, missing_message
+    value = value.strip()
+    if not re.match(pattern, value): return None, invalid_message
+    return str(value), None
+
+##############################
+def _PASSWORD(value):
+    pattern = '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$'
+    missing_message = "Password is missing."
+    invalid_message = "Password must contain at least one uppercase letter, one lowercase letter, one digit, and a special character (#?!@$%^&*-)."
+    if not value: return None, missing_message
+    if not re.match(pattern, value): return None, invalid_message
+    return str(value), None
