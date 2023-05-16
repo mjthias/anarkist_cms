@@ -5,6 +5,7 @@ from bottle import get, static_file, run, default_app
 # API
 import api.users_get
 import api.taps_get
+import api.breweries_get
 
 # CMS
 import routes.sign_in
