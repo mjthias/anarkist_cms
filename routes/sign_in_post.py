@@ -33,7 +33,7 @@ def _():
             return _RESPOND(400, "Password does not match.")
 
         session = {
-            "fk_user_id": users[0]["user_id"],
+            "user_id": users[0]["user_id"],
             "session_iat": int(time.time()),
         }
 
@@ -42,7 +42,7 @@ def _():
             VALUES(%s, %s)
         """
 
-        cursor.execute(query, (session["fk_user_id"], session["session_iat"]))
+        cursor.execute(query, (session["user_id"], session["session_iat"]))
         db_connect.commit()
 
         session["session_id"] = cursor.lastrowid
