@@ -3,7 +3,7 @@ import jwt
 import time
 import pymysql
 import re
-from utils.vars import _DB_CONFIG, _JWT_SECRET
+from utils.vars import _DB_CONFIG, _JWT_SECRET, _NAME_MIN_LEN, _NAME_MAX_LEN
 from utils.g import _DELETE_SESSION, _UPDATE_SESSION, _RESPOND
 
 ##############################
@@ -68,7 +68,9 @@ def _OFFSET(value):
 
 def _ID(value):
     pattern = '^[1-9][0-9]*$'
+    missing_message = "ID is missing."
     invalid_message = "ID must be a positive integer."
+    if not value: return None, missing_message
     if not re.match(pattern, value): return None, invalid_message
     return int(value), None
 
@@ -90,4 +92,26 @@ def _PASSWORD(value):
     invalid_message = "Password must contain at least one uppercase letter, one lowercase letter, one digit, and a special character (#?!@$%^&*-)."
     if not value: return None, missing_message
     if not re.match(pattern, value): return None, invalid_message
+    return str(value), None
+
+##############################
+def _CONFIRM_PASSWORD(value1, value2):
+    missing_message = "Confirm password is missing."
+    mismatch_message = "Passwords does not match."
+    if not value2: return None, missing_message
+    value2, invalid_message = _PASSWORD(value2)
+    if invalid_message: return None, invalid_message
+    if not value1 == value2: return None, mismatch_message
+    return str(value2), None
+
+##############################
+def _USER_NAME(value):
+    value = value.strip()
+    missing_message = "User name is missing."
+    invalid_min_message = f"User name must be at least {_NAME_MIN_LEN} characters."
+    invalid_max_message = f"User name must be less than {_NAME_MAX_LEN} characters."
+    if not value: return None, missing_message
+    if len(value) < _NAME_MIN_LEN: return None, invalid_min_message
+    if len(value) > _NAME_MAX_LEN: return None, invalid_max_message
+    value = value.capitalize()
     return str(value), None

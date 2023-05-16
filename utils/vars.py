@@ -22,3 +22,10 @@ _API_PATH = "/api/v1"
 
 # Vercel
 _VERCEL_DEPLOY_HOOK = hidden._VERCEL_DEPLOY_HOOK
+
+# Authorized user roles
+_AUTH_USER_ROLES = [1, 2]
+
+# Name variables
+_NAME_MIN_LEN = 2
+_NAME_MAX_LEN = 100
