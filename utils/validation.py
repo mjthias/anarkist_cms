@@ -106,11 +106,11 @@ def _CONFIRM_PASSWORD(value1, value2):
 
 ##############################
 def _USER_NAME(value):
-    value = value.strip()
     missing_message = "User name is missing."
     invalid_min_message = f"User name must be at least {_NAME_MIN_LEN} characters."
     invalid_max_message = f"User name must be less than {_NAME_MAX_LEN} characters."
     if not value: return None, missing_message
+    value = value.strip()
     if len(value) < _NAME_MIN_LEN: return None, invalid_min_message
     if len(value) > _NAME_MAX_LEN: return None, invalid_max_message
     value = value.capitalize()
