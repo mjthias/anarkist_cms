@@ -19,3 +19,6 @@ _JWT_SECRET = hidden._JWT_SECRET
 
 # API path variable
 _API_PATH = "/api/v1"
+
+# Vercel
+_VERCEL_DEPLOY_HOOK = hidden._VERCEL_DEPLOY_HOOK

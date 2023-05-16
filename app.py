@@ -1,9 +1,10 @@
-from bottle import run, default_app
+from bottle import get, static_file, run, default_app
 
 ##############################
 
 # API
 import api.users_get
+import api.taps_get
 
 # CMS
 import routes.sign_in
@@ -15,6 +16,14 @@ import routes.home
 import routes.beers
 
 ##############################
+
+# Static files
+@get("/static/<dir_name>/<file_name>")
+def _(dir_name, file_name):
+    return static_file(file_name, root=f"./static/{dir_name}")
+
+##############################
+
 
 try:
     # Prod

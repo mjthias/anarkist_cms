@@ -1,12 +1,18 @@
 % rebase("base", page_title="beers") 
 
-<header>
-    <h2>Beers</h2>
-</header>
-<ul>
-    % for beer in beers:
-        <li>
-            % include("components/beer")
-        </li>
-    % end
-</ul>
+<div
+    id="spa"
+    data-page_title="Beers"
+    data-page_url="/beers"
+    >
+    <header>
+        <h2>Beers</h2>
+    </header>
+    <ul>
+        % for beer in beers:
+            <li>
+                % include("components/beer")
+            </li>
+        % end
+    </ul>
+</div>

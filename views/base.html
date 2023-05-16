@@ -1,3 +1,8 @@
+% from bottle import request
+% is_xhr = True if request.headers.get("spa") else False
+% if not is_xhr:
+
+% setdefault('page_title', 'Anarkist')
 % setdefault('render_navigation', True)
 
 <!DOCTYPE html>
@@ -7,7 +12,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://kit.fontawesome.com/4612253046.js" crossorigin="anonymous" defer></script>
-    <title>{{page_title or 'Anarkist'}}</title>
+    <script src="/static/js/main.js" defer></script>
+    <title>{{page_title}}</title>
 </head>
 <body>
     % if render_navigation:
@@ -15,7 +21,12 @@
         % include("components/side_menu")
     % end
     <main>
+% end
+
         {{!base}}
+
+% if not is_xhr:
     </main>
 </body>
 </html>
+%end
