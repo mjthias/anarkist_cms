@@ -4,6 +4,7 @@ from bottle import get, static_file, run, default_app
 
 # API
 import api.users_get
+import api.users_post
 import api.taps_get
 import api.breweries_get
 import api.bars_get
