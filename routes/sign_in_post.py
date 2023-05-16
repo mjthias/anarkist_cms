@@ -1,17 +1,26 @@
 from bottle import post, redirect, request, response
 from utils.g import _RESPOND
 from utils.vars import _DB_CONFIG, _JWT_SECRET
+import utils.validation as validate
 import pymysql
 import time
 import jwt
+import bcrypt
 
 ##############################
 @post("/sign-in")
 def _():
     try:
-        user_email = request.forms.get("user_email")
-        user_password = request.forms.get("user_password")
+        user_email, error = validate._EMAIL(request.forms.get("user_email"))
+        if error: return _RESPOND(400, error)
+        user_password, error = validate._PASSWORD(request.forms.get("user_password"))
+        if error: return _RESPOND(400, error)
+        user_password_bytes = user_password.encode('utf-8')
+    except Exception as ex:
+        print(str(ex))
+        return _RESPOND(500, "Server error.")
 
+    try:
         db_connect = pymysql.connect(**_DB_CONFIG)
         db_connect.begin()
         cursor = db_connect.cursor()
@@ -20,7 +29,8 @@ def _():
         users = cursor.fetchall()
 
         if not users: return _RESPOND(400, "User does not exist.")
-        if not user_password == users[0]["user_password"]: return _RESPOND(400, "Password does not match.")
+        if not bcrypt.checkpw(user_password_bytes, str(users[0]['user_password']).encode('utf-8')): 
+            return _RESPOND(400, "Password does not match.")
 
         session = {
             "fk_user_id": users[0]["user_id"],
