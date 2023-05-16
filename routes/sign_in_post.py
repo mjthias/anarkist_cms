@@ -4,7 +4,6 @@ from utils.vars import _DB_CONFIG, _JWT_SECRET
 import pymysql
 import time
 import jwt
-import json
 
 ##############################
 @post("/sign-in")
