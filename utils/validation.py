@@ -52,16 +52,22 @@ def _SESSION():
 
 def _LIMIT(value):
     pattern = '^[1-9][0-9]*|(-1$)'
-    return True if re.match(pattern, value) else False
+    invalid_message = "Limit must be a positive integer or '-1'."
+    if not re.match(pattern, value): return None, invalid_message
+    return int(value), None
 
 ##############################
 
 def _OFFSET(value):
     pattern = '^[0-9]*$'
-    return True if re.match(pattern, value) else False
+    invalid_message = "Offset must be a positive integer."
+    if not re.match(pattern, value): return None, invalid_message
+    return int(value), None
 
 ##############################
 
 def _ID(value):
     pattern = '^[1-9][0-9]*$'
-    return True if re.match(pattern, value) else False
+    invalid_message = "ID must be a positive integer."
+    if not re.match(pattern, value): return None, invalid_message
+    return int(value), None

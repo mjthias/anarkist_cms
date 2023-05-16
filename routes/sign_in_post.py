@@ -16,14 +16,14 @@ def _():
         db_connect.begin()
         cursor = db_connect.cursor()
 
-        cursor.execute("SELECT * FROM users WHERE user_email = %s LIMIT 1", (user_email))
-        user = cursor.fetchone()
+        cursor.execute("SELECT * FROM sign_in_users_list WHERE user_email = %s", (user_email))
+        users = cursor.fetchall()
 
-        if not user: return _RESPOND(400, "User does not exist.")
-        if not user_password == user["user_password"]: return _RESPOND(400, "Password does not match.")
+        if not users: return _RESPOND(400, "User does not exist.")
+        if not user_password == users[0]["user_password"]: return _RESPOND(400, "Password does not match.")
 
         session = {
-            "fk_user_id": user["user_id"],
+            "fk_user_id": users[0]["user_id"],
             "session_iat": int(time.time()),
         }
 
@@ -33,17 +33,37 @@ def _():
         """
 
         cursor.execute(query, (session["fk_user_id"], session["session_iat"]))
-        session["session_id"] = cursor.lastrowid
-
-        encoded_jwt = jwt.encode(session, _JWT_SECRET, algorithm="HS256")
-        response.set_cookie("anarkist", encoded_jwt, path="/")
-
         db_connect.commit()
-        return _RESPOND(200, "Session successfully created.")
+
+        session["session_id"] = cursor.lastrowid
+        session["user_role"] = users[0]["user_role_id"]
+        
     except Exception as ex:
-        print(str(ex))
+        print(ex)
         db_connect.rollback()
         return _RESPOND(500, "Server error")
     finally:
         cursor.close()
         db_connect.close()
+
+    if len(users) > 1 or users[0]["user_role_id"] == 1:
+        encoded_jwt = jwt.encode(session, _JWT_SECRET, algorithm="HS256")
+        response.set_cookie("anarkist", encoded_jwt, path="/")
+
+        if users[0]["user_role_id"] != 1:
+            bars = []
+            for user in users:
+                bar = {
+                    "bar_id": user['bar_id'],
+                    "bar_name": user['bar_name']
+                }
+                bars.append(bar)
+            response.set_cookie("bars", bars, _JWT_SECRET, path="/")
+
+        return redirect("/select-location")
+        
+    if len(users) == 1:
+        session["bar_id"] = users[0]["bar_id"]
+        encoded_jwt = jwt.encode(session, _JWT_SECRET, algorithm="HS256")
+        response.set_cookie("anarkist", encoded_jwt, path="/")
+        return redirect("/")

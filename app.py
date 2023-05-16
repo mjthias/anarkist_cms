@@ -2,15 +2,18 @@ from bottle import get, static_file, run, default_app
 
 ##############################
 
-# Routes
+# API
+import api.users_get
+import api.taps_get
+
+# CMS
 import routes.sign_in
 import routes.sign_in_post
+import routes.select_location
+import routes.select_location_post
 import routes.sign_out
 import routes.home
 import routes.beers
-
-# API
-import api.taps_get
 
 ##############################
 
