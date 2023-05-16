@@ -1,12 +1,10 @@
 from bottle import get, response, request
-from utils.vars import _DB_CONFIG, _API_PATH, _JWT_SECRET
+from utils.vars import _AUTH_USER_ROLES, _DB_CONFIG, _API_PATH, _JWT_SECRET
 from utils.g import _RESPOND
 import utils.validation as validate
 import pymysql
 import json
 import jwt
-
-authorized_user_roles = [1, 2]
 
 ##############################
 @get(f"{_API_PATH}/users")
@@ -14,7 +12,7 @@ def _():
     if not request.get_cookie("anarkist"): return _RESPOND(403, "Unauthorized attempt.")
     cookie = request.get_cookie("anarkist")
     decoded_jwt = jwt.decode(cookie, _JWT_SECRET, algorithms=["HS256"])
-    if not int(decoded_jwt["user_role"]) in authorized_user_roles: return _RESPOND(403, "Unauthorized attempt.")
+    if not int(decoded_jwt["user_role"]) in _AUTH_USER_ROLES: return _RESPOND(403, "Unauthorized attempt.")
     
     bar_id, error = validate._ID(str(decoded_jwt["bar_id"]))
     if error: return _RESPOND(400, error)
