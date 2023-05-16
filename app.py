@@ -10,7 +10,7 @@ import routes.home
 import routes.beers
 
 # API
-...
+import api.taps_get
 
 ##############################
 
