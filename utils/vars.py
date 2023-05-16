@@ -16,3 +16,6 @@ except:
     }
 
 _JWT_SECRET = hidden._JWT_SECRET
+
+# API path variable
+_API_PATH = "/api/v1"
