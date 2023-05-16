@@ -2,10 +2,12 @@ from bottle import response, request
 import jwt
 import time
 import pymysql
+import re
 from utils.vars import _DB_CONFIG, _JWT_SECRET
 from utils.g import _DELETE_SESSION, _UPDATE_SESSION, _RESPOND
 
 ##############################
+
 def _SESSION():
     now = int(time.time())
     day_in_seconds = 864000
@@ -45,3 +47,21 @@ def _SESSION():
 
     else:
         return False
+    
+##############################
+
+def _LIMIT(value):
+    pattern = '^[1-9][0-9]*|(-1$)'
+    return True if re.match(pattern, value) else False
+
+##############################
+
+def _OFFSET(value):
+    pattern = '^[0-9]*$'
+    return True if re.match(pattern, value) else False
+
+##############################
+
+def _ID(value):
+    pattern = '^[1-9][0-9]*$'
+    return True if re.match(pattern, value) else False
