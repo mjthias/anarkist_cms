@@ -1,5 +1,5 @@
 from bottle import get, response
-from utils.vars import _DB_CONFIG
+import utils.vars as var
 import pymysql
 import json
 
@@ -12,7 +12,7 @@ def _():
 
     # CONNNECT TO DB AND EXECUTE
     try:
-        db = pymysql.connect(**_DB_CONFIG)
+        db = pymysql.connect(**var.DB_CONFIG)
         cursor = db.cursor()
         cursor.execute(query)
         bars = cursor.fetchall()
