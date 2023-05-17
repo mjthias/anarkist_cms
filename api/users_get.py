@@ -12,7 +12,7 @@ def _():
     if not request.get_cookie("anarkist"): return g.respond(403, "Unauthorized attempt.")
     cookie = request.get_cookie("anarkist")
     decoded_jwt = jwt.decode(cookie, var.JWT_SECRET, algorithms=["HS256"])
-    if not int(decoded_jwt["user_role"]) in var.AUTH_USER_ROLES: return g.respond(403, "Unauthorized attempt.")
+    if not int(decoded_jwt["role_id"]) in var.AUTH_USER_ROLES: return g.respond(403, "Unauthorized attempt.")
     
     bar_id, error = validate.id(str(decoded_jwt["bar_id"]))
     if error: return g.respond(400, error)
@@ -23,7 +23,7 @@ def _():
     limit, error = validate.limit(limit)
     if error: return g.respond(400, error)
 
-    if decoded_jwt["user_role"] == 1:
+    if decoded_jwt["role_id"] == 1:
         where_clause = "WHERE bar_id = %s OR bar_id IS NULL"
     else:
         where_clause = "WHERE bar_id = %s"

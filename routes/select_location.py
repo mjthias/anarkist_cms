@@ -15,13 +15,13 @@ def _():
         return redirect("/sign-in")
     
     user_id = session["user_id"]
-    user_role = session["user_role"]
+    role_id = session["role_id"]
     
     #CONNECT TO DB
     try:
         db_connect = pymysql.connect(**var.DB_CONFIG)
         cursor = db_connect.cursor()
-        if user_role == 1:
+        if role_id == 1:
             cursor.execute("SELECT bar_id, bar_name FROM bars")
         else:
             cursor.execute("""

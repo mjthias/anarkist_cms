@@ -13,7 +13,7 @@ def _():
     if not request.get_cookie("anarkist"): return g.respond(403, "Unauthorized attempt.")
     cookie = request.get_cookie("anarkist")
     decoded_jwt = jwt.decode(cookie, var.JWT_SECRET, algorithms=["HS256"])
-    session_role_id = int(decoded_jwt["user_role"])
+    session_role_id = int(decoded_jwt["role_id"])
     session_bar_id = int(decoded_jwt["bar_id"])
     if not session_role_id in var.AUTH_USER_ROLES: return g.respond(403, "Unauthorized attempt.")
 
