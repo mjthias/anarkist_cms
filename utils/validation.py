@@ -132,3 +132,11 @@ def user_name(value):
     if len(value) > var.NAME_MAX_LEN: return None, invalid_max_message
     value = value.capitalize()
     return str(value), None
+
+##############################
+def confirm_deletion(value):
+    missing_message = "Confirm deletion is missing."
+    invalid_message = "Please type 'DELETE' in all caps."
+    if not value: return None, missing_message
+    if not value == "DELETE": return None, invalid_message
+    return str(value), None
