@@ -6,6 +6,7 @@ from bottle import get, static_file, run, default_app
 import api.users_get
 import api.users_post
 import api.users_put
+import api.users_delete
 import api.taps_get
 import api.breweries_get
 import api.bars_get
