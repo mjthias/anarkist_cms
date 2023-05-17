@@ -9,7 +9,7 @@ import jwt
 @post("/select-location")
 def _():
     # VALIDATE
-    session = validate.session()
+    session = validate.partial_session()
     if not session: return g.respond(403, "Unauthorized attempt.")
 
     bar_id, error = validate.id(request.forms.get("bars"))
