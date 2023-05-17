@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:8889
--- Generation Time: May 17, 2023 at 07:15 AM
+-- Generation Time: May 17, 2023 at 07:17 AM
 -- Server version: 5.7.39
 -- PHP Version: 8.2.0
 
@@ -73,7 +73,8 @@ CREATE TABLE `bar_access` (
 INSERT INTO `bar_access` (`fk_bar_id`, `fk_user_id`) VALUES
 (1, 2),
 (2, 2),
-(1, 3);
+(1, 3),
+(2, 20);
 
 -- --------------------------------------------------------
 
@@ -249,6 +250,23 @@ CREATE TABLE `sessions` (
 -- --------------------------------------------------------
 
 --
+-- Stand-in structure for view `sign_in_users_list`
+-- (See below for the actual view)
+--
+CREATE TABLE `sign_in_users_list` (
+`user_id` bigint(20) unsigned
+,`user_email` varchar(100)
+,`user_password` varchar(100)
+,`user_name` varchar(100)
+,`user_role_id` bigint(20) unsigned
+,`user_role_title` varchar(20)
+,`bar_id` bigint(20) unsigned
+,`bar_name` varchar(100)
+);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `taps`
 --
 
@@ -306,7 +324,7 @@ CREATE TABLE `users` (
   `user_id` bigint(20) UNSIGNED NOT NULL,
   `user_email` varchar(100) NOT NULL,
   `user_name` varchar(100) NOT NULL,
-  `user_password` varchar(50) NOT NULL,
+  `user_password` varchar(100) NOT NULL,
   `fk_user_role_id` bigint(20) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -315,9 +333,26 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `user_email`, `user_name`, `user_password`, `fk_user_role_id`) VALUES
-(1, 'super@user.dk', 'Super User', 'ASDasd123!', 1),
-(2, 'bar@admin.dk', 'Bar Admin', 'ASDasd123!', 2),
-(3, 'bar@staff.dk', 'Bar Staff', 'ASDasd123!', 3);
+(1, 'super@user.dk', 'Super user', '$2b$12$mcZKnS0.O9TtbUXSQSWqv.A2EWofo3mC740IXRWRc1g3AEH3pGEGe', 1),
+(2, 'bar@admin.dk', 'Bar Admin', '$2b$12$mcZKnS0.O9TtbUXSQSWqv.A2EWofo3mC740IXRWRc1g3AEH3pGEGe', 2),
+(3, 'bar@staff.dk', 'Bar Staff', '$2b$12$mcZKnS0.O9TtbUXSQSWqv.A2EWofo3mC740IXRWRc1g3AEH3pGEGe', 3),
+(20, 'm@g.dk', 'Morten', '$2b$12$mcZKnS0.O9TtbUXSQSWqv.A2EWofo3mC740IXRWRc1g3AEH3pGEGe', 3);
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `users_list`
+-- (See below for the actual view)
+--
+CREATE TABLE `users_list` (
+`user_id` bigint(20) unsigned
+,`user_email` varchar(100)
+,`user_name` varchar(100)
+,`user_role_id` bigint(20) unsigned
+,`user_role_title` varchar(20)
+,`bar_id` bigint(20) unsigned
+,`bar_name` varchar(100)
+);
 
 -- --------------------------------------------------------
 
@@ -356,6 +391,24 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`anarkist`@`%` SQL SECURITY DEFINER VIEW `bee
 DROP TABLE IF EXISTS `taps_list`;
 
 CREATE ALGORITHM=UNDEFINED DEFINER=`anarkist`@`%` SQL SECURITY DEFINER VIEW `taps_list`  AS SELECT `taps`.`tap_id` AS `tap_id`, `taps`.`tap_number` AS `tap_number`, `taps`.`fk_beer_id` AS `fk_beer_id`, `taps`.`fk_bar_id` AS `fk_bar_id`, `taps`.`tap_unavailable` AS `tap_unavailable`, `beer_list`.`beer_id` AS `beer_id`, `beer_list`.`beer_name` AS `beer_name`, `beer_list`.`beer_ebc` AS `beer_ebc`, `beer_list`.`beer_ibu` AS `beer_ibu`, `beer_list`.`beer_alc` AS `beer_alc`, `beer_list`.`beer_price` AS `beer_price`, `beer_list`.`beer_image` AS `beer_image`, `beer_list`.`brewery_name` AS `brewery_name`, `beer_list`.`beer_style_name` AS `beer_style_name`, `beer_list`.`beer_description_en` AS `beer_description_en`, `beer_list`.`beer_description_dk` AS `beer_description_dk` FROM (`taps` join `beer_list` on((`taps`.`fk_beer_id` = `beer_list`.`beer_id`))) ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `sign_in_users_list`
+--
+DROP TABLE IF EXISTS `sign_in_users_list`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`anarkist`@`%` SQL SECURITY DEFINER VIEW `sign_in_users_list`  AS SELECT `users`.`user_id` AS `user_id`, `users`.`user_email` AS `user_email`, `users`.`user_password` AS `user_password`, `users`.`user_name` AS `user_name`, `user_roles`.`user_role_id` AS `user_role_id`, `user_roles`.`user_role_title` AS `user_role_title`, `bars`.`bar_id` AS `bar_id`, `bars`.`bar_name` AS `bar_name` FROM (((`users` left join `user_roles` on((`users`.`fk_user_role_id` = `user_roles`.`user_role_id`))) left join `bar_access` on((`users`.`user_id` = `bar_access`.`fk_user_id`))) left join `bars` on((`bar_access`.`fk_bar_id` = `bars`.`bar_id`))) ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `users_list`
+--
+DROP TABLE IF EXISTS `users_list`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`anarkist`@`%` SQL SECURITY DEFINER VIEW `users_list`  AS SELECT `users`.`user_id` AS `user_id`, `users`.`user_email` AS `user_email`, `users`.`user_name` AS `user_name`, `user_roles`.`user_role_id` AS `user_role_id`, `user_roles`.`user_role_title` AS `user_role_title`, `bars`.`bar_id` AS `bar_id`, `bars`.`bar_name` AS `bar_name` FROM (((`users` left join `user_roles` on((`users`.`fk_user_role_id` = `user_roles`.`user_role_id`))) left join `bar_access` on((`users`.`user_id` = `bar_access`.`fk_user_id`))) left join `bars` on((`bar_access`.`fk_bar_id` = `bars`.`bar_id`))) ;
 
 --
 -- Indexes for dumped tables
@@ -497,7 +550,7 @@ ALTER TABLE `pizzas`
 -- AUTO_INCREMENT for table `sessions`
 --
 ALTER TABLE `sessions`
-  MODIFY `session_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `session_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=82;
 
 --
 -- AUTO_INCREMENT for table `taps`
@@ -509,7 +562,7 @@ ALTER TABLE `taps`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `user_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `user_roles`
