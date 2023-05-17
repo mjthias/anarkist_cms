@@ -1,28 +1,24 @@
-from bottle import get, response
+from bottle import get
 import utils.vars as var
+import utils.g as g
 import pymysql
-import json
 
 ##############################
 
-@get("/api/bars")
+@get(f"{var.API_PATH}/bars")
 def _():
-    response.content_type = 'application/json'
-    query = "SELECT * FROM bars"
-
-    # CONNNECT TO DB AND EXECUTE
     try:
         db = pymysql.connect(**var.DB_CONFIG)
         cursor = db.cursor()
-        cursor.execute(query)
+        cursor.execute("SELECT * FROM bars")
         bars = cursor.fetchall()
-        response.status = 200
-        return json.dumps(bars)
+        if not bars:
+            return g.respond(204, "")
+        return g.respond(200, bars)
 
     except Exception as ex:
         print(str(ex))
-        response.status = 500
-        return "Server error"
+        return g.respond(500, "Server error")
 
     finally:
         cursor.close()
