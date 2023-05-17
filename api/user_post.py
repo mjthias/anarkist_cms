@@ -10,12 +10,9 @@ import jwt
 ##############################
 @post(f"{var.API_PATH}/users")
 def _():
-    if not request.get_cookie("anarkist"): return g.respond(403, "Unauthorized attempt.")
-    cookie = request.get_cookie("anarkist")
-    session = jwt.decode(cookie, var.JWT_SECRET, algorithms=["HS256"])
-    session_role_id = int(session["role_id"])
-    session_bar_id = int(session["bar_id"])
-    if not session_role_id in var.AUTH_USER_ROLES: return g.respond(403, "Unauthorized attempt.")
+    session = validate.session()
+    if not request.get_cookie("anarkist"): return g.respond(401, "Unauthorized attempt.")
+    if not session["role_id"] in var.AUTH_USER_ROLES: return g.respond(401, "Unauthorized attempt.")
 
     try:
         user_name, error = validate.user_name(request.forms.get("user_name"))
@@ -31,7 +28,7 @@ def _():
         if not user_role_id == 1:
             bar_id, error = validate.id(request.forms.get("bar_id"))
             if error: return g.respond(400, f"Bar {error}")
-            if (not session_role_id == 1) and (not session_bar_id == bar_id):
+            if (not session["role_id"] == 1) and (not session["bar_id"] == bar_id):
                 return g.respond(403, "Unauthorized attempt.")
 
         

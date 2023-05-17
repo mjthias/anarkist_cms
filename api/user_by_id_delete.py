@@ -11,12 +11,9 @@ allowed_keys = ["user_id", "confirm_deletion"]
 ##############################
 @delete(f"{var.API_PATH}/users/<user_id>")
 def _(user_id=""):
-    if not request.get_cookie("anarkist"): return g.respond(401, "Unauthorized attempt.")
-    cookie = request.get_cookie("anarkist")
-    session = jwt.decode(cookie, var.JWT_SECRET, algorithms=["HS256"])
-    session_user_id = int(session["user_id"])
-    session_role_id = int(session["role_id"])
-    if (not session_user_id == int(user_id)) and (not session_role_id in var.AUTH_USER_ROLES): return g.respond(401, "Unauthorized attempt.")
+    session = validate.session()
+    if not session: return g.respond(401, "Unauthorized attempt.")
+    if (not session["user_id"] == int(user_id)) and (not session["role_id"] in var.AUTH_USER_ROLES): return g.respond(401, "Unauthorized attempt.")
 
     try:
         for key in request.forms.keys():

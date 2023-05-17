@@ -9,17 +9,14 @@ import jwt
 ##############################
 @get(f"{var.API_PATH}/users")
 def _():
-    if not request.get_cookie("anarkist"): return g.respond(403, "Unauthorized attempt.")
-    cookie = request.get_cookie("anarkist")
-    session = jwt.decode(cookie, var.JWT_SECRET, algorithms=["HS256"])
-    if not int(session["role_id"]) in var.AUTH_USER_ROLES: return g.respond(403, "Unauthorized attempt.")
+    session = validate.session()
+    if not session: return g.respond(401, "Unauthorized attempt.")
+    if not int(session["role_id"]) in var.AUTH_USER_ROLES: return g.respond(401, "Unauthorized attempt.")
     
     bar_id, error = validate.id(str(session["bar_id"]))
     if error: return g.respond(400, error)
-    offset = request.query.get("offset") if request.query.get("offset") else "0"
     offset, error = validate.offset(offset)
     if error: return g.respond(400, error)
-    limit = request.query.get("limit") if request.query.get("limit") else "100"
     limit, error = validate.limit(limit)
     if error: return g.respond(400, error)
 

@@ -9,18 +9,14 @@ import jwt
 ##############################
 @get(f"{var.API_PATH}/users/<user_id>")
 def _(user_id=""):
-    if not request.get_cookie("anarkist"): return g.respond(401, "Unauthorized attempt.")
-    cookie = request.get_cookie("anarkist")
-    session = jwt.decode(cookie, var.JWT_SECRET, algorithms=["HS256"])
-    session_user_id = int(session["user_id"])
-    session_role_id = int(session["role_id"])
-    session_bar_id = int(session["bar_id"])
-    if (not session_user_id == int(user_id)) and (not session_role_id in var.AUTH_USER_ROLES): return g.respond(401, "Unauthorized attempt.")
+    session = validate.session()
+    if not session: return g.respond(401, "Unauthorized attempt.")
+    if (not session["user_id"] == int(user_id)) and (not session["role_id"] in var.AUTH_USER_ROLES): return g.respond(401, "Unauthorized attempt.")
 
     try:
         user_id, error = validate.id(user_id)
         if error: return g.respond(400, f"User {error}")
-        bar_id, error = validate.id(str(session_bar_id))
+        bar_id, error = validate.id(str(session["bar_id"]))
         if error: return g.respond(400, f"Bar {error}")
 
     except Exception as ex:
@@ -31,7 +27,7 @@ def _(user_id=""):
         db_connect = pymysql.connect(**var.DB_CONFIG)
         cursor = db_connect.cursor()
 
-        if session_role_id == 1:
+        if session["role_id"] == 1:
             cursor.execute("""
                 SELECT * FROM users_list 
                 WHERE (user_id = %s AND bar_id = %s) 
