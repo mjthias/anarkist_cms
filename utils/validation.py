@@ -51,6 +51,7 @@ def session():
 ##############################
 
 def limit(value):
+    if not value: return 100, None
     pattern = '^[1-9][0-9]*|(-1$)'
     invalid_message = "Limit must be a positive integer or '-1'."
     if not re.match(pattern, value): return None, invalid_message
@@ -59,6 +60,7 @@ def limit(value):
 ##############################
 
 def offset(value):
+    if not value: return 0, None
     pattern = '^[0-9]*$'
     invalid_message = "Offset must be a positive integer."
     if not re.match(pattern, value): return None, invalid_message
