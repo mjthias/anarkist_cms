@@ -14,10 +14,10 @@ allowed_keys = ["user_id", "user_name", "user_email", "user_role_id"]
 def _(user_id=""):
     if not request.get_cookie("anarkist"): return g.respond(401, "Unauthorized attempt.")
     cookie = request.get_cookie("anarkist")
-    decoded_jwt = jwt.decode(cookie, var.JWT_SECRET, algorithms=["HS256"])
-    session_user_id = int(decoded_jwt["user_id"])
-    session_role_id = int(decoded_jwt["role_id"])
-    session_bar_id = int(decoded_jwt["bar_id"])
+    session = jwt.decode(cookie, var.JWT_SECRET, algorithms=["HS256"])
+    session_user_id = int(session["user_id"])
+    session_role_id = int(session["role_id"])
+    session_bar_id = int(session["bar_id"])
     if (not session_user_id == int(user_id)) and (not session_role_id in var.AUTH_USER_ROLES): return g.respond(401, "Unauthorized attempt.")
     try:
         for key in request.forms.keys():

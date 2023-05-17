@@ -8,8 +8,8 @@ import jwt
 def _():
     try:
         cookie = request.get_cookie("anarkist")
-        decoded_jwt = jwt.decode(cookie, var.JWT_SECRET, algorithms=["HS256"])
-        g.delete_session(decoded_jwt)
+        session = jwt.decode(cookie, var.JWT_SECRET, algorithms=["HS256"])
+        g.delete_session(session)
         response.set_cookie("anarkist", cookie, path="/", expires=0)
         return g.respond(200, "Successfully signed out.")
     except Exception as ex:
