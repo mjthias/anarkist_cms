@@ -10,7 +10,7 @@ import jwt
 @view("select_location")
 def _():
     #VALIDATE
-    session = validate.session()
+    session = validate.partial_session()
     if not session:
         return redirect("/sign-in")
     
