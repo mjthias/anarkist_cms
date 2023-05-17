@@ -68,27 +68,3 @@ def _():
     encoded_jwt = jwt.encode(session, var.JWT_SECRET, algorithm="HS256")
     response.set_cookie("anarkist", encoded_jwt, path="/")
     return redirect("/select-location")
-
-    # More than 1 bar access or super_user
-    if len(users) > 1 or users[0]["user_role_id"] == 1:
-        encoded_jwt = jwt.encode(session, var.JWT_SECRET, algorithm="HS256")
-        response.set_cookie("anarkist", encoded_jwt, path="/")
-
-        # if not super user
-        if users[0]["user_role_id"] != 1:
-            bars = []
-            for user in users:
-                bar = {
-                    "bar_id": user['bar_id'],
-                    "bar_name": user['bar_name']
-                }
-                bars.append(bar)
-            response.set_cookie("bars", bars, var.JWT_SECRET, path="/")
-
-        return redirect("/select-location")
-        
-    if len(users) == 1:
-        session["bar_id"] = users[0]["bar_id"]
-        encoded_jwt = jwt.encode(session, var.JWT_SECRET, algorithm="HS256")
-        response.set_cookie("anarkist", encoded_jwt, path="/")
-        return redirect("/")
