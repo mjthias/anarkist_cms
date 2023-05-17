@@ -4,7 +4,7 @@ import time
 import pymysql
 import re
 import utils.vars as var
-from utils.g import _DELETE_SESSION, _UPDATE_SESSION, _RESPOND
+import utils.g as g
 
 ##############################
 
@@ -27,7 +27,7 @@ def session():
                 return False
         except Exception as ex:
             print(str(ex))
-            return _RESPOND(500, "Server error.")
+            return g.respond(500, "Server error.")
         finally:
             cursor.close()
             db_connect.close()
@@ -36,10 +36,10 @@ def session():
         seconds_since_session_creation = now-session_iat
 
         if seconds_since_session_creation > day_in_seconds:
-            _DELETE_SESSION(decoded_jwt)
+            g.delete_session(decoded_jwt)
             response.set_cookie("anarkist", cookie, expires=0)
         else:
-            _UPDATE_SESSION(now, decoded_jwt)
+            g.update_session(now, decoded_jwt)
             decoded_jwt["session_iat"] = now
             encoded_jwt = jwt.encode(decoded_jwt, var.JWT_SECRET, algorithm="HS256")
             response.set_cookie("anarkist", encoded_jwt, path="/")

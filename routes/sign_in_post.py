@@ -1,5 +1,5 @@
 from bottle import post, redirect, request, response
-from utils.g import _RESPOND
+import utils.g as g
 import utils.vars as var
 import utils.validation as validate
 import pymysql
@@ -12,13 +12,13 @@ import bcrypt
 def _():
     try:
         user_email, error = validate.email(request.forms.get("user_email"))
-        if error: return _RESPOND(400, error)
+        if error: return g.respond(400, error)
         user_password, error = validate.password(request.forms.get("user_password"))
-        if error: return _RESPOND(400, error)
+        if error: return g.respond(400, error)
         user_password_bytes = user_password.encode('utf-8')
     except Exception as ex:
         print(str(ex))
-        return _RESPOND(500, "Server error.")
+        return g.respond(500, "Server error.")
 
     try:
         db_connect = pymysql.connect(**var.DB_CONFIG)
@@ -28,9 +28,9 @@ def _():
         cursor.execute("SELECT * FROM sign_in_users_list WHERE user_email = %s", (user_email))
         users = cursor.fetchall()
 
-        if not users: return _RESPOND(400, "User does not exist.")
+        if not users: return g.respond(400, "User does not exist.")
         if not bcrypt.checkpw(user_password_bytes, str(users[0]['user_password']).encode('utf-8')): 
-            return _RESPOND(400, "Password does not match.")
+            return g.respond(400, "Password does not match.")
 
         session = {
             "user_id": users[0]["user_id"],
@@ -51,7 +51,7 @@ def _():
     except Exception as ex:
         print(ex)
         db_connect.rollback()
-        return _RESPOND(500, "Server error")
+        return g.respond(500, "Server error")
     finally:
         cursor.close()
         db_connect.close()

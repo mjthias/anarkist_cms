@@ -3,14 +3,14 @@ import pymysql
 import utils.vars as var
 
 ##############################
-def _RESPOND(status = 400, error_message = "Unknown error"):
+def respond(status = 400, error_message = "Unknown error"):
     response.status = status
     return {
         "info": error_message
     }
 
 ##############################
-def _DELETE_SESSION(session=None):
+def delete_session(session=None):
     try:
         db_connect = pymysql.connect(**var.DB_CONFIG)
         cursor = db_connect.cursor()
@@ -26,13 +26,13 @@ def _DELETE_SESSION(session=None):
         print(f"Rows deleted: {counter}")
     except Exception as ex:
         print(str(ex))
-        return _RESPOND(500, "Server error.")
+        return g.respond(500, "Server error.")
     finally:
         cursor.close()
         db_connect.close()
 
 ##############################
-def _UPDATE_SESSION(now=0, session=None):
+def update_session(now=0, session=None):
     try:
         db_connect = pymysql.connect(**var.DB_CONFIG)
         cursor = db_connect.cursor()
@@ -51,7 +51,7 @@ def _UPDATE_SESSION(now=0, session=None):
         print(f"Rows updated: {counter}")
     except Exception as ex:
         print(str(ex))
-        _RESPOND(500, "Server error.")
+        g.respond(500, "Server error.")
     finally:
         cursor.close()
         db_connect.close()

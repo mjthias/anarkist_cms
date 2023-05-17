@@ -1,5 +1,5 @@
 from bottle import get, view, redirect, request
-from utils.g import _RESPOND
+import utils.g as g
 import utils.validation as validate
 
 ##############################

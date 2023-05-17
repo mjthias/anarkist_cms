@@ -1,5 +1,5 @@
 from bottle import post, redirect, request, response
-from utils.g import _RESPOND
+import utils.g as g
 import utils.vars as var
 import utils.validation as validate
 import json
@@ -8,8 +8,8 @@ import jwt
 ##############################
 @post("/select-location")
 def _():
-    if not validate.session(): return _RESPOND(403, "Unauthorized attempt.")
-    if not request.forms.get("bars"): return _RESPOND(400, "An error occured.")
+    if not validate.session(): return g.respond(403, "Unauthorized attempt.")
+    if not request.forms.get("bars"): return g.respond(400, "An error occured.")
 
     bar_id = int(request.forms.get("bars"))
     cookie = request.get_cookie("anarkist")
