@@ -13,7 +13,7 @@ def _():
         return redirect("/sign-in")
     
     # redirect if role = staff (3)
-    role_id=int(session["user_role"])
+    role_id=int(session["role_id"])
     if role_id == 3:
         return redirect("/")
     

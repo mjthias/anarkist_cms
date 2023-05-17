@@ -8,13 +8,27 @@ import utils.g as g
 
 ##############################
 
+def partial_session():
+    if request.get_cookie("anarkist"):
+        cookie = request.get_cookie("anarkist")
+        decoded_jwt = jwt.decode(cookie, var.JWT_SECRET, algorithms=["HS256"])
+        return decoded_jwt
+    else:
+        return False
+
+##############################
+
 def session():
+    valid_session_keys = ['user_id', 'session_iat', 'session_id', 'role_id', 'bar_id']
     now = int(time.time())
     day_in_seconds = 864000
 
     if request.get_cookie("anarkist"):
         cookie = request.get_cookie("anarkist")
         decoded_jwt = jwt.decode(cookie, var.JWT_SECRET, algorithms=["HS256"])
+
+        for key in valid_session_keys:
+            if not key in list(decoded_jwt.keys()): return False
 
         try:
             db_connect = pymysql.connect(**var.DB_CONFIG)
@@ -38,6 +52,7 @@ def session():
         if seconds_since_session_creation > day_in_seconds:
             g.delete_session(decoded_jwt)
             response.set_cookie("anarkist", cookie, expires=0)
+            return False
         else:
             g.update_session(now, decoded_jwt)
             decoded_jwt["session_iat"] = now

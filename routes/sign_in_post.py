@@ -53,7 +53,7 @@ def _():
 
         # Append the remaininig values to session-dict
         session["session_id"] = cursor.lastrowid
-        session["user_role"] = users[0]["user_role_id"]
+        session["role_id"] = users[0]["user_role_id"]
 
     except Exception as ex:
         print(ex)
