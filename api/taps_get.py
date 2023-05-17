@@ -39,7 +39,7 @@ def _():
         db = pymysql.connect(**var.DB_CONFIG)
         cursor = db.cursor()
         cursor.execute(query, params)
-        if limit == "1": 
+        if limit == 1: 
             taps = cursor.fetchone()
         else: 
             taps = cursor.fetchall()
