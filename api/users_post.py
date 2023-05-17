@@ -1,5 +1,5 @@
 from bottle import post, request, response
-from utils.vars import _API_PATH, _AUTH_USER_ROLES, _DB_CONFIG, _JWT_SECRET
+import utils.vars as var
 from utils.g import _RESPOND
 import utils.validation as validate
 import bcrypt
@@ -8,14 +8,14 @@ import json
 import jwt
 
 ##############################
-@post(f"{_API_PATH}/users")
+@post(f"{var.API_PATH}/users")
 def _():
     if not request.get_cookie("anarkist"): return _RESPOND(403, "Unauthorized attempt.")
     cookie = request.get_cookie("anarkist")
-    decoded_jwt = jwt.decode(cookie, _JWT_SECRET, algorithms=["HS256"])
+    decoded_jwt = jwt.decode(cookie, var.JWT_SECRET, algorithms=["HS256"])
     session_role_id = int(decoded_jwt["user_role"])
     session_bar_id = int(decoded_jwt["bar_id"])
-    if not session_role_id in _AUTH_USER_ROLES: return _RESPOND(403, "Unauthorized attempt.")
+    if not session_role_id in var.AUTH_USER_ROLES: return _RESPOND(403, "Unauthorized attempt.")
 
     try:
         user_name, error = validate.user_name(request.forms.get("user_name"))
@@ -52,7 +52,7 @@ def _():
         return _RESPOND(500, "Server error.")
     
     try:
-        db_connect = pymysql.connect(**_DB_CONFIG)
+        db_connect = pymysql.connect(**var.DB_CONFIG)
         db_connect.begin()
         cursor = db_connect.cursor()
 

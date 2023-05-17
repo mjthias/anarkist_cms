@@ -1,6 +1,6 @@
 from bottle import put, request, response
 from utils.g import _RESPOND
-from utils.vars import _API_PATH, _AUTH_USER_ROLES, _JWT_SECRET, _DB_CONFIG
+import utils.vars as var
 import utils.validation as validate
 import jwt
 import json
@@ -10,15 +10,15 @@ allowed_keys = ["user_id", "user_name", "user_email", "user_role_id"]
 # allowed_keys = ["user_id", "user_name", "user_email", "user_password", "user_new_password", "user_confirm_new_password", "user_role_id"]
 
 ##############################
-@put(f"{_API_PATH}/users/<user_id>")
+@put(f"{var.API_PATH}/users/<user_id>")
 def _(user_id=""):
     if not request.get_cookie("anarkist"): return _RESPOND(401, "Unauthorized attempt.")
     cookie = request.get_cookie("anarkist")
-    decoded_jwt = jwt.decode(cookie, _JWT_SECRET, algorithms=["HS256"])
+    decoded_jwt = jwt.decode(cookie, var.JWT_SECRET, algorithms=["HS256"])
     session_user_id = int(decoded_jwt["user_id"])
     session_role_id = int(decoded_jwt["user_role"])
     session_bar_id = int(decoded_jwt["bar_id"])
-    if (not session_user_id == int(user_id)) and (not session_role_id in _AUTH_USER_ROLES): return _RESPOND(401, "Unauthorized attempt.")
+    if (not session_user_id == int(user_id)) and (not session_role_id in var.AUTH_USER_ROLES): return _RESPOND(401, "Unauthorized attempt.")
     try:
         for key in request.forms.keys():
             if not key in allowed_keys: return _RESPOND(403, f"Forbidden key: {key}")
@@ -55,7 +55,7 @@ def _(user_id=""):
         return _RESPOND(500, "Server error")
     
     try:
-        db_connect = pymysql.connect(**_DB_CONFIG)
+        db_connect = pymysql.connect(**var.DB_CONFIG)
         db_connect.begin()
         cursor = db_connect.cursor()
 

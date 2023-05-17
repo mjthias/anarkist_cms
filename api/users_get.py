@@ -1,5 +1,5 @@
 from bottle import get, response, request
-from utils.vars import _AUTH_USER_ROLES, _DB_CONFIG, _API_PATH, _JWT_SECRET
+import utils.vars as var
 from utils.g import _RESPOND
 import utils.validation as validate
 import pymysql
@@ -7,12 +7,12 @@ import json
 import jwt
 
 ##############################
-@get(f"{_API_PATH}/users")
+@get(f"{var.API_PATH}/users")
 def _():
     if not request.get_cookie("anarkist"): return _RESPOND(403, "Unauthorized attempt.")
     cookie = request.get_cookie("anarkist")
-    decoded_jwt = jwt.decode(cookie, _JWT_SECRET, algorithms=["HS256"])
-    if not int(decoded_jwt["user_role"]) in _AUTH_USER_ROLES: return _RESPOND(403, "Unauthorized attempt.")
+    decoded_jwt = jwt.decode(cookie, var.JWT_SECRET, algorithms=["HS256"])
+    if not int(decoded_jwt["user_role"]) in var.AUTH_USER_ROLES: return _RESPOND(403, "Unauthorized attempt.")
     
     bar_id, error = validate.id(str(decoded_jwt["bar_id"]))
     if error: return _RESPOND(400, error)
@@ -29,7 +29,7 @@ def _():
         where_clause = "WHERE bar_id = %s"
 
     try:
-        db_connect = pymysql.connect(**_DB_CONFIG)
+        db_connect = pymysql.connect(**var.DB_CONFIG)
         cursor = db_connect.cursor()
 
         cursor.execute(f"SELECT * FROM users_list {where_clause} LIMIT %s,%s", (bar_id, offset, limit))

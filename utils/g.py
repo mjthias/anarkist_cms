@@ -1,6 +1,6 @@
 from bottle import response
 import pymysql
-from utils.vars import _DB_CONFIG
+import utils.vars as var
 
 ##############################
 def _RESPOND(status = 400, error_message = "Unknown error"):
@@ -12,7 +12,7 @@ def _RESPOND(status = 400, error_message = "Unknown error"):
 ##############################
 def _DELETE_SESSION(session=None):
     try:
-        db_connect = pymysql.connect(**_DB_CONFIG)
+        db_connect = pymysql.connect(**var.DB_CONFIG)
         cursor = db_connect.cursor()
 
         cursor.execute("DELETE FROM sessions WHERE session_id =%s", (session["session_id"],))
@@ -34,7 +34,7 @@ def _DELETE_SESSION(session=None):
 ##############################
 def _UPDATE_SESSION(now=0, session=None):
     try:
-        db_connect = pymysql.connect(**_DB_CONFIG)
+        db_connect = pymysql.connect(**var.DB_CONFIG)
         cursor = db_connect.cursor()
 
         cursor.execute("""

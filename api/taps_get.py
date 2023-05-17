@@ -1,5 +1,5 @@
 from bottle import get, request, response
-from utils.vars import _DB_CONFIG
+import utils.vars as var
 import utils.validation as validate
 import pymysql
 import json
@@ -57,7 +57,7 @@ def _():
 
     # CONNNECT TO DB AND EXECUTE
     try:
-        db = pymysql.connect(**_DB_CONFIG)
+        db = pymysql.connect(**var.DB_CONFIG)
         cursor = db.cursor()
         cursor.execute(query, params)
         if limit == "1":

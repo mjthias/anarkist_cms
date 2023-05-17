@@ -3,7 +3,7 @@ import jwt
 import time
 import pymysql
 import re
-from utils.vars import _DB_CONFIG, _JWT_SECRET, _NAME_MIN_LEN, _NAME_MAX_LEN
+import utils.vars as var
 from utils.g import _DELETE_SESSION, _UPDATE_SESSION, _RESPOND
 
 ##############################
@@ -14,10 +14,10 @@ def session():
 
     if request.get_cookie("anarkist"):
         cookie = request.get_cookie("anarkist")
-        decoded_jwt = jwt.decode(cookie, _JWT_SECRET, algorithms=["HS256"])
+        decoded_jwt = jwt.decode(cookie, var.JWT_SECRET, algorithms=["HS256"])
 
         try:
-            db_connect = pymysql.connect(**_DB_CONFIG)
+            db_connect = pymysql.connect(**var.DB_CONFIG)
             cursor = db_connect.cursor()
 
             cursor.execute("SELECT * FROM sessions WHERE session_id = %s LIMIT 1", (decoded_jwt["session_id"],))
@@ -41,7 +41,7 @@ def session():
         else:
             _UPDATE_SESSION(now, decoded_jwt)
             decoded_jwt["session_iat"] = now
-            encoded_jwt = jwt.encode(decoded_jwt, _JWT_SECRET, algorithm="HS256")
+            encoded_jwt = jwt.encode(decoded_jwt, var.JWT_SECRET, algorithm="HS256")
             response.set_cookie("anarkist", encoded_jwt, path="/")
             return True
 
@@ -107,11 +107,11 @@ def confirm_password(value1, value2):
 ##############################
 def user_name(value):
     missing_message = "User name is missing."
-    invalid_min_message = f"User name must be at least {_NAME_MIN_LEN} characters."
-    invalid_max_message = f"User name must be less than {_NAME_MAX_LEN} characters."
+    invalid_min_message = f"User name must be at least {var.NAME_MIN_LEN} characters."
+    invalid_max_message = f"User name must be less than {var.NAME_MAX_LEN} characters."
     if not value: return None, missing_message
     value = value.strip()
-    if len(value) < _NAME_MIN_LEN: return None, invalid_min_message
-    if len(value) > _NAME_MAX_LEN: return None, invalid_max_message
+    if len(value) < var.NAME_MIN_LEN: return None, invalid_min_message
+    if len(value) > var.NAME_MAX_LEN: return None, invalid_max_message
     value = value.capitalize()
     return str(value), None

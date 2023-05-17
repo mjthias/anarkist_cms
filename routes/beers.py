@@ -1,5 +1,5 @@
 from bottle import get, view, response
-from utils.vars import _DB_CONFIG
+import utils.vars as var
 import pymysql
 import json
 
@@ -9,7 +9,7 @@ import json
 @view("beers")
 def _():
     try:
-        db = pymysql.connect(**_DB_CONFIG)
+        db = pymysql.connect(**var.DB_CONFIG)
         cursor = db.cursor()
         cursor.execute("SELECT * FROM beers")
         beers = cursor.fetchall()

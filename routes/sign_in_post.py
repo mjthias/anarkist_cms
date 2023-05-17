@@ -1,6 +1,6 @@
 from bottle import post, redirect, request, response
 from utils.g import _RESPOND
-from utils.vars import _DB_CONFIG, _JWT_SECRET
+import utils.vars as var
 import utils.validation as validate
 import pymysql
 import time
@@ -21,7 +21,7 @@ def _():
         return _RESPOND(500, "Server error.")
 
     try:
-        db_connect = pymysql.connect(**_DB_CONFIG)
+        db_connect = pymysql.connect(**var.DB_CONFIG)
         db_connect.begin()
         cursor = db_connect.cursor()
 
@@ -57,7 +57,7 @@ def _():
         db_connect.close()
 
     if len(users) > 1 or users[0]["user_role_id"] == 1:
-        encoded_jwt = jwt.encode(session, _JWT_SECRET, algorithm="HS256")
+        encoded_jwt = jwt.encode(session, var.JWT_SECRET, algorithm="HS256")
         response.set_cookie("anarkist", encoded_jwt, path="/")
 
         if users[0]["user_role_id"] != 1:
@@ -68,12 +68,12 @@ def _():
                     "bar_name": user['bar_name']
                 }
                 bars.append(bar)
-            response.set_cookie("bars", bars, _JWT_SECRET, path="/")
+            response.set_cookie("bars", bars, var.JWT_SECRET, path="/")
 
         return redirect("/select-location")
         
     if len(users) == 1:
         session["bar_id"] = users[0]["bar_id"]
-        encoded_jwt = jwt.encode(session, _JWT_SECRET, algorithm="HS256")
+        encoded_jwt = jwt.encode(session, var.JWT_SECRET, algorithm="HS256")
         response.set_cookie("anarkist", encoded_jwt, path="/")
         return redirect("/")
