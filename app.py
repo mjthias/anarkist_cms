@@ -18,6 +18,7 @@ import routes.select_location_post
 import routes.sign_out
 import routes.home
 import routes.beers
+import routes.users
 
 ##############################
 
