@@ -27,7 +27,7 @@ def session():
                 return False
         except Exception as ex:
             print(str(ex))
-            return g.respond(500, "Server error.")
+            return False
         finally:
             cursor.close()
             db_connect.close()
@@ -43,7 +43,7 @@ def session():
             decoded_jwt["session_iat"] = now
             encoded_jwt = jwt.encode(decoded_jwt, var.JWT_SECRET, algorithm="HS256")
             response.set_cookie("anarkist", encoded_jwt, path="/")
-            return True
+            return decoded_jwt
 
     else:
         return False
