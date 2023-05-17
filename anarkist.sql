@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:8889
--- Generation Time: May 09, 2023 at 05:18 PM
+-- Generation Time: May 17, 2023 at 07:15 AM
 -- Server version: 5.7.39
 -- PHP Version: 8.2.0
 
@@ -114,7 +114,25 @@ INSERT INTO `beers` (`beer_id`, `beer_name`, `fk_brewery_id`, `beer_ebc`, `beer_
 -- (See below for the actual view)
 --
 CREATE TABLE `beer_list` (
-`beer_name` varchar(50)
+`beer_id` bigint(20) unsigned
+,`beer_name` varchar(50)
+,`fk_brewery_id` bigint(20) unsigned
+,`beer_ebc` varchar(3)
+,`beer_ibu` varchar(3)
+,`beer_alc` varchar(5)
+,`fk_beer_style_id` bigint(20) unsigned
+,`beer_price` double unsigned
+,`beer_image` varchar(41)
+,`beer_description_en` varchar(500)
+,`beer_description_dk` varchar(500)
+,`beer_created_at` int(10) unsigned
+,`fk_beer_created_by` bigint(20) unsigned
+,`beer_updated_at` int(10) unsigned
+,`fk_beer_updated_by` bigint(20) unsigned
+,`brewery_name` varchar(100)
+,`beer_style_name` varchar(50)
+,`beer_created_by_user_name` varchar(100)
+,`beer_updated_by_user_name` varchar(100)
 );
 
 -- --------------------------------------------------------
@@ -125,14 +143,14 @@ CREATE TABLE `beer_list` (
 
 CREATE TABLE `beer_styles` (
   `beer_style_id` bigint(20) UNSIGNED NOT NULL,
-  `beer_style_title` varchar(50) NOT NULL
+  `beer_style_name` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `beer_styles`
 --
 
-INSERT INTO `beer_styles` (`beer_style_id`, `beer_style_title`) VALUES
+INSERT INTO `beer_styles` (`beer_style_id`, `beer_style_name`) VALUES
 (2, 'Hazy IPA'),
 (1, 'IPA'),
 (3, 'Sour');
@@ -256,6 +274,31 @@ INSERT INTO `taps` (`tap_id`, `tap_number`, `fk_beer_id`, `fk_bar_id`, `tap_unav
 -- --------------------------------------------------------
 
 --
+-- Stand-in structure for view `taps_list`
+-- (See below for the actual view)
+--
+CREATE TABLE `taps_list` (
+`tap_id` bigint(20) unsigned
+,`tap_number` tinyint(100)
+,`fk_beer_id` bigint(20) unsigned
+,`fk_bar_id` bigint(20) unsigned
+,`tap_unavailable` tinyint(1)
+,`beer_id` bigint(20) unsigned
+,`beer_name` varchar(50)
+,`beer_ebc` varchar(3)
+,`beer_ibu` varchar(3)
+,`beer_alc` varchar(5)
+,`beer_price` double unsigned
+,`beer_image` varchar(41)
+,`brewery_name` varchar(100)
+,`beer_style_name` varchar(50)
+,`beer_description_en` varchar(500)
+,`beer_description_dk` varchar(500)
+);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -303,7 +346,16 @@ INSERT INTO `user_roles` (`user_role_id`, `user_role_title`) VALUES
 --
 DROP TABLE IF EXISTS `beer_list`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`anarkist`@`%` SQL SECURITY DEFINER VIEW `beer_list`  AS SELECT `beers`.`beer_name` AS `beer_name` FROM `beers` ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`anarkist`@`%` SQL SECURITY DEFINER VIEW `beer_list`  AS SELECT `beers`.`beer_id` AS `beer_id`, `beers`.`beer_name` AS `beer_name`, `beers`.`fk_brewery_id` AS `fk_brewery_id`, `beers`.`beer_ebc` AS `beer_ebc`, `beers`.`beer_ibu` AS `beer_ibu`, `beers`.`beer_alc` AS `beer_alc`, `beers`.`fk_beer_style_id` AS `fk_beer_style_id`, `beers`.`beer_price` AS `beer_price`, `beers`.`beer_image` AS `beer_image`, `beers`.`beer_description_en` AS `beer_description_en`, `beers`.`beer_description_dk` AS `beer_description_dk`, `beers`.`beer_created_at` AS `beer_created_at`, `beers`.`fk_beer_created_by` AS `fk_beer_created_by`, `beers`.`beer_updated_at` AS `beer_updated_at`, `beers`.`fk_beer_updated_by` AS `fk_beer_updated_by`, `breweries`.`brewery_name` AS `brewery_name`, `beer_styles`.`beer_style_name` AS `beer_style_name`, `c`.`user_name` AS `beer_created_by_user_name`, `u`.`user_name` AS `beer_updated_by_user_name` FROM ((((`beers` join `beer_styles` on((`beers`.`fk_beer_style_id` = `beer_styles`.`beer_style_id`))) join `breweries` on((`beers`.`fk_brewery_id` = `breweries`.`brewery_id`))) join `users` `c` on((`beers`.`fk_beer_created_by` = `c`.`user_id`))) join `users` `u` on((`beers`.`fk_beer_updated_by` = `u`.`user_id`))) ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `taps_list`
+--
+DROP TABLE IF EXISTS `taps_list`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`anarkist`@`%` SQL SECURITY DEFINER VIEW `taps_list`  AS SELECT `taps`.`tap_id` AS `tap_id`, `taps`.`tap_number` AS `tap_number`, `taps`.`fk_beer_id` AS `fk_beer_id`, `taps`.`fk_bar_id` AS `fk_bar_id`, `taps`.`tap_unavailable` AS `tap_unavailable`, `beer_list`.`beer_id` AS `beer_id`, `beer_list`.`beer_name` AS `beer_name`, `beer_list`.`beer_ebc` AS `beer_ebc`, `beer_list`.`beer_ibu` AS `beer_ibu`, `beer_list`.`beer_alc` AS `beer_alc`, `beer_list`.`beer_price` AS `beer_price`, `beer_list`.`beer_image` AS `beer_image`, `beer_list`.`brewery_name` AS `brewery_name`, `beer_list`.`beer_style_name` AS `beer_style_name`, `beer_list`.`beer_description_en` AS `beer_description_en`, `beer_list`.`beer_description_dk` AS `beer_description_dk` FROM (`taps` join `beer_list` on((`taps`.`fk_beer_id` = `beer_list`.`beer_id`))) ;
 
 --
 -- Indexes for dumped tables
@@ -337,7 +389,7 @@ ALTER TABLE `beers`
 --
 ALTER TABLE `beer_styles`
   ADD PRIMARY KEY (`beer_style_id`),
-  ADD UNIQUE KEY `beer_style_title` (`beer_style_title`);
+  ADD UNIQUE KEY `beer_style_name` (`beer_style_name`);
 
 --
 -- Indexes for table `breweries`
