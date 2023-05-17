@@ -6,7 +6,7 @@ import utils.validation as validate
 @get("/sign-in")
 @view("sign_in")
 def _():
-    is_signed_in = validate._SESSION()
+    is_signed_in = validate.session()
 
     if is_signed_in: 
         return redirect("/")

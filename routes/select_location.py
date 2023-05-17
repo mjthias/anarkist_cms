@@ -8,7 +8,7 @@ import pymysql
 @get("/select-location")
 @view("select_location")
 def _():
-    is_signed_in = validate._SESSION()
+    is_signed_in = validate.session()
 
     if is_signed_in:
         if not request.get_cookie("bars"):

@@ -1,6 +1,6 @@
 from bottle import get, request, response
 from utils.vars import _DB_CONFIG
-import utils.validation as is_valid
+import utils.validation as validate
 import pymysql
 import json
 
@@ -12,19 +12,19 @@ def _():
 
     # VALIDATE INPUT VLAUES
     bar_id = request.query.get("bar-id")
-    if bar_id and not is_valid._ID(bar_id):
+    if bar_id and not validate.id(bar_id):
         response.status = 400
         return json.dumps({"error": "Bar-id must be a positive integer"})
     
     limit = request.query.get("limit")
-    if limit and not is_valid._LIMIT(limit):
+    if limit and not validate.limit(limit):
         response.status = 400
         return json.dumps({"error": "Limit must be -1 or a postive integer"})
     if not limit:
         limit = 100
 
     offset = request.query.get("offset")
-    if offset and not is_valid._OFFSET(offset):
+    if offset and not validate.offset(offset):
         response.status = 400
         return json.dumps({"error": "Offset must 0 or a positive integer"})
     if not offset:

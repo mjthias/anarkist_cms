@@ -11,9 +11,9 @@ import bcrypt
 @post("/sign-in")
 def _():
     try:
-        user_email, error = validate._EMAIL(request.forms.get("user_email"))
+        user_email, error = validate.email(request.forms.get("user_email"))
         if error: return _RESPOND(400, error)
-        user_password, error = validate._PASSWORD(request.forms.get("user_password"))
+        user_password, error = validate.password(request.forms.get("user_password"))
         if error: return _RESPOND(400, error)
         user_password_bytes = user_password.encode('utf-8')
     except Exception as ex:

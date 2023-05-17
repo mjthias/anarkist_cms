@@ -8,7 +8,7 @@ import jwt
 ##############################
 @post("/select-location")
 def _():
-    if not validate._SESSION(): return _RESPOND(403, "Unauthorized attempt.")
+    if not validate.session(): return _RESPOND(403, "Unauthorized attempt.")
     if not request.forms.get("bars"): return _RESPOND(400, "An error occured.")
 
     bar_id = int(request.forms.get("bars"))

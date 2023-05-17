@@ -18,18 +18,18 @@ def _():
     if not session_role_id in _AUTH_USER_ROLES: return _RESPOND(403, "Unauthorized attempt.")
 
     try:
-        user_name, error = validate._USER_NAME(request.forms.get("user_name"))
+        user_name, error = validate.user_name(request.forms.get("user_name"))
         if error: return _RESPOND(400, error)
-        user_email, error = validate._EMAIL(request.forms.get("user_email"))
+        user_email, error = validate.email(request.forms.get("user_email"))
         if error: return _RESPOND(400, error)
-        user_password, error = validate._PASSWORD(request.forms.get("user_password"))
+        user_password, error = validate.password(request.forms.get("user_password"))
         if error: return _RESPOND(400, error)
-        user_confirm_password, error = validate._CONFIRM_PASSWORD(user_password, request.forms.get("user_confirm_password"))
+        user_confirm_password, error = validate.confirm_password(user_password, request.forms.get("user_confirm_password"))
         if error: return _RESPOND(400, error)
-        user_role_id, error = validate._ID(request.forms.get("user_role_id"))
+        user_role_id, error = validate.id(request.forms.get("user_role_id"))
         if error: return _RESPOND(400, f"User Role {error}")
         if not user_role_id == 1:
-            bar_id, error = validate._ID(request.forms.get("bar_id"))
+            bar_id, error = validate.id(request.forms.get("bar_id"))
             if error: return _RESPOND(400, f"Bar {error}")
             if (not session_role_id == 1) and (not session_bar_id == bar_id):
                 return _RESPOND(403, "Unauthorized attempt.")

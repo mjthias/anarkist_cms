@@ -14,13 +14,13 @@ def _():
     decoded_jwt = jwt.decode(cookie, _JWT_SECRET, algorithms=["HS256"])
     if not int(decoded_jwt["user_role"]) in _AUTH_USER_ROLES: return _RESPOND(403, "Unauthorized attempt.")
     
-    bar_id, error = validate._ID(str(decoded_jwt["bar_id"]))
+    bar_id, error = validate.id(str(decoded_jwt["bar_id"]))
     if error: return _RESPOND(400, error)
     offset = request.query.get("offset") if request.query.get("offset") else "0"
-    offset, error = validate._OFFSET(offset)
+    offset, error = validate.offset(offset)
     if error: return _RESPOND(400, error)
     limit = request.query.get("limit") if request.query.get("limit") else "100"
-    limit, error = validate._LIMIT(limit)
+    limit, error = validate.limit(limit)
     if error: return _RESPOND(400, error)
 
     if decoded_jwt["user_role"] == 1:
