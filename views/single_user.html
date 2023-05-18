@@ -1,0 +1,105 @@
+% import utils.g as g
+% page_title = user["user_name"] if user else "User not found"
+% rebase("base", page_title=page_title)
+
+<div id="spa" data-page_title={{page_title}} data-page_url="/users/{{search_user_id}}">
+    <header>
+        % if user:
+            <h2>{{user["user_name"]}}</h2>
+        % else:
+            <h2>User not found</h2>
+        % end
+    </header>
+
+    % if user:
+    <form >
+        <h2>User info</h2>
+        <label for="name">Name</label>
+        <input type="text" name="user_name" id="name" value="{{user['user_name']}}">
+        <label for="email">Email</label>
+        <input type="text" name="user_email" id="email" value="{{user['user_email']}}">
+
+        % if session["role_id"] == 1 and user["user_role_id"] != 1:
+            <label for="user-role"></label>
+            <select name="user_role" id="user-role">
+                <option 
+                    value="3"
+                    % if user['user_role_id'] == 3: 
+                    selected 
+                    % end
+                    >Bar staff
+                </option>
+                <option 
+                    value="2"
+                    % if user['user_role_id'] == 2: 
+                    selected 
+                    % end
+                    >Bar admin
+                </option>
+                <option 
+                    value="1"
+                    % if user['user_role_id'] == 1: 
+                    selected 
+                    % end
+                    >Super user
+                </option>
+            </select>
+            
+        % elif session["role_id"] == 2 and user["user_role_id" == 3]:
+            <label for="user-role"></label>
+            <select name="user_role" id="user-role">
+                <option 
+                    value="3"
+                    % if user['user_role_id'] == 3:
+                    selected 
+                    % end
+                    >Bar staff
+                </option>
+                <option 
+                    value="2"
+                    % if user['user_role_id'] == 2:
+                    selected 
+                    % end
+                    >Bar admin
+                </option>
+            </select>
+        % end 
+
+        <button>Save changes</button>
+    </form>
+
+    % if session["user_id"] == search_user_id:
+    <form >
+        <h2>Reset password</h2>
+        <label for="old-password">Old password</label>
+        <input type="password" id="old-password" name="user_password">
+        <label for="password">New password</label>
+        <input type="password" id="password" name="user_password">
+        <label for="repeat-password">Repeat password</label>
+        <input type="password" id="repeat-password" name="user_password_repeat">
+        <button>Reset password</button>
+    </form>
+    % end
+
+        % if user["bar_access"]:
+            <div>
+                <h2>Bar access</h2>
+                % for bar in user["bar_access"]:
+                    <form>
+                        <p>{{bar["bar_name"]}}</p>
+                        <button>Remove</button>
+                    </form>
+                % end
+                <form>
+                    <select name="bar_id" id="add">
+                        <option selected></option>
+                        % for bar in bars:
+                        <option value="{{bar['bar_id']}}">{{bar["bar_name"]}}, {{bar["bar_city"]}}</option>
+                        % end
+                    </select>
+                </form>
+            </div>
+        % end
+
+    % end
+</div>

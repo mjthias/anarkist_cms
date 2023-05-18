@@ -21,6 +21,7 @@ import routes.sign_out
 import routes.home
 import routes.beers
 import routes.users
+import routes.users_by_id
 
 ##############################
 
