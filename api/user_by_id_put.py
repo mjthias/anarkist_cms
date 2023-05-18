@@ -2,12 +2,10 @@ from bottle import put, request, response
 import utils.g as g
 import utils.vars as var
 import utils.validation as validate
-import jwt
 import json
 import pymysql
 
 allowed_keys = ["user_id", "user_name", "user_email", "user_role_id"]
-# allowed_keys = ["user_id", "user_name", "user_email", "user_password", "user_new_password", "user_confirm_new_password", "user_role_id"]
 
 ##############################
 @put(f"{var.API_PATH}/users/<user_id>")
@@ -28,24 +26,9 @@ def _(user_id=""):
         if error: return g.respond(400, error)
         user_name, error = validate.user_name(request.forms.get("user_name"))
         if error: return g.respond(400, error)
-        # user_password, error = validate.password(request.forms.get("user_password"))
-        # if error: return g.respond(400, error)
-        # user_new_password, error = validate.password(request.forms.get("user_new_password"))
-        # if error: return g.respond(400, error)
-        # user_confirm_new_password, error = validate.confirm_password(user_new_password, request.forms.get("user_confirm_new_password"))
-        # if error: return g.respond(400, error)
         user_role_id, error = validate.id(request.forms.get("user_role_id"))
         if error: return g.respond(400, f"User role {error}")
 
-        # user = {
-        #     "user_id": user_id,
-        #     "user_email": user_email,
-        #     "user_name": user_name,
-        #     "user_password": user_password,
-        #     "user_new_password": user_new_password,
-        #     "user_confirm_new_password": user_confirm_new_password,
-        #     "user_role_id": user_role_id
-        # }
     except Exception as ex:
         print(str(ex))
         return g.respond(500, "Server error")
