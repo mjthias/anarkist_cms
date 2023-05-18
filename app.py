@@ -8,6 +8,7 @@ import api.user_post
 import api.user_by_id_get
 import api.user_by_id_put
 import api.user_by_id_delete
+import api.password_put
 import api.taps_get
 import api.breweries_get
 import api.bars_get
