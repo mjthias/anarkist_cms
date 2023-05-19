@@ -3,6 +3,8 @@ from bottle import get, static_file, run, default_app
 ##############################
 
 # API
+import api.sign_in_post
+import api.select_location_post
 import api.users_get
 import api.user_post
 import api.user_by_id_get
@@ -15,9 +17,7 @@ import api.bars_get
 
 # CMS
 import routes.sign_in
-import routes.sign_in_post
 import routes.select_location
-import routes.select_location_post
 import routes.sign_out
 import routes.home
 import routes.beers

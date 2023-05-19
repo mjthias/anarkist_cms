@@ -56,8 +56,13 @@ def _():
         db_connect.commit()
 
         # Append the remaininig values to session-dict
+        session["user_name"] = user["user_name"]
         session["session_id"] = cursor.lastrowid
         session["role_id"] = user["fk_user_role_id"]
+        
+        encoded_jwt = jwt.encode(session, var.JWT_SECRET, algorithm="HS256")
+        response.set_cookie("anarkist", encoded_jwt, path="/")
+        return g.respond(201, "Successfully signed in.")
 
     except Exception as ex:
         print(ex)
@@ -67,8 +72,3 @@ def _():
     finally:
         cursor.close()
         db_connect.close()
-
-
-    encoded_jwt = jwt.encode(session, var.JWT_SECRET, algorithm="HS256")
-    response.set_cookie("anarkist", encoded_jwt, path="/")
-    return redirect("/select-location")

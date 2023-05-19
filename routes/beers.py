@@ -1,22 +1,23 @@
-from bottle import get, view, response
+from bottle import get, view, response, redirect
 import utils.vars as var
+import utils.validation as validate
 import pymysql
-import json
 
 ##############################
 
 @get("/beers")
 @view("beers")
 def _():
+    session = validate.session()
+    if not session: 
+        return redirect("/sign-in")
     try:
         db = pymysql.connect(**var.DB_CONFIG)
         cursor = db.cursor()
         cursor.execute("SELECT * FROM beers")
         beers = cursor.fetchall()
-        user = {"user_name": "Super User"}
-        # return json.dumps(beers)
         print(beers)
-        return dict(beers = beers, user=user)
+        return dict(beers = beers, session=session)
 
     except Exception as ex:
         print(str(ex))
