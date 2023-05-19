@@ -56,6 +56,7 @@ def _():
         db_connect.commit()
 
         # Append the remaininig values to session-dict
+        session["user_name"] = user["user_name"]
         session["session_id"] = cursor.lastrowid
         session["role_id"] = user["fk_user_role_id"]
 

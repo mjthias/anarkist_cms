@@ -19,7 +19,7 @@ def partial_session():
 ##############################
 
 def session():
-    valid_session_keys = ['user_id', 'session_iat', 'session_id', 'role_id', 'bar_id']
+    valid_session_keys = ['user_id', 'session_iat', 'user_name', 'session_id', 'role_id', 'bar_id', 'bar_name', 'bar_access']
     now = int(time.time())
     day_in_seconds = 864000
 
@@ -27,8 +27,7 @@ def session():
         cookie = request.get_cookie("anarkist")
         decoded_jwt = jwt.decode(cookie, var.JWT_SECRET, algorithms=["HS256"])
 
-        for key in valid_session_keys:
-            if not key in list(decoded_jwt.keys()): return False
+        if not list(decoded_jwt.keys()) == valid_session_keys: return False
 
         try:
             db_connect = pymysql.connect(**var.DB_CONFIG)

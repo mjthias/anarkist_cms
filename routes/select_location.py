@@ -41,9 +41,14 @@ def _():
     # If only 1 bar, skip selection
     if len(bars) == 1:
         session["bar_id"] = bars[0]["bar_id"]
+        session["bar_name"] = bars[0]["bar_name"]
         encoded_jwt = jwt.encode(session, var.JWT_SECRET, algorithm="HS256")
         response.set_cookie("anarkist", encoded_jwt, path="/")
         return redirect("/")
+    
+    session["bar_access"] = bars
+    encoded_jwt = jwt.encode(session, var.JWT_SECRET, algorithm="HS256")
+    response.set_cookie("anarkist", encoded_jwt, path="/")
     
     return dict(bars=bars)
 
