@@ -1,6 +1,18 @@
 <nav>
     <div>
-        <i class="fa-solid fa-circle-user"></i><span>TODO (session["user_name"])</span>
+        {{ session["bar_name"] }}
+    </div>
+    <div>
+        % for bar in session["bar_access"]:
+        <div>
+            % if not session["bar_id"] == bar["bar_id"]:
+            {{ bar["bar_name"] }}
+            % end
+        </div>
+        % end
+    </div>
+    <div>
+        <i class="fa-solid fa-circle-user"></i><span>{{ session["user_name"] }}</span>
     </div>
     <ul>
         <li>
