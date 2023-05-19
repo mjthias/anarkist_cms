@@ -90,6 +90,9 @@ async function updateUserPassword(form) {
 
   const res = await conn.json();
   console.log(res)
+
+}
+
 async function signIn() {
   const form = event.target.form;
   // TODO: VALIDATE INPUT VALUES
