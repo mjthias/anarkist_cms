@@ -44,3 +44,35 @@ async function spa(spaUrl, doPushState = true) {
 window.addEventListener("popstate", (e) => {
   spa(e.state.spaUrl, false);
 });
+
+async function signIn() {
+  const form = event.target.form;
+  // TODO: VALIDATE INPUT VALUES
+
+  const connection = await fetch('/sign-in', {
+    method: "POST",
+    body: new FormData(form)
+  }); 
+  const response = await connection.json()
+  if (!connection.ok) {
+    // TODO: Display error message to user
+  } else {
+    window.location.href = "/select-location";
+  }
+}
+
+async function selectLocation() {
+  const form = event.target.form;
+  // TODO: VALIDATE INPUT VALUES
+
+  const connection = await fetch('/select-location', {
+    method: "POST",
+    body: new FormData(form)
+  });
+  const response = await connection.json();
+  if (!connection.ok) {
+    // TODO: Display error to user
+  } else {
+    window.location.href = "/";
+  }
+}

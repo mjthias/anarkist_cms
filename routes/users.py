@@ -37,7 +37,7 @@ def _():
                 """, (bar_id, user_id))
             
         users = cursor.fetchall()
-        return dict(users = users)
+        return dict(session = session, users = users)
 
     except Exception as ex:
         print(str(ex))
