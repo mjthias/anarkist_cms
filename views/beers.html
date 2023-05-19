@@ -1,18 +1,11 @@
-% rebase("base", page_title="beers") 
+% rebase("base", page_title="Beers", render_sub_menu=True) 
 
 <div
     id="spa"
     data-page_title="Beers"
     data-page_url="/beers"
     >
-    <header>
-        <h2>Beers</h2>
-    </header>
-    <ul>
         % for beer in beers:
-            <li>
-                % include("components/beer")
-            </li>
+            % include("components/beer", href=f"/beers/{ beer['beer_id'] }")
         % end
-    </ul>
 </div>

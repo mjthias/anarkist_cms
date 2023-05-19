@@ -1,1 +1,23 @@
-<a href="/beers/{{beer['beer_id']}}">{{beer["beer_name"]}}</a>
+<!-- <a href="/beers/{{beer['beer_id']}}">{{beer["beer_name"]}}</a> -->
+
+<article id="{{ beer['beer_id'] }}" href="{{ href }}" onclick="spa('{{ href }}')">
+    <div>
+        % if beer['beer_image']:
+        <img src="{{ beer['beer_image']}}" />
+        % else:
+        <i class="fa-solid fa-beer-mug-empty"></i>
+        % end
+    </div>
+    <div>
+        <header>
+            <h3>{{ beer['beer_name'] }}</h3>
+        </header>
+        <div>
+            <p>{{ beer['beer_style_name'] }}</p>
+            <p>{{ beer['brewery_name'] }}</p>
+            <p>Alc.: {{ beer['beer_alc'] }}%</p>
+            <p>IBU: {{ beer['beer_ibu'] }}</p>
+            <p>EBC: {{ beer['beer_ebc'] }}</p>
+        </div>
+    </div>
+</article>
