@@ -29,17 +29,21 @@ def _():
         cursor = db_connect.cursor()
 
         # Get users from db
-        cursor.execute("SELECT * FROM sign_in_users_list WHERE user_email = %s", (user_email))
-        users = cursor.fetchall()
+        cursor.execute("""
+            SELECT * FROM users 
+            WHERE user_email = %s
+            LIMIT 1
+        """, (user_email))
+        user = cursor.fetchone()
 
         # Validate password
-        if not users: return g.respond(400, "Invalid email or password.")
-        if not bcrypt.checkpw(user_password_bytes, str(users[0]['user_password']).encode('utf-8')): 
+        if not user: return g.respond(400, "Invalid email or password.")
+        if not bcrypt.checkpw(user_password_bytes, str(user['user_password']).encode('utf-8')): 
             return g.respond(400, "Invalid email or password.")
 
         # Create session
         session = {
-            "user_id": users[0]["user_id"],
+            "user_id": user["user_id"],
             "session_iat": int(time.time()),
         }
 
@@ -53,7 +57,7 @@ def _():
 
         # Append the remaininig values to session-dict
         session["session_id"] = cursor.lastrowid
-        session["role_id"] = users[0]["user_role_id"]
+        session["role_id"] = user["fk_user_role_id"]
 
     except Exception as ex:
         print(ex)
