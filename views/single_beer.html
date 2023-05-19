@@ -1,0 +1,62 @@
+% rebase("base", page_title=f"{beer['beer_name']}", render_sub_menu=True)
+
+<div
+    id="spa"
+    data-page_title="{{ beer['beer_name'] }}"
+    data-page_url="/beers/{{ beer['beer_id'] }}"
+    >
+
+    <form onsubmit="return false" novalidate="true">
+        <div>
+            <label for="beer_name">Name</label>
+            <input type="text" id="beer_name" name="beer_name" value="{{ beer['beer_name'] }}" />
+        </div>
+        <div>
+            <label for="brewery_name">Brewery</label>
+            <input type="text" id="brewery_name" name="brewery_name" value="{{ beer['brewery_name'] }}" />
+        </div>
+        <div>
+            <label for="beer_style_name">Style</label>
+            <input type="text" id="beer_style_name" name="beer_style_name" value="{{ beer['beer_style_name'] }}" />
+        </div>
+        <div>
+            <label for="beer_alc">Alc.</label>
+            <input type="number" id="beer_alc" name="beer_alc" value="{{ beer['beer_alc'] }}" />
+        </div>
+        <div>
+            <label for="beer_price">Price</label>
+            <input type="number" id="beer_price" name="beer_price" value="{{ beer['beer_price'] }}" />
+        </div>
+        <div>
+            <label for="beer_ibu">IBU</label>
+            <input type="number" id="beer_ibu" name="beer_ibu" value="{{ beer['beer_ibu'] }}" />
+        </div>
+        <div>
+            <label for="beer_ebc">EBC</label>
+            <input type="number" id="beer_ebc" name="beer_ebc" value="{{ beer['beer_ebc'] }}" />
+        </div>
+        <div>
+            <label for="beer_description_en">Description (English)</label>
+            <textarea id="beer_description_en" name="beer_description_en">{{ beer['beer_description_en'] }}</textarea>
+        </div>
+        <div>
+            <label for="beer_description_dk">Description (Danish)</label>
+            <textarea id="beer_description_dk" name="beer_description_dk">{{ beer['beer_description_dk'] }}</textarea>
+        </div>
+        <div>
+            <label for="beer_image">
+                <span><i class="fa-solid fa-image"></i></span>Upload image
+            </label>
+            <input type="file" id="beer_image" name="beer_image" accept="image/png, image/jpg, image/jpeg"  value="{{ beer['beer_image'] }}"/>
+        </div>
+        <div>
+            % if beer['beer_image']:
+                <img src="{{ beer['beer_image'] }}" alt="{{ beer['beer_name'] }}" />
+            % end
+        </div>
+        <div>
+            <button>Submit</button>
+        </div>
+    </form>
+    
+</div>
