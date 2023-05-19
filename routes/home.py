@@ -1,8 +1,12 @@
-from bottle import get, view
+from bottle import get, view, redirect
+import utils.validation as validate
 
 ##############################
 @get("/")
 @view("home")
 def _():
-    user = {"user_name": "Super User"}
-    return dict(user=user)
+    session = validate.session()
+    if not session:
+        return redirect("/sign-in")
+    
+    return dict(session=session)
