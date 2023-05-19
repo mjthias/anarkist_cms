@@ -1,6 +1,6 @@
 % rebase("base", page_title="Select location", render_navigation=False)
 
-<form method="POST" action="/select-location">
+<form onsubmit="return false" novalidate="true">
     <label for="bars">Bars</label>
     <select id="bars" name="bars">
         <option selected>Please choose a location</option>
@@ -8,5 +8,5 @@
             <option value="{{ bar['bar_id'] }}">{{ bar['bar_name'] }}</option>
         % end
     </select>
-    <button type="submit">Submit</button>
+    <button onclick="selectLocation()">Submit</button>
 </form>
