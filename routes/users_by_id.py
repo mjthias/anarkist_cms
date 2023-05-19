@@ -29,7 +29,9 @@ def _(search_user_id):
     try:
         db = pymysql.connect(**var.DB_CONFIG)
         cursor = db.cursor()
+        bars = None # Init, not needed if selected user is super_user
 
+        # SELECT THE USER
         # FOR SUPER USERS
         if role_id == 1:
             cursor.execute("""
@@ -42,22 +44,7 @@ def _(search_user_id):
                 """, (bar_id, search_user_id, search_user_id))
             user = cursor.fetchone()
 
-            # If searched user != super_user, bar_access needed
-            if user and user["user_role_id"] != "1":
-                cursor.execute("""
-                    SELECT bar_id, bar_name 
-                    FROM bar_access
-                    JOIN bars
-                    WHERE fk_user_id = %s 
-                    AND fk_bar_id = bar_id
-                    """, (search_user_id))
-                bar_access = cursor.fetchall()
-                user["bar_access"] = bar_access
-
-                cursor.execute("SELECT * FROM BARS")
-                bars = cursor.fetchall()
-
-        # NON-SUPER-USERS
+        # FOR NON-SUPER-USERS
         else:
             cursor.execute("""
                 SELECT * FROM `users_list` 
@@ -65,6 +52,22 @@ def _(search_user_id):
                 LIMIT 1;
                 """, (bar_id, search_user_id))
             user = cursor.fetchone()
+
+        # Select users bar_access
+        if user and user["user_role_id"] != "1":
+            cursor.execute("""
+                SELECT bar_id, bar_name 
+                FROM bar_access
+                JOIN bars
+                WHERE fk_user_id = %s 
+                AND fk_bar_id = bar_id
+                """, (search_user_id))
+            bar_access = cursor.fetchall()
+            user["bar_access"] = bar_access
+
+            # Select all bars
+            cursor.execute("SELECT * FROM BARS")
+            bars = cursor.fetchall()
 
         return dict(
                 user = user,

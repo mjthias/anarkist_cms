@@ -6,28 +6,31 @@ import pymysql
 import bcrypt
 
 ##############################
-@put(f"{var.API_PATH}/users/<user_id>/reset-password")
-def _(user_id=""):
-    # VALIDATE USER
-    session = validate.session()
-    if not session: return g.respond(401, "Unauthorized attempt.")
-    if (not session["user_id"] == int(user_id) and (not session["role_id"] == 1)): return g.respond(401, "Unauthorized attempt.")
 
-    # VALIDATE INPUT VALUES
-    allowed_keys = ["user_id", "user_password", "user_new_password", "user_confirm_new_password"]
+@put(f"{var.API_PATH}/users/reset-password")
+def _():
     try:
+        # VALIDATE
+        # Session
+        session = validate.session()
+        if not session: return g.respond(401, "Unauthorized attempt.")
+
+        user_id = session["user_id"]
+
+        # Keys allowed
+        allowed_keys = ["user_password", "user_new_password", "user_confirm_new_password"]
         for key in request.forms.keys():
             if not key in allowed_keys: return g.respond(403, f"Forbidden key: {key}")
         
-        user_id, error = validate.id(user_id)
-        if error: return g.respond(400, f"User {error}")
-        form_user_id, error = validate.id(request.forms.get("user_id"))
-        if error: return g.respond(400, f"User {error}")
-        if not user_id == form_user_id: return g.respond(400, "The user ID's does not match.")
+        # Current password
         user_password, error = validate.password(request.forms.get("user_password"))
         if error: return g.respond(400, error)
+
+        # New password
         user_new_password, error = validate.password(request.forms.get("user_new_password"))
         if error: return g.respond(400, error)
+
+        # Password to confirm
         user_confirm_new_password, error = validate.confirm_password(user_new_password, request.forms.get("user_confirm_new_password"))
         if error: return g.respond(400, error)
         
@@ -41,6 +44,7 @@ def _(user_id=""):
         db_connect.begin()
         cursor = db_connect.cursor()
 
+        # Select the user
         cursor.execute("SELECT * FROM users WHERE user_id = %s LIMIT 1", (user_id,))
         user = cursor.fetchone()
         if not user: return g.respond(204, "")
@@ -63,16 +67,18 @@ def _(user_id=""):
             WHERE user_id = %s
         """, (user_new_password, user_id))
 
+        # No user affected
         counter = cursor.rowcount
         if not counter: return g.respond(204, "")
-        print(f"Rows updated: {counter}")
+        
         db_connect.commit()
-
         return g.respond(200, "Password was successfully updated.")
+    
     except Exception as ex:
         print(str(ex))
         db_connect.rollback()
         return g.respond(500, "Server error.")
+    
     finally:
         cursor.close()
         db_connect.close()

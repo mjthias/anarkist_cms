@@ -45,6 +45,51 @@ window.addEventListener("popstate", (e) => {
   spa(e.state.spaUrl, false);
 });
 
+// ##############################
+// ##############################
+// ##############################
+
+// API actions
+
+function validateForm(callback) {
+  event.preventDefault()
+  const form = event.target.form
+  const isValid = form.checkValidity()
+  if (!isValid) return
+  callback(form)
+}
+
+async function updateUserInfo(form) {
+  const userId = form.user_id.value;
+  const conn = await fetch(`/api/v1/users/${userId}`, {
+    method: "PUT",
+    body: new FormData(form)
+  });
+
+  if (conn.status != 200) {
+    const err = await conn.json()
+    console.log(err)
+    return
+  }
+
+  const res = await conn.json()
+  console.log(res)
+}
+
+async function updateUserPassword(form) {
+  const conn = await fetch(`/api/v1/users/reset-password`, {
+      method: "PUT",
+      body: new FormData(form)
+  })
+
+  if (conn.status != 200) {
+    const err = await conn.json()
+    console.log(err)
+    return
+  }
+
+  const res = await conn.json();
+  console.log(res)
 async function signIn() {
   const form = event.target.form;
   // TODO: VALIDATE INPUT VALUES
