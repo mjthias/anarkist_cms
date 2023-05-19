@@ -3,16 +3,16 @@ import utils.vars as var
 import utils.g as g
 import utils.validation as validate
 import pymysql
-import json
-import jwt
 
 ##############################
 @get(f"{var.API_PATH}/users/<user_id>")
 def _(user_id=""):
+    # VALIDATE SESSION/USER
     session = validate.session()
     if not session: return g.respond(401, "Unauthorized attempt.")
     if (not session["user_id"] == int(user_id)) and (not session["role_id"] in var.AUTH_USER_ROLES): return g.respond(401, "Unauthorized attempt.")
 
+    # VALIDATE INPUT VALUES
     try:
         user_id, error = validate.id(user_id)
         if error: return g.respond(400, f"User {error}")
@@ -23,10 +23,12 @@ def _(user_id=""):
         print(str(ex))
         return g.respond(500, "Server error.")
     
+    # CONNECT TO DB
     try:
         db_connect = pymysql.connect(**var.DB_CONFIG)
         cursor = db_connect.cursor()
 
+        # INCLUDE SUPER USERS AND USERS WITHOUT A BAR IF SUPER USER
         if session["role_id"] == 1:
             cursor.execute("""
                 SELECT * FROM users_list 

@@ -5,14 +5,16 @@ import utils.validation as validate
 import json
 import pymysql
 
-allowed_keys = ["user_id", "user_name", "user_email", "user_role_id"]
-
 ##############################
 @put(f"{var.API_PATH}/users/<user_id>")
 def _(user_id=""):
+    # VALIDATE SESSION/USER
     session = validate.session()
     if not session: return g.respond(401, "Unauthorized attempt.")
     if (not session["user_id"] == int(user_id)) and (not session["role_id"] in var.AUTH_USER_ROLES): return g.respond(401, "Unauthorized attempt.")
+    
+    # VALIDATE INPUT VALUES
+    allowed_keys = ["user_id", "user_name", "user_email", "user_role_id"]
     try:
         for key in request.forms.keys():
             if not key in allowed_keys: return g.respond(403, f"Forbidden key: {key}")
@@ -33,29 +35,27 @@ def _(user_id=""):
         print(str(ex))
         return g.respond(500, "Server error")
     
+    # CONNECT TO DB
     try:
         db_connect = pymysql.connect(**var.DB_CONFIG)
         db_connect.begin()
         cursor = db_connect.cursor()
 
-        if session["role_id"] == 1:
-            cursor.execute("""
-                SELECT * FROM users_list 
-                WHERE (user_id = %s AND bar_id = %s) 
-                OR (user_id = %s AND bar_id IS NULL)
-                LIMIT 1
-            """, (user_id, session["bar_id"], user_id))
-        else:
-            cursor.execute("""
-                SELECT * FROM users_list 
-                WHERE user_id = %s AND bar_id = %s 
-                LIMIT 1
-            """, (user_id, session["bar_id"]))
+        # INCLUDE SUPER USERS IF SUPER USER
+        cursor.execute("""
+            SELECT * FROM users_list
+            WHERE (user_id = %s AND bar_id = %s)
+            OR (user_id = %s AND user_role_id = %s)
+            LIMIT 1 
+        """, (user_id, session["bar_id"], user_id, session["role_id"]))
         user = cursor.fetchone()
         if not user: return g.respond(204, "")
 
-        user["user_email"] = user_email
-        user["user_name"] = user_name
+        # IF NEW VALUES, SET TO USER VALUES
+        if not user_email == user["user_email"]: user["user_email"] = user_email
+        if not user_name == user["user_name"]: user["user_name"] = user_name
+        # IF SUPER USER OR BAR ADMIN OF SAME BAR AS USER BEING UPDATED, SET NEW USER ROLE
+        ### ONLY SUPER USERS CAN UPDATE TO SUPER USER
         if (session["role_id"] == 1) or (session["bar_id"] == user["bar_id"] and session["role_id"] == 2 and not user_role_id == 1):
             user["user_role_id"] = user_role_id
 
@@ -71,25 +71,18 @@ def _(user_id=""):
         if not counter: return g.respond(204, "")
         print(f"Rows updated: {counter}")
         db_connect.commit()
-
-        if session["role_id"] == 1:
-            cursor.execute("""
-                SELECT * FROM users_list 
-                WHERE (user_id = %s AND bar_id = %s) 
-                OR (user_id = %s AND bar_id IS NULL)
-                LIMIT 1
-            """, (user_id, session["bar_id"], user_id))
-        else:
-            cursor.execute("""
-                SELECT * FROM users_list 
-                WHERE user_id = %s AND bar_id = %s 
-                LIMIT 1
-            """, (user_id, session["bar_id"]))
+        
+        # FETCH USER WITH UPDATED VALUES. IF SUPER USER INCLUDE SUPER USERS
+        cursor.execute("""
+            SELECT * FROM users_list
+            WHERE (user_id = %s AND bar_id = %s)
+            OR (user_id = %s AND user_role_id = %s)
+            LIMIT 1 
+        """, (user_id, session["bar_id"], user_id, session["role_id"]))
+        if not user: return g.respond(204, "")
         user = cursor.fetchone()
 
-        response.status = 200
-        response.content_type = "application/json"
-        return json.dumps(user)
+        return g.respond(200, user)
     except Exception as ex:
         print(str(ex))
         db_connect.rollback()
