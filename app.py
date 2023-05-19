@@ -14,6 +14,8 @@ import api.password_put
 import api.taps_get
 import api.breweries_get
 import api.bars_get
+import api.bar_access_post
+import api.bar_access_delete
 
 # CMS
 import routes.sign_in

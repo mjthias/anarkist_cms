@@ -36,27 +36,25 @@ def _(search_user_id):
         if role_id == 1:
             cursor.execute("""
                 SELECT * FROM `users_list` 
-                WHERE bar_id = %s
-                AND user_id = %s
-                OR user_role_id = 1 
-                AND user_id = %s
+                WHERE user_id = %s
                 LIMIT 1;
-                """, (bar_id, search_user_id, search_user_id))
+                """, (search_user_id))
             user = cursor.fetchone()
 
         # FOR NON-SUPER-USERS
         else:
             cursor.execute("""
                 SELECT * FROM `users_list` 
-                WHERE bar_id = %s AND user_id = %s
+                WHERE user_id = %s
+                AND user_role_id != 1
                 LIMIT 1;
-                """, (bar_id, search_user_id))
+                """, (search_user_id))
             user = cursor.fetchone()
 
         # Select users bar_access
         if user and user["user_role_id"] != "1":
             cursor.execute("""
-                SELECT bar_id, bar_name 
+                SELECT bar_id, bar_name, bar_city, bar_street
                 FROM bar_access
                 JOIN bars
                 WHERE fk_user_id = %s 
