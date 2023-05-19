@@ -14,14 +14,15 @@
     % if user:
     <form >
         <h2>User info</h2>
+        <input type="text" hidden name="user_id" value="{{user['user_id']}}">
         <label for="name">Name</label>
         <input type="text" name="user_name" id="name" value="{{user['user_name']}}">
         <label for="email">Email</label>
         <input type="text" name="user_email" id="email" value="{{user['user_email']}}">
 
-        % if session["role_id"] == 1 and user["user_role_id"] != 1:
+        % if session["role_id"] == 1:
             <label for="user-role"></label>
-            <select name="user_role" id="user-role">
+            <select name="user_role_id" id="user-role">
                 <option 
                     value="3"
                     % if user['user_role_id'] == 3: 
@@ -44,10 +45,10 @@
                     >Super user
                 </option>
             </select>
-            
-        % elif session["role_id"] == 2 and user["user_role_id" == 3]:
+
+        % elif session["role_id"] == 2 and user["user_role_id"] == 3:
             <label for="user-role"></label>
-            <select name="user_role" id="user-role">
+            <select name="user_role_id" id="user-role">
                 <option 
                     value="3"
                     % if user['user_role_id'] == 3:
@@ -65,23 +66,28 @@
             </select>
         % end 
 
-        <button>Save changes</button>
+        <button onclick="validateForm( updateUserInfo )">Save changes</button>
     </form>
 
     % if session["user_id"] == search_user_id:
     <form >
         <h2>Reset password</h2>
-        <label for="old-password">Old password</label>
-        <input type="password" id="old-password" name="user_password">
-        <label for="password">New password</label>
-        <input type="password" id="password" name="user_password">
-        <label for="repeat-password">Repeat password</label>
-        <input type="password" id="repeat-password" name="user_password_repeat">
-        <button>Reset password</button>
+        <input type="text" hidden name="user_id" value="{{user['user_id']}}">
+
+        <label for="user_password">Old password</label>
+        <input type="password" id="user_password" name="user_password">
+
+        <label for="user_new_password">New password</label>
+        <input type="password" id="user_new_password" name="user_new_password">
+
+        <label for="user_confirm_new_password">Repeat password</label>
+        <input type="password" id="user_confirm_new_password" name="user_confirm_new_password">
+
+        <button onclick="validateForm( updateUserPassword )">Reset password</button>
     </form>
     % end
 
-        % if user["bar_access"]:
+        % if user["bar_access"] and session["user_id"] != search_user_id:
             <div>
                 <h2>Bar access</h2>
                 % for bar in user["bar_access"]:
@@ -91,10 +97,13 @@
                     </form>
                 % end
                 <form>
+                    <input type="text" hidden name="user_id" value="{{user['user_id']}}">
                     <select name="bar_id" id="add">
                         <option selected></option>
                         % for bar in bars:
-                        <option value="{{bar['bar_id']}}">{{bar["bar_name"]}}, {{bar["bar_city"]}}</option>
+                        <option value="{{bar['bar_id']}}">
+                            {{bar["bar_name"]}}, {{bar["bar_city"]}}
+                        </option>
                         % end
                     </select>
                 </form>
