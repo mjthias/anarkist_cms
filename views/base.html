@@ -4,6 +4,7 @@
 
 % setdefault('page_title', 'Anarkist')
 % setdefault('render_navigation', True)
+% setdefault('render_sub_menu', False)
 
 <!DOCTYPE html>
 <html lang="en">
@@ -22,7 +23,9 @@
     % end
     <main>
 % end
-
+        % if render_sub_menu:
+        % include("components/sub_menu")
+        % end
         {{!base}}
 
 % if not is_xhr:
