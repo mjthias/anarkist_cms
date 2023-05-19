@@ -4,11 +4,25 @@
     <header>
         <h2>Users</h2>
     </header>
-    <ul>
-        % for user in users:
+    % current_bar_id = None
+    % close_ul = True
+    % for user in users:
+        % if not user["bar_id"] == current_bar_id:
+            % current_bar_id = user["bar_id"]
+            % close_ul = True
+            <h2>{{user["bar_name"]}}</h2>
+            <p>{{user["bar_street"]}}, {{user["bar_city"]}}</p>
+            <ul>
+        % end
+
         <li>
             % include("components/user")
         </li>
+
+        % if close_ul:
+            </ul>
+            % close_ul = False
         % end
+    % end
     </ul>
 </div>

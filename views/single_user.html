@@ -46,7 +46,7 @@
                 </option>
             </select>
 
-        % elif session["role_id"] == 2 and user["user_role_id"] == 3:
+        % elif session["role_id"] == 2:
             <label for="user-role"></label>
             <select name="user_role_id" id="user-role">
                 <option 
@@ -87,28 +87,38 @@
     </form>
     % end
 
-        % if user["bar_access"] and session["user_id"] != search_user_id:
-            <div>
-                <h2>Bar access</h2>
-                % for bar in user["bar_access"]:
+    % if user["bar_access"] and session["user_id"] != search_user_id:
+        <div>
+            <h2>Bar access</h2>
+            % this_bar_access = False
+            % for bar in user["bar_access"]:
+                % if bar["bar_id"] == session["bar_id"]:
+                    % this_bar_access = True
                     <form>
-                        <p>{{bar["bar_name"]}}</p>
-                        <button>Remove</button>
+                        <input type="text" hidden name="user_id" value="{{user['user_id']}}">
+                        <button onclick="deleteBarAccess()">Remove acces</button>
                     </form>
                 % end
-                <form>
-                    <input type="text" hidden name="user_id" value="{{user['user_id']}}">
-                    <select name="bar_id" id="add">
-                        <option selected></option>
-                        % for bar in bars:
-                        <option value="{{bar['bar_id']}}">
-                            {{bar["bar_name"]}}, {{bar["bar_city"]}}
-                        </option>
-                        % end
-                    </select>
-                </form>
-            </div>
-        % end
+                <p>{{bar["bar_name"]}}</p>
+                <p>{{bar["bar_street"]}}, {{bar["bar_city"]}}</p>
+            % end
+            % if len(user["bar_access"]) > 1:
+                % if not this_bar_access:
+                    <form>
+                        <input type="text" hidden name="user_id" value="{{user['user_id']}}">
+                        <span><button onclick="postBarAccess()">Give acces</button> to {{session["bar_name"]}}</span>
+                    </form>
+                % end
+            % end
+        </div>
+    % end
 
+    % if user["user_role_id"] == session["role_id"] or session["role_id"] != 3:
+        <form>
+            <input type="text" hidden name="user_id" value="{{user['user_id']}}">
+            <label for="confirm_deletion">Type 'DELETE'</label>
+            <input type="text" name="confirm_deletion" id="confirm_deletion">
+            <button onclick="validateForm( deleteUser )">Delete user</button>
+        </form>
     % end
 </div>
