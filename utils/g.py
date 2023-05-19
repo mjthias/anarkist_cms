@@ -50,7 +50,7 @@ def update_session(now=0, session=None):
             print("No sessions to update.")
         
         db_connect.commit()
-        print(f"Rows updated: {counter}")
+        print(f"Sessions updated: {counter}")
     except Exception as ex:
         print(str(ex))
         respond(500, "Server error.")

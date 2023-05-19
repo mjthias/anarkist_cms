@@ -2,8 +2,6 @@ from bottle import delete, request, response
 import utils.g as g
 import utils.vars as var
 import utils.validation as validate
-import jwt
-import json
 import pymysql
 
 allowed_keys = ["user_id", "confirm_deletion"]
@@ -11,10 +9,12 @@ allowed_keys = ["user_id", "confirm_deletion"]
 ##############################
 @delete(f"{var.API_PATH}/users/<user_id>")
 def _(user_id=""):
+    # VALIDATE SESSION/USER
     session = validate.session()
     if not session: return g.respond(401, "Unauthorized attempt.")
     if (not session["user_id"] == int(user_id)) and (not session["role_id"] in var.AUTH_USER_ROLES): return g.respond(401, "Unauthorized attempt.")
 
+    # VALIDATE INPUT VALUES
     try:
         for key in request.forms.keys():
             if not key in allowed_keys: return g.respond(403, f"Forbidden key: {key}")
@@ -31,6 +31,7 @@ def _(user_id=""):
         print(str(ex))
         return g.respond(500, "Server error")
     
+    # CONNECT TO DB
     try:
         db_connect = pymysql.connect(**var.DB_CONFIG)
         cursor = db_connect.cursor()
@@ -41,8 +42,6 @@ def _(user_id=""):
         if not counter: g.respond(204, "")
         db_connect.commit()
 
-        response.status = 200
-        response.content_type = "application/json"
         return g.respond(200, f"Successfully deleted user with ID: {user_id}")
     except Exception as ex:
         print(str(ex))

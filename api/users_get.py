@@ -1,42 +1,56 @@
-from bottle import get, response, request
+from bottle import get, request
 import utils.vars as var
 import utils.g as g
 import utils.validation as validate
 import pymysql
-import json
-import jwt
 
 ##############################
 @get(f"{var.API_PATH}/users")
 def _():
+    # VALIDATE SESSION/USER
     session = validate.session()
     if not session: return g.respond(401, "Unauthorized attempt.")
     if not int(session["role_id"]) in var.AUTH_USER_ROLES: return g.respond(401, "Unauthorized attempt.")
     
-    bar_id, error = validate.id(str(session["bar_id"]))
-    if error: return g.respond(400, error)
-    offset, error = validate.offset(offset)
-    if error: return g.respond(400, error)
-    limit, error = validate.limit(limit)
-    if error: return g.respond(400, error)
+    # VALIDATE INPUT/QUERYSTRING VALUES
+    try:
+        user_id, error = validate.id(str(session["user_id"]))
+        if error: return g.respond(400, f"User {error}")
+        bar_id, error = validate.id(str(session["bar_id"]))
+        if error: return g.respond(400, f"Bar {error}")
+        offset, error = validate.offset(request.query.get("offset"))
+        if error: return g.respond(400, error)
+        limit, error = validate.limit(request.query.get("limit"))
+        if error: return g.respond(400, error)
+    except Exception as ex:
+        print(str(ex))
+        return g.respond(500, "Server error.")
 
-    if session["role_id"] == 1:
-        where_clause = "WHERE bar_id = %s OR bar_id IS NULL"
-    else:
-        where_clause = "WHERE bar_id = %s"
-
+    # CONNECT TO DB
     try:
         db_connect = pymysql.connect(**var.DB_CONFIG)
         cursor = db_connect.cursor()
 
-        cursor.execute(f"SELECT * FROM users_list {where_clause} LIMIT %s,%s", (bar_id, offset, limit))
+        # INCLUDE SUPER USERS IF SUPER USER
+        if session["role_id"] == 1:
+            cursor.execute("""
+                SELECT * FROM users_list
+                WHERE bar_id = %s 
+                OR user_role_id = 1 AND user_id != %s
+                LIMIT %s,%s
+            """, (bar_id, user_id, offset, limit))
+        else:
+            cursor.execute("""
+                SELECT * FROM users_list
+                WHERE bar_id = %s AND user_id != %s
+                LIMIT %s,%s
+            """, (bar_id, user_id, offset, limit))
         users = cursor.fetchall()
 
         counter = cursor.rowcount
         if not counter: return g.respond(204, "")
 
-        response.status = 200
-        return json.dumps(users)
+        return g.respond(200, users)
     except Exception as ex:
         print(str(ex))
         return g.respond(500, "Server error.")
