@@ -14,6 +14,7 @@ import api.password_put
 import api.taps_get
 import api.breweries_get
 import api.bars_get
+import api.beer_by_id_put
 import api.bar_access_post
 import api.bar_access_delete
 
@@ -34,6 +35,10 @@ import routes.users_by_id
 @get("/static/<dir_name>/<file_name>")
 def _(dir_name, file_name):
     return static_file(file_name, root=f"./static/{dir_name}")
+
+@get("/static/images/<image>")
+def _(image):
+    return static_file(image, root="./static/images", mimetype="image/*")
 
 ##############################
 
