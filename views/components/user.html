@@ -1,4 +1,4 @@
-<a href="/users/{{user['user_id']}}">
+% user_url = f"/users/{user['user_id']}"
+<a href="{{user_url}}" onclick="spa('{{user_url}}'); return false">
     <p>{{user["user_name"]}}</p>
-    
 </a>
