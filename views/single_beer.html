@@ -19,8 +19,8 @@
         </div>
         <div>
             <label for="beer_style_name">Style</label>
-            <input type="text" id="beer_style_name" name="beer_style_name" value="{{ beer['beer_style_name'] }}" />
-            <input type="hidden" name="beer_style_id" value="{{ beer['fk_beer_style_id'] }}" />
+            <input oninput="searchBeerStyle()" type="text" id="beer_style_name" name="beer_style_name" value="{{ beer['beer_style_name'] }}" />
+            <input type="hidden" id="beer_style_id" name="beer_style_id" value="{{ beer['fk_beer_style_id'] }}" />
         </div>
         <div>
             <label for="beer_alc">Alc.</label>
