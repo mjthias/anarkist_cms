@@ -1,18 +1,23 @@
-from bottle import post, request
+from bottle import put, request
+import utils.vars as var
 import utils.validation as validate
 import utils.g as g
-import utils.vars as var
 import pymysql
 
 ##############################
 
-@post(f"{var.API_PATH}/breweries")
-def _():
+@put(f"{var.API_PATH}/breweries/<brewery_id>")
+def _(brewery_id):
+
     # VALIDATE SESSION
     session = validate.session()
-    if not session: 
-        return g.respond(401, "Unauthorized attempt")
+    if not session:
+        return g.respond(401, "Unautorized attmept.")
     
+    # VALIDATE BREWERY_ID PARAM
+    brewery_id, error = validate.id(brewery_id)
+    if error: return g.respond(400, error)
+
     # VALIDATE INPUT VALUES
     brewery_name, error = validate.brewery_name(request.forms.get("brewery_name"))
     if error: return g.respond(400, error)
@@ -29,21 +34,19 @@ def _():
 
         if len(brewery_menu_name) > len(brewery_name):
             return g.respond(400, "Menu name can't be longer than the actual name")
-
-
-    # INSERT TO DB
+    
     try:
         db = pymysql.connect(**var.DB_CONFIG)
         cursor = db.cursor()
         cursor.execute("""
-            INSERT INTO breweries
-            (brewery_name, brewery_menu_name)
-            VALUES (%s, %s)
-            """, (brewery_name, brewery_menu_name))
-        brewery_id = cursor.lastrowid
+            UPDATE breweries
+            SET brewery_name = %s, brewery_menu_name = %s
+            WHERE brewery_id = %s
+            """, (brewery_name, brewery_menu_name, brewery_id))
+        counter = cursor.rowcount
+        if not counter: return g.respond(204, "")
         db.commit()
-
-        return g.respond(201, brewery_id)
+        return g.respond(200, "Brewery updated")
 
     except Exception as ex:
         print(ex)
@@ -54,3 +57,6 @@ def _():
     finally:
         cursor.close()
         db.close()
+
+
+    
