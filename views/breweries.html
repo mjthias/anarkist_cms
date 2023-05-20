@@ -1,6 +1,6 @@
-% rebase("base", page_title="Users")
+% rebase("base", page_title="Breweries")
 
-<div id="spa" data-page_title="Users" data-page_url="/breweries">
+<div id="spa" data-page_title="Breweries" data-page_url="/breweries">
     <header>
         <h2>Breweries</h2>
         <a href="/breweries/create" onclick="spa('/breweries/create'); return false;">New brewery</a>
@@ -11,13 +11,14 @@
         % init_loop = True
 
         % for brewery in breweries:
-            % if brewery["brewery_name"][0] != first_char:
+            % if brewery["brewery_name"][0].capitalize() != first_char:
 
+                % first_char = brewery["brewery_name"][0].capitalize()
                 % if not init_loop:
                     </ul>
                 % end
                 % init_loop = False
-                <h2>{{brewery["brewery_name"][0]}}</h2>
+                <h2>{{brewery["brewery_name"][0].capitalize()}}</h2>
                 <ul>
             % end
 

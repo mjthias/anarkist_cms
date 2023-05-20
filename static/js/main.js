@@ -194,3 +194,53 @@ async function selectLocation() {
     window.location.href = "/";
   }
 }
+
+async function postBrewery(form) {
+  const conn = await fetch("/api/v1/breweries", {
+    method: "POST",
+    body: new FormData(form)
+  })
+
+  if (!conn.ok) {
+    const err = await conn.json()
+    console.log(err)
+    return
+  }
+
+  const breweryId = await conn.json()
+  spa(`/breweries/${breweryId}`)
+}
+
+async function updateBrewery(form) {
+  const breweryId = form.brewery_id.value
+  const conn = await fetch(`/api/v1/breweries/${breweryId}`, {
+    method: "PUT",
+    body: new FormData(form)
+  })
+
+  if (!conn.ok) {
+    const error = await conn.json()
+    console.log(error)
+    // TODO handle error
+  }
+
+  // Success
+}
+
+async function deleteBrewery(form) {
+  const breweryId = form.brewery_id.value
+  const conn = await fetch(`/api/v1/breweries/${breweryId}`, {
+    method: "DELETE",
+    body: new FormData(form)
+  })
+  if (!conn.ok) {
+    // TODO handle error
+    const error = await conn.json()
+    console.log(error)
+    return
+  }
+
+  // SUCCES
+  spa("/breweries")
+}
+
