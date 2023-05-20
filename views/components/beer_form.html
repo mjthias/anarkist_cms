@@ -1,0 +1,179 @@
+<form onsubmit="return false" novalidate="true">
+    % if defined('beer'):
+        <input 
+            type="hidden" 
+            value="{{ beer['beer_id'] }}"
+            name="beer_id" 
+            pattern="[1-9][0-9]*" 
+            required 
+        />
+    % end 
+    <div>
+        <label for="beer_name">Name</label>
+        <input 
+            type="text" 
+            id="beer_name" 
+            name="beer_name" 
+            % if defined('beer'):
+                value="{{ beer['beer_name'] }}" 
+            % end
+            minlength="2" 
+            maxlength="50" 
+            required 
+        />
+    </div>
+    <div>
+        <label for="brewery_name">Brewery</label>
+        <input 
+            oninput="searchBrewery()" 
+            type="text" 
+            id="brewery_name" 
+            name="brewery_name"
+            % if defined('beer'):
+                value="{{ beer['brewery_name'] }}" 
+            % end
+            minlength="2" 
+            maxlength="50" 
+            required 
+        />
+        <input 
+            type="hidden" 
+            id="brewery_id" 
+            name="brewery_id" 
+            % if defined('beer'):
+                value="{{ beer['fk_brewery_id']}}" 
+            % end
+            pattern="[1-9][0-9]*" 
+            required 
+        />
+    </div>
+    <div>
+        <label for="beer_style_name">Style</label>
+        <input 
+            oninput="searchBeerStyle()" 
+            type="text" id="beer_style_name" 
+            name="beer_style_name"
+            % if defined('beer'):
+                value="{{ beer['beer_style_name'] }}" 
+            % end
+            minlength="2" 
+            maxlength="50" 
+            required 
+        />
+        <input 
+            type="hidden" 
+            id="beer_style_id" 
+            name="beer_style_id"
+            % if defined('beer'):
+                value="{{ beer['fk_beer_style_id'] }}" 
+            % end
+            pattern="[1-9][0-9]*" 
+            required 
+        />
+    </div>
+    <div>
+        <label for="beer_alc">Alc.</label>
+        <input 
+            type="number" 
+            id="beer_alc" 
+            name="beer_alc" 
+            % if defined('beer'):
+                value="{{ beer['beer_alc'] }}" 
+            % end
+            min="0" 
+            max="99" 
+            step=".1" 
+            required 
+        />
+    </div>
+    <div>
+        <label for="beer_price">Price</label>
+        <input 
+            type="number" 
+            id="beer_price" 
+            name="beer_price" 
+            % if defined('beer'):
+                value="{{ beer['beer_price'] }}" 
+            % end
+            min="0" 
+            step=".01" 
+            required 
+        />
+    </div>
+    <div>
+        <label for="beer_ibu">IBU</label>
+        <input 
+            type="number" 
+            id="beer_ibu" 
+            name="beer_ibu" 
+            % if defined('beer'):
+                value="{{ beer['beer_ibu'] }}" 
+            % end
+            min="0" 
+            step="1" 
+        />
+    </div>
+    <div>
+        <label for="beer_ebc">EBC</label>
+        <input 
+            type="number" 
+            id="beer_ebc" 
+            name="beer_ebc"
+            % if defined('beer'): 
+                value="{{ beer['beer_ebc'] }}" 
+            % end
+            min="0" 
+            step="1" 
+        />
+    </div>
+    <div>
+        <label for="beer_description_en">Description (English)</label>
+        <textarea id="beer_description_en" name="beer_description_en" minlength="0" maxlength="500">
+            % if defined('beer'):
+                {{ beer['beer_description_en'] }}
+            % end
+        </textarea>
+    </div>
+    <div>
+        <label for="beer_description_dk">Description (Danish)</label>
+        <textarea id="beer_description_dk" name="beer_description_dk" minlength="0" maxlength="500">
+            % if defined('beer'):
+                {{ beer['beer_description_dk'] }}
+            % end
+        </textarea>
+    </div>
+    <div>
+        <label for="beer_image">
+            <span><i class="fa-solid fa-image"></i></span>Upload image
+        </label>
+        <input type="file" id="beer_image" name="beer_image" accept="image/png, image/jpg, image/jpeg" />
+        <input 
+            type="hidden" 
+            id="beer_image_name" 
+            name="beer_image_name" 
+            % if defined('beer'):
+                value="{{ beer['beer_image'] }}"
+            % end 
+        />
+    </div>
+    <div>
+        % if defined('beer') and beer['beer_image']:
+            <img src="/static/images/{{ beer['beer_image'] }}" alt="{{ beer['beer_name'] }}" />
+        % end
+    </div>
+    <div>
+        <button
+            % if defined('beer'):
+            onclick="validateForm(updateBeer)"
+            % else:
+            onclick="validateForm(createBeer)"
+            % end
+        >
+            % if defined('beer'):
+                Update
+            % else:
+                Create
+            % end
+        </button>
+    </div>
+</form>
