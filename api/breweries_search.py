@@ -18,6 +18,7 @@ def _(brewery_name=""):
         offset, error = validate.offset(request.query.get("offset"))
         if error: return g.respond(400, error)
         limit, error = validate.limit(request.query.get("limit"))
+        if error: return g.respond(400, error)
     except Exception as ex:
         print(str(ex))
         return g.respond(500, "Server error.")
