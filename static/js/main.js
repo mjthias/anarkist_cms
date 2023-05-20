@@ -58,6 +58,23 @@ function validateForm(callback) {
 }
 
 
+async function postUser(form) {
+  const conn = await fetch("/api/v1/users", {
+    method: "POST",
+    body: new FormData(form)
+  })
+
+  if (!conn.ok) {
+    const err = await conn.json()
+    console.log(err)
+    return
+  }
+
+  const userId = await conn.json()
+  spa(`/users/${userId}`)
+}
+
+
 async function deleteUser(form) {
   const userId = form.user_id.value
   const conn = await fetch(`/api/v1/users/${userId}`, {
@@ -72,6 +89,7 @@ async function deleteUser(form) {
   const res = await conn.json()
   console.log(res)
 }
+
 
 async function updateUserInfo(form) {
   const userId = form.user_id.value;

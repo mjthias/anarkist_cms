@@ -10,30 +10,33 @@ import jwt
 ##############################
 @post(f"{var.API_PATH}/users")
 def _():
-    # VALIDATE SESSION/USER
+    # VALIDATE SESSION AND USER ROLE
     session = validate.session()
-    if not request.get_cookie("anarkist"): return g.respond(401, "Unauthorized attempt.")
-    if not session["role_id"] in var.AUTH_USER_ROLES: return g.respond(401, "Unauthorized attempt.")
+    if not session: return g.respond(401, "Unauthorized attempt.")
+    if session["role_id"] == 3: return g.respond(401, "Unauthorized attempt.")
+
+    bar_id = session["bar_id"]
 
     # VALIDATE INPUT VALUES
     try:
         user_name, error = validate.user_name(request.forms.get("user_name"))
         if error: return g.respond(400, error)
+
         user_email, error = validate.email(request.forms.get("user_email"))
         if error: return g.respond(400, error)
+
         user_password, error = validate.password(request.forms.get("user_password"))
         if error: return g.respond(400, error)
+
         user_confirm_password, error = validate.confirm_password(user_password, request.forms.get("user_confirm_password"))
         if error: return g.respond(400, error)
+
         user_role_id, error = validate.id(request.forms.get("user_role_id"))
         if error: return g.respond(400, f"User Role {error}")
-        # IF NEW USER IS NOT A SUPER USER
-        if not user_role_id == 1:
-            bar_id, error = validate.id(request.forms.get("bar_id"))
-            if error: return g.respond(400, f"Bar {error}")
-            # ONLY ALLOW THE CREATION OF USERS WITH ACCESS TO CHOSEN LOCATION
-            if (not session["role_id"] == 1) and (not session["bar_id"] == bar_id):
-                return g.respond(403, "Unauthorized attempt.")
+
+        # Admins cant create super users
+        if session["role_id"] == 2 and user_role_id == 1:
+            return g.respond(401, "Unauthorized attempt.")
 
         # GENERATE HASHED PASSWORD
         user_password_bytes = user_password.encode('utf-8')
@@ -54,9 +57,9 @@ def _():
     
     # CONNECT TO DB
     try:
-        db_connect = pymysql.connect(**var.DB_CONFIG)
-        db_connect.begin()
-        cursor = db_connect.cursor()
+        db = pymysql.connect(**var.DB_CONFIG)
+        db.begin()
+        cursor = db.cursor()
 
         query = """
             INSERT INTO users
@@ -69,7 +72,7 @@ def _():
         cursor.execute(query, user)
         user_id = cursor.lastrowid
 
-        # IF NEW USER IS NOT A SUPERUSER, INSERT BAR ACCESS AS WELL, AND FETCH NEW USER
+        # IF NEW USER IS NOT A SUPERUSER, INSERT BAR ACCESS AS WELL
         if not user_role_id == 1:
             query = """
                 INSERT INTO bar_access
@@ -78,21 +81,20 @@ def _():
                 VALUES(%s, %s)
             """
             cursor.execute(query, (bar_id, user_id))
-            cursor.execute("SELECT * FROM users_list WHERE user_id = %s AND bar_id = %s LIMIT 1", (user_id, bar_id))
-        else:
-            cursor.execute("SELECT * FROM users_list WHERE user_id = %s LIMIT 1", (user_id,))
 
         user = cursor.fetchone()
-        db_connect.commit()
+        db.commit()
 
-        return g.respond(201, user)
+        return g.respond(201, user_id)
+    
     except Exception as ex:
         print(str(ex))
-        db_connect.rollback()
+        db.rollback()
         if "user_email" in str(ex): return g.respond(400, "Email already exists.")
         if "user_role_id" in str(ex): return g.respond(400, "User role does not exist.")
         if "bar_id" in str(ex): return g.respond(400, "Bar does not exist.")
         return g.respond(500, "Server error.")
+    
     finally:
         cursor.close()
-        db_connect.close()
+        db.close()

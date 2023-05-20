@@ -25,6 +25,7 @@ import routes.home
 import routes.beers
 import routes.beers_by_id
 import routes.users
+import routes.users_create
 import routes.users_by_id
 
 ##############################

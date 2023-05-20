@@ -1,0 +1,41 @@
+% rebase("base", page_title="Users")
+
+<div id="spa" data-page_title="Create user" data-page_url="/users/create">
+    <header>
+        <h2>New user</h2>
+    </header>
+
+    <form >
+        <h2>User info</h2>
+        <div>
+            <label for="name">Name</label>
+            <input type="text" name="user_name" id="name">
+        </div>
+        <div>
+            <label for="email">Email</label>
+            <input type="text" name="user_email" id="email">
+        </div>
+        <div>
+            <label for="user-role">User role</label>
+            <select name="user_role_id" id="user-role">
+                <option value="" selected disabled>Select user role</option>
+                <option value="3">Bar staff</option>
+                <option value="2">Bar admin</option>
+                % if session["role_id"] == 1:
+                    <option value="1">Super user</option>
+                % end
+            </select>
+        </div>
+        <div>
+            <label for="user_password">Password</label>
+            <input type="password" id="user_password" name="user_password">
+        </div>
+        <div>
+            <label for="user_confirm_password">Repeat password</label>
+            <input type="password" id="user_confirm_password" name="user_confirm_password">
+        </div>
+
+        <button onclick="validateForm( postUser )">Create user</button>
+    </form>
+</div>
+
