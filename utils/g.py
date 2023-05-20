@@ -57,3 +57,11 @@ def update_session(now=0, session=None):
     finally:
         cursor.close()
         db_connect.close()
+
+##############################
+def format_price(value):
+    seperator_index = str(value).index(".")
+    if str(value)[seperator_index+1:] == "0":
+        return format(value, ".0f")
+    else:
+        return format(value, ".2f")
