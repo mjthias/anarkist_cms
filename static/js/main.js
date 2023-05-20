@@ -291,3 +291,19 @@ async function searchBeerStyle() {
     document.querySelector("#beer_style_id").value = resp[0].beer_style_id;
   }
 }
+
+async function updateBeer(form) {
+  const beerId = form.beer_id.value;
+
+  const conn = await fetch(`/api/v1/beers/${beerId}`, {
+    method: "PUT",
+    body: new FormData(form)
+  });
+
+  if (!conn.ok) {
+    const error = await conn.json()
+    console.log(error);
+    return;
+  }
+  // SUCCESS
+}
