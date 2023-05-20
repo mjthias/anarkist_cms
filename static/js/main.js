@@ -7,7 +7,7 @@ let memoUrl = location.pathname;
 async function spa(spaUrl, doPushState = true) {
   // if new and current url are same - end
   // if (spaUrl == memoUrl) return;
-
+  console.log(spaUrl)
   // Fetch spaUrl if not in DOMM
   const conn = await fetch(spaUrl, {
     method: "GET",
