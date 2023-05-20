@@ -5,6 +5,9 @@ import pymysql
 import re
 import utils.vars as var
 import utils.g as g
+import os
+import uuid
+import imghdr
 
 ##############################
 
@@ -139,3 +142,76 @@ def confirm_deletion(value):
     if not value: return None, missing_message
     if not value == "DELETE": return None, invalid_message
     return str(value), None
+
+##############################
+def name(value):
+    missing_message = "Name is missing."
+    invalid_min_message = f"Name must be at least {var.NAME_MIN_LEN} characters."
+    invalid_max_message = f"Name must be less than {var.NAME_MAX_LEN} characters."
+    if not value: return None, missing_message
+    value = value.strip()
+    if len(value) < var.NAME_MIN_LEN: return None, invalid_min_message
+    if len(value) > var.NAME_MAX_LEN: return None, invalid_max_message
+    return str(value), None
+
+##############################
+def ebc(value):
+    if not value: return "", None
+    pattern = '^[0-9]*$'
+    invalid_message = "EBC must be a positive integer."
+    if not re.match(pattern, value): return None, invalid_message
+    return str(value), None
+
+##############################
+def ibu(value):
+    if not value: return "", None
+    pattern = '^[0-9]*$'
+    invalid_message = "IBU must be a positive integer."
+    if not re.match(pattern, value): return None, invalid_message
+    return str(value), None
+
+##############################
+def alc(value):
+    missing_message = "Alcohol percentage is missing"
+    invalid_message = "Alcohol percentage must be a positive value."
+    if not value: return None, missing_message
+    value = str(value).replace(",", ".")
+    value = float(value)
+    if not value >= 0: return None, invalid_message
+    return format(value, '.2f'), None
+
+##############################
+def price(value):
+    missing_message = "Price is missing."
+    invalid_message = "Price must be at least 0 DKK."
+    if not value: return None, missing_message
+    value = str(value).replace(",", ".")
+    value = float(value)
+    if value < 0: return None, invalid_message
+    return value, None
+
+##############################
+def description(value):
+    if not value: return "", None
+    max_len = 500
+    invalid_message = f"Description must be less than {max_len} characters"
+    if len(value) > max_len: return None, invalid_message
+    return value, None
+
+##############################
+def image(image):
+    allowed_file_types = [".png", ".jpeg", ".jpg"]
+    file_name, file_extension = os.path.splitext(image.filename)
+
+    if file_extension not in allowed_file_types: return None, "Filetype is not allowed."
+    if file_extension == ".jpg": file_extension = ".jpeg"
+
+    file_name = f"{str(uuid.uuid4())}{file_extension}"
+    file_path = f"{var.IMAGE_PATH}{file_name}"
+    image.save(file_path)
+    imghdr_extension = imghdr.what(file_path)
+    if not file_extension == f".{imghdr_extension}":
+        os.remove(file_path)
+        return None, "Suspicious image."
+    return file_name, None
+    
