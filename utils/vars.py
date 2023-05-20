@@ -29,3 +29,6 @@ AUTH_USER_ROLES = [1, 2]
 # Name variables
 NAME_MIN_LEN = 2
 NAME_MAX_LEN = 100
+
+# Image path
+IMAGE_PATH = "./static/images/"
