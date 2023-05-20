@@ -3,7 +3,7 @@
 <article id="{{ beer['beer_id'] }}" href="{{ href }}" onclick="spa('{{ href }}')">
     <div>
         % if beer['beer_image']:
-        <img src="{{ beer['beer_image']}}" />
+        <img src="/static/images/{{ beer['beer_image']}}" />
         % else:
         <i class="fa-solid fa-beer-mug-empty"></i>
         % end
