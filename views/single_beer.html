@@ -7,6 +7,7 @@
     >
 
     <form onsubmit="return false" novalidate="true">
+        <input type="hidden" value="{{ beer['beer_id'] }}" name="beer_id" />
         <div>
             <label for="beer_name">Name</label>
             <input type="text" id="beer_name" name="beer_name" value="{{ beer['beer_name'] }}" />
@@ -14,10 +15,12 @@
         <div>
             <label for="brewery_name">Brewery</label>
             <input type="text" id="brewery_name" name="brewery_name" value="{{ beer['brewery_name'] }}" />
+            <input type="hidden" name="brewery_id" value="{{ beer['fk_brewery_id']}}" />
         </div>
         <div>
             <label for="beer_style_name">Style</label>
             <input type="text" id="beer_style_name" name="beer_style_name" value="{{ beer['beer_style_name'] }}" />
+            <input type="hidden" name="beer_style_id" value="{{ beer['fk_beer_style_id'] }}" />
         </div>
         <div>
             <label for="beer_alc">Alc.</label>
@@ -47,7 +50,8 @@
             <label for="beer_image">
                 <span><i class="fa-solid fa-image"></i></span>Upload image
             </label>
-            <input type="file" id="beer_image" name="beer_image" accept="image/png, image/jpg, image/jpeg"  value="{{ beer['beer_image'] }}"/>
+            <input type="file" id="beer_image" name="beer_image" accept="image/png, image/jpg, image/jpeg" />
+            <input type="hidden" name="beer_image_name" value="{{ beer['beer_image'] }}" />
         </div>
         <div>
             % if beer['beer_image']:
