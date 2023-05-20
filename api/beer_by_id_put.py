@@ -40,6 +40,7 @@ def _(beer_id=""):
         if error: return g.respond(400, error)
         beer_description_dk, error = validate.description(request.forms.get("beer_description_dk"))
         if error: return g.respond(400, error)
+        # IF A FILE HAS BEEN UPLOADED, VALIDATE IT. ELSE SET THE VALUE TO OLD FILE NAME
         if request.files.get("beer_image"):
             beer_image, error = validate.image(request.files.get("beer_image"))
             if error: return g.respond(400, error)
@@ -54,17 +55,21 @@ def _(beer_id=""):
         print(str(ex))
         return g.respond(500, "Server error.")
 
+    # CONNECT TO DB
     try:
         db_connect = pymysql.connect(**var.DB_CONFIG)
         db_connect.begin()
         cursor = db_connect.cursor()
 
+        # SELECT DB BEER
         cursor.execute("SELECT * FROM beers WHERE beer_id = %s LIMIT 1", (beer_id,))
         beer = cursor.fetchone()
         if not beer: return g.respond(204, "")
 
+        # SAVE OLD IMAGE PATH
         beer_image_old = beer["beer_image"]
 
+        # APPEND NEW VALUES TO BEER
         beer['beer_name'] = beer_name
         beer['fk_brewery_id'] = brewery_id
         beer['beer_ebc'] = beer_ebc
@@ -78,6 +83,7 @@ def _(beer_id=""):
         beer['beer_updated_at'] = int(time.time())
         beer['fk_beer_updated_by'] = session['user_id']
 
+        # UPDATE BEER
         cursor.execute("""
             UPDATE beers
             SET beer_name = %s,
@@ -100,9 +106,11 @@ def _(beer_id=""):
         print(f"Rows updated: {counter}")
         db_connect.commit()
 
+        # REMOVE OLD BEER IMAGE FROM SYSTEM
         if not beer_image_old == "" and not beer_image_old == beer_image:
             os.remove(f"{var.IMAGE_PATH}{beer_image_old}")
 
+        # FETCH UPDATED BEER FROM BEER_LIST VIEW
         cursor.execute("SELECT * FROM beer_list WHERE beer_id = %s LIMIT 1", (beer_id,))
         beer = cursor.fetchone()
 
