@@ -136,6 +136,34 @@ def user_name(value):
     return str(value), None
 
 ##############################
+def brewery_name(value):
+    missing_message = "Brewery name is missing."
+    invalid_min_message = "Brewery name must be at least 2 characters."
+    invalid_max_message = "Brewery name must be less than 100 characters."
+    invalid_message = "Brewery name can only consist of alphabetic characters, spaces and '-'"
+    if not value: return None, missing_message
+    value = value.strip()
+    if len(value) < 2: return None, invalid_min_message
+    if len(value) > 100: return None, invalid_max_message
+    pattern = '^[a-zA-Z -]*$'
+    if not re.match(pattern, value): return None, invalid_message
+    return str(value), None
+
+##############################
+def brewery_menu_name(value):
+    missing_message = "Brewery menu name is missing."
+    invalid_min_message = "Brewery menu name must be at least 2 characters."
+    invalid_max_message = "Brewery menu name must be less than 50 characters."
+    invalid_message = "Brewery menu name can only consist of alphabetic characters, spaces and '-'"
+    if not value: return None, missing_message
+    value = value.strip()
+    if len(value) < 2: return None, invalid_min_message
+    if len(value) > 100: return None, invalid_max_message
+    pattern = '^[a-zA-Z -]*$'
+    if not re.match(pattern, value): return None, invalid_message
+    return str(value), None
+
+##############################
 def confirm_deletion(value):
     missing_message = "Confirm deletion is missing."
     invalid_message = "Please type 'DELETE' in all caps."

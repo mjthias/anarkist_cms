@@ -82,7 +82,6 @@ def _():
             """
             cursor.execute(query, (bar_id, user_id))
 
-        user = cursor.fetchone()
         db.commit()
 
         return g.respond(201, user_id)
