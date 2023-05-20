@@ -1,13 +1,13 @@
 <form onsubmit="return false" novalidate="true">
-    <input 
-        type="hidden" 
-        % if defined('beer'):
+    % if defined('beer'):
+        <input 
+            type="hidden" 
             value="{{ beer['beer_id'] }}"
-        % end 
-        name="beer_id" 
-        pattern="[1-9][0-9]*" 
-        required 
-    />
+            name="beer_id" 
+            pattern="[1-9][0-9]*" 
+            required 
+        />
+    % end 
     <div>
         <label for="beer_name">Name</label>
         <input 
