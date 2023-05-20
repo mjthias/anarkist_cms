@@ -159,6 +159,8 @@
     <div>
         % if defined('beer') and beer['beer_image']:
             <img src="/static/images/{{ beer['beer_image'] }}" alt="{{ beer['beer_name'] }}" />
+        % else:
+            <img src="" alt="" />
         % end
     </div>
     <div>
@@ -166,7 +168,7 @@
             % if defined('beer'):
             onclick="validateForm(updateBeer)"
             % else:
-            onclick="validateForm(createBeer)"
+            onclick="validateForm(postBeer)"
             % end
         >
             % if defined('beer'):

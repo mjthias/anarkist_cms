@@ -292,6 +292,22 @@ async function searchBeerStyle() {
   }
 }
 
+async function postBeer(form) {
+  const conn = await fetch("/api/v1/beers", {
+    method: "POST",
+    body: new FormData(form)
+  });
+
+  if (!conn.ok) {
+    const error = await conn.json();
+    console.log(error);
+    return;
+  }
+
+  const beerId = await conn.json();
+  spa(`/beers/${beerId}`);
+}
+
 async function updateBeer(form) {
   const beerId = form.beer_id.value;
 
