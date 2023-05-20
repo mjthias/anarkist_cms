@@ -13,6 +13,7 @@ import api.user_by_id_delete
 import api.password_put
 import api.taps_get
 import api.breweries_get
+import api.breweries_post
 import api.bars_get
 import api.beer_by_id_put
 import api.bar_access_post
@@ -24,6 +25,7 @@ import routes.select_location
 import routes.sign_out
 import routes.home
 import routes.breweries
+import routes.breweries_create
 import routes.beers
 import routes.beers_by_id
 import routes.users

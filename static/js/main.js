@@ -194,3 +194,19 @@ async function selectLocation() {
     window.location.href = "/";
   }
 }
+
+async function postBrewery(form) {
+  const conn = await fetch("/api/v1/breweries", {
+    method: "POST",
+    body: new FormData(form)
+  })
+
+  if (!conn.ok) {
+    const err = await conn.json()
+    console.log(err)
+    return
+  }
+
+  const breweryId = await conn.json()
+  spa(`/breweries/${breweryId}`)
+}
