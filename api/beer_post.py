@@ -3,6 +3,7 @@ import utils.vars as var
 import utils.g as g
 import utils.validation as validate
 import pymysql
+import time
 
 ##############################
 @post(f"{var.API_PATH}/beers")
@@ -41,20 +42,59 @@ def _():
         else:
             beer_image = ""
 
-        beer = {
-            "beer_name": beer_name,
-            "brewery_id": brewery_id,
-            "beer_style_id": beer_style_id,
-            "beer_alc": beer_alc,
-            "beer_price": beer_price,
-            "beer_ibu": beer_ibu,
-            "beer_ebc": beer_ebc,
-            "beer_description_en": beer_description_en,
-            "beer_description_dk": beer_description_dk,
-            "beer_image": beer_image
-        }
+        beer = (
+            beer_name,
+            brewery_id,
+            beer_ebc,
+            beer_ibu,
+            beer_alc,
+            beer_style_id,
+            beer_price,
+            beer_image,
+            beer_description_en,
+            beer_description_dk,
+            int(time.time()),
+            session["user_id"],
+            int(time.time()),
+            session["user_id"]
+        )
 
-        return g.respond(201, beer)
     except Exception as ex:
         print(str(ex))
         return g.respond(500, "Server error.")
+    
+    # CONNECT TO DB
+    try: 
+        db_connect = pymysql.connect(**var.DB_CONFIG)
+        cursor = db_connect.cursor()
+
+        query = """
+            INSERT INTO beers
+            (beer_name,
+            fk_brewery_id,
+            beer_ebc,
+            beer_ibu,
+            beer_alc,
+            fk_beer_style_id,
+            beer_price,
+            beer_image,
+            beer_description_en,
+            beer_description_dk,
+            beer_created_at,
+            fk_beer_created_by,
+            beer_updated_at,
+            fk_beer_updated_by)
+            VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        """
+
+        cursor.execute(query, beer)
+        beer_id = cursor.lastrowid
+        db_connect.commit()
+
+        return g.respond(201, beer_id)
+    except Exception as ex:
+        print(str(ex))
+        return g.respond(500, "Server error.")
+    finally:
+        cursor.close()
+        db_connect.close()
