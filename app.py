@@ -13,6 +13,7 @@ import api.user_by_id_delete
 import api.password_put
 import api.taps_get
 import api.breweries_get
+import api.breweries_search
 import api.bars_get
 import api.beer_by_id_put
 import api.bar_access_post
