@@ -244,3 +244,26 @@ async function deleteBrewery(form) {
   spa("/breweries")
 }
 
+async function searchBrewery() {
+  searchTerm = event.target.value;
+  console.log(searchTerm);
+  if (searchTerm.length < 2) {
+    return;
+  }
+
+  const conn = await fetch(`/api/v1/breweries/${searchTerm}?offset=0&limit=5`, {
+    method: "GET"
+  });
+  const resp = await conn.json();
+  if (!conn.ok) {
+    // TODO: Handle error
+    console.log(resp);
+    return;
+  }
+
+  // TODO: Handle multiple results, and display to the user
+  
+  if (resp.length === 1) {
+    document.querySelector("#brewery_id").value = resp[0].brewery_id;
+  }
+}
