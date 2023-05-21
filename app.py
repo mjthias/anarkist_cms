@@ -25,6 +25,7 @@ import api.bar_access_post
 import api.bar_access_delete
 import api.beer_styles_search
 import api.beer_styles_post
+import api.beer_style_by_id_put
 
 # CMS
 import routes.sign_in
