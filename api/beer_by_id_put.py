@@ -41,7 +41,7 @@ def _(beer_id=""):
         beer_description_dk, error = validate.description(request.forms.get("beer_description_dk"))
         if error: return g.respond(400, error)
         # IF A FILE HAS BEEN UPLOADED, VALIDATE IT. ELSE SET THE VALUE TO OLD FILE NAME
-        if not request.files.get("beer_image").filename == "empty":
+        if request.files.get("beer_image") and not request.files.get("beer_image").filename == "empty":
             beer_image, error = validate.image(request.files.get("beer_image"))
             if error: return g.respond(400, error)
         else:
