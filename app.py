@@ -39,12 +39,9 @@ import routes.breweries_by_id
 import routes.beers
 import routes.beers_create
 import routes.beers_by_id
-<<<<<<< HEAD
 import routes.beer_styles
 import routes.beer_style_by_id
-=======
 import routes.taps
->>>>>>> AB-107-taps-route
 import routes.users
 import routes.users_create
 import routes.users_by_id
