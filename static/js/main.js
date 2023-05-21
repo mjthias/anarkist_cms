@@ -317,9 +317,27 @@ async function updateBeer(form) {
   });
 
   if (!conn.ok) {
-    const error = await conn.json()
+    const error = await conn.json();
     console.log(error);
     return;
   }
   // SUCCESS
+}
+
+async function deleteBeer(form) {
+  const beerId = form.delete_beer_id.value;
+  
+  const conn = await fetch(`/api/v1/beers/${beerId}`, {
+    method: "DELETE",
+    body: new FormData(form)
+  });
+
+  if (!conn.ok) {
+    const error = await conn.json();
+    console.log(error);
+    return;
+  }
+
+  // SUCCESS
+  spa(`/beers`);
 }
