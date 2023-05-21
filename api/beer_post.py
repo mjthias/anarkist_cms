@@ -36,7 +36,7 @@ def _():
         if error: return g.respond(400, error)
         beer_description_dk, error = validate.description(request.forms.get("beer_description_dk"))
         if error: return g.respond(400, error)
-        if request.files.get("beer_image"):
+        if request.files.get("beer_image") and not request.files.get("beer_image").filename == "empty":
             beer_image, error = validate.image(request.files.get("beer_image"))
             if error: return g.respond(400, error)
         else:
