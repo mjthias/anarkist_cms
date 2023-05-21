@@ -14,7 +14,7 @@ def _():
     try:
         db = pymysql.connect(**var.DB_CONFIG)
         cursor = db.cursor()
-        cursor.execute("SELECT * FROM beer_list")
+        cursor.execute("SELECT * FROM beers_list")
         beers = cursor.fetchall()
         print(beers)
         return dict(beers = beers, session=session)
