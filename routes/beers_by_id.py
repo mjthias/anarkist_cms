@@ -23,7 +23,7 @@ def _(beer_id=""):
     try:
         db_connect = pymysql.connect(**var.DB_CONFIG)
         cursor = db_connect.cursor()
-        cursor.execute("SELECT * FROM beer_list WHERE beer_id = %s LIMIT 1", (beer_id,))
+        cursor.execute("SELECT * FROM beers_list WHERE beer_id = %s LIMIT 1", (beer_id,))
         beer = cursor.fetchone()
         beer['beer_price'] = g.format_price(beer["beer_price"])
         beer['beer_alc'] = g.format_price(float(beer['beer_alc']))
