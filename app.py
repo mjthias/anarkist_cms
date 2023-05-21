@@ -20,6 +20,7 @@ import api.breweries_by_id_delete
 import api.bars_get
 import api.beer_post
 import api.beer_by_id_put
+import api.beer_by_id_delete
 import api.bar_access_post
 import api.bar_access_delete
 import api.beer_styles_search
