@@ -1,0 +1,21 @@
+% tap_url = f"/taps/{tap['tap_id']}"
+<a href="{{tap_url}}" onclick="spa('{{tap_url}}'); return false;">
+
+    % if tap["tap_number"]:
+        <p>{{tap["tap_number"]}}</p>
+    % else:
+        <p>
+            <span>off</span>
+            <span>the</span>
+            <span>wall</span>
+        </p>
+    % end
+        <h2>{{tap["beer_name"]}}</h2>
+        <p>{{tap["beer_style_name"]}}</p>
+        <p>{{tap["brewery_name"]}}</p>
+        <p>
+            <span>ALC.:{{tap["beer_alc"] or "-"}}%</span>|
+            <span>EBC:{{tap["beer_ebc"] or "-"}}</span>]
+            <span>IBU:{{tap["beer_ibu"] or "-"}}</span>
+        </p>
+</a>

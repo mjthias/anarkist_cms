@@ -1,0 +1,14 @@
+% rebase("base", page_title="Taps")
+
+<div id="spa" data-page_title="Taps" data-page_url="/taps">
+    <header>
+        <h2>Users</h2>
+        <a href="/taps/create" onclick="spa('/taps/create'); return false;">New tap</a>
+    </header>
+    
+    <section>
+        % for tap in taps:
+            % include("components/tap")
+        % end
+    </section>
+</div>
