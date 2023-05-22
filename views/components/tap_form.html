@@ -1,0 +1,40 @@
+<form>
+    <input
+        type="text"
+        name="tap_id"
+        % if defined("tap"):
+            value="{{tap['tap_id']}}"
+        % end
+        hidden>
+    <div>
+        <label for="beer_name"></label>
+        <input
+        type="text" 
+        name="beer_name" 
+        id="beer_name"
+        % if defined("tap"):
+            value="{{tap['beer_name']}}"
+        % end
+        onchange="searchBeer()"
+        >
+        <input
+            type="text" 
+            name="beer_id"
+            % if defined("tap"):
+                value="{{tap['beer_id']}}"
+            % end
+            hidden
+            >
+    </div>
+    <div>
+    % if defined("tap"):
+        <p>{{tap["beer_style_name"]}}</p>
+        <p>{{tap["brewery_name"]}}</p>
+        <p>
+            <span>ALC.:{{tap["beer_alc"]}}%</span>|
+            <span>EBC:{{tap["beer_ebc"]}}</span>|
+            <span>IBU:{{tap["beer_ibu"]}}</span>
+        </p>
+    % end
+    </div>
+</form>

@@ -21,6 +21,7 @@ import api.bars_get
 import api.beer_post
 import api.beer_by_id_put
 import api.beer_by_id_delete
+import api.beers_by_name_get
 import api.bar_access_post
 import api.bar_access_delete
 import api.beer_styles_search
@@ -42,6 +43,7 @@ import routes.beers_by_id
 import routes.beer_styles
 import routes.beer_style_by_id
 import routes.taps
+import routes.taps_by_id
 import routes.users
 import routes.users_create
 import routes.users_by_id
