@@ -35,6 +35,7 @@ def _(bar_id):
     bar_zip_code, error = validate.zip_code(request.forms.get("bar_zip_code"))
     if error: return g.respond(400, error)
 
+    # Update in db
     try:
         db = pymysql.connect(**var.DB_CONFIG)
         cursor = db.cursor()
