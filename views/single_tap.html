@@ -1,0 +1,14 @@
+% rebase("base", page_title="Taps")
+
+<div id="spa" data-page_title="Taps" data-page_url="/taps">
+    <header>
+        <h2>Tap nr: {{tap["tap_number"] or "OFF THE WALL"}}</h2>
+        % if session["role_id"] != 3:
+            <a href="/taps/create" onclick="spa('/taps/create'); return false;">New tap</a>
+        % end
+    </header>
+    
+    <section>
+        % include("components/tap_form")
+    </section>
+</div>
