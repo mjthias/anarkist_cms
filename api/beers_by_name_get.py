@@ -1,4 +1,4 @@
-from bottle import get
+from bottle import get, request, view
 import utils.validation as validate
 import utils.g as g
 import utils.vars as var
@@ -6,27 +6,27 @@ import pymysql
 
 ##############################
 
-@get(f"{var.API_PATH}/beers/<beer_name>")
-def _(beer_name):
+@get(f"{var.API_PATH}/beers")
+def _():
     # VALIDATE SESSION
-    # session = validate.session()
-    # if not session: return g.respond(401, "Unauthorized attempt")
+    session = validate.session()
+    if not session: return g.respond(401, "Unauthorized attempt")
 
     #VALIDATE PARAM
-    beer_name, error = validate.name(beer_name)
+    beer_name, error = validate.name(request.params.get("name"))
     if error: return g.respond(400, error)
 
     try:
         db = pymysql.connect(**var.DB_CONFIG)
         cursor = db.cursor()
         cursor.execute("""
-        SELECT * FROM beer_list
-        WHERE beer_name LIKE CONCAT("am", "%")
-        """)
+        CALL get_beers_by_fuzzy_name(%s, 10, 0)
+        """, (beer_name))
         beers = cursor.fetchall()
-        print(beers)
-        if len(beers) == 0:
-            return g.respond(204, "")
+
+        if request.headers.get("as_html"):
+            return as_html(beers)
+        
         return g.respond(200, beers)
 
     except Exception as ex:
@@ -36,6 +36,10 @@ def _(beer_name):
     finally:
         cursor.close()
         db.close()
+
+@view("components/beer_search_results")
+def as_html(beers):
+    return dict(beers= beers)
 
     
 

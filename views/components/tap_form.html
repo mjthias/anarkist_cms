@@ -7,34 +7,69 @@
         % end
         hidden>
     <div>
-        <label for="beer_name"></label>
+        <label for="beer-name"></label>
         <input
         type="text" 
-        name="beer_name" 
-        id="beer_name"
+        name="beer_name"
+        minlength="2"
+        id="beer-name"
         % if defined("tap"):
             value="{{tap['beer_name']}}"
         % end
-        onchange="searchBeer()"
+        oninput="searchBeers()"
         >
+        <div class="search-list"></div>
         <input
             type="text" 
             name="beer_id"
+            id="beer-id"
             % if defined("tap"):
                 value="{{tap['beer_id']}}"
             % end
             hidden
             >
     </div>
-    <div>
+
+    <div class="beer-info">
     % if defined("tap"):
-        <p>{{tap["beer_style_name"]}}</p>
-        <p>{{tap["brewery_name"]}}</p>
+        <p class="beer-style">{{tap["beer_style_name"]}}</p>
+        <p class="brewery-name">{{tap["brewery_name"]}}</p>
         <p>
-            <span>ALC.:{{tap["beer_alc"]}}%</span>|
-            <span>EBC:{{tap["beer_ebc"]}}</span>|
-            <span>IBU:{{tap["beer_ibu"]}}</span>
+            <span class="alc">ALC.:{{tap["beer_alc"]}}%</span>|
+            <span class="ebc">EBC:{{tap["beer_ebc"]}}</span>|
+            <span class="ibu">IBU:{{tap["beer_ibu"]}}</span>
         </p>
     % end
     </div>
+
+    % if defined("tap"):
+        <div>
+            <label for="tap-unavailable">Tap unavailable</label>
+            <input
+                type="checkbox"
+                name="tap_unavailable"
+                id="tap-unavailable"
+                % if tap["tap_unavailable"]:
+                    checked
+                % end
+                >
+        </div>
+
+        <button onclick="validateForm( updateTap )">Update tap</button>
+    % else:
+        <div>
+            <label for="tap-off-the-wall">Off the wall</label>
+            <input type="checkbox" name="tap_off_the_wall" id="tap-off-the-wall">
+        </div>
+
+        <button onclick="validateForm( postTap )">Create tap</button>
+    % end
+
 </form>
+
+% if defined("tap"):
+    <form>
+        <input type="text" name="tap_id" value="{{tap['tap_id']}}" hidden>
+        <button onclick="validateForm( deleteTap )">Delete tap</button>
+    </form>
+% end
