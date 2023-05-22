@@ -1,0 +1,53 @@
+<form>
+    <div>
+        <label for="bar-name">Name</label>
+        <input 
+            type="text" 
+            name="bar_name"
+            id="bar-name"
+            % if defined("bar"):
+                value="{{bar['bar_name']}}"
+            % end
+            >
+    </div>
+    <div>
+        <label for="bar-street">Street</label>
+        <input 
+            type="text" 
+            name="bar_street"
+            id="bar-street"
+            % if defined("bar"):
+                value="{{bar['bar_street']}}"
+            % end
+            >
+    </div>
+    <div>
+        <label for="bar-zip-code">Zip code</label>
+        <input 
+            type="text" 
+            name="bar_zip_code"
+            id="bar-zip-code"
+            % if defined("bar"):
+                value="{{bar['bar_zip_code']}}"
+            % end
+            >
+    </div>
+    <div>
+        <label for="bar-city">City</label>
+        <input 
+            type="text" 
+            name="bar_city"
+            id="bar-city"
+            % if defined("bar"):
+                value="{{bar['bar_city']}}"
+            % end
+            >
+    </div>
+
+    % if defined("bar"):
+        <input type="text" name="bar_id" value="{{bar['bar_id']}}" hidden>
+        <button onclick="validateForm( updateBar )">Udpate bar</button>
+    % else:
+        <button onclick="validateForm( postBar )">Create bar</button>
+    % end
+</form>
