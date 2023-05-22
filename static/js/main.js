@@ -390,3 +390,79 @@ async function deleteBeer(form) {
   // SUCCESS
   spa(`/beers`);
 }
+
+async function searchBeers(){
+  const form = event.target.form
+  const beerName = form.beer_name.value
+  const searchList = form.querySelector(".search-list")
+  searchList.textContent = ""
+
+  if (beerName.length < 2) {
+    return
+  }
+
+  const conn = await fetch(`/api/v1/beers?name=${beerName}`, {
+    headers: {as_html : true}
+  })
+
+  if (!conn.ok) return
+
+  const html = await conn.text()
+  searchList.insertAdjacentHTML("afterbegin", html)
+}
+
+async function selectSearchedBeer() {
+  const elm = event.target.parentElement
+  document.querySelector('#beer-name').value = elm.dataset.beer_name
+  document.querySelector('#beer-id').value = elm.dataset.beer_id
+
+  const infoHtml = `
+  <p class="beer-style">${elm.dataset.beer_style}</p>
+  <p class="brewery-name">${elm.dataset.brewery_name}</p>
+  <p>
+      <span class="alc">ALC.:${elm.dataset.beer_alc}%</span>|
+      <span class="ebc">EBC:${elm.dataset.beer_ebc}</span>|
+      <span class="ibu">IBU:${elm.dataset.beer_ibu}</span>
+  </p>
+  `
+  document.querySelector(".beer-info").innerHTML = infoHtml
+
+  elm.parentElement.remove()
+}
+
+async function postTap(form) {
+  const conn = await fetch("/api/v1/taps", {
+    method: "POST",
+    body: new FormData(form)
+  })
+
+  if (!conn.ok) return
+
+  const newTapId = await conn.json()
+  spa(`/taps/${newTapId}`)
+}
+
+async function updateTap(form) {
+  const tapId = form.tap_id.value
+  const conn = await fetch(`/api/v1/taps/${tapId}`, {
+    method: "PUT",
+    body: new FormData(form)
+  })
+
+  if (!conn.ok) return
+
+  const res = await conn.json()
+  console.log(res)
+}
+
+async function deleteTap(form) {
+  const tapId = form.tap_id.value
+  const conn = await fetch(`/api/v1/taps/${tapId}`, {
+    method: "DELETE",
+    body: new FormData(form)
+  })
+
+  if (!conn.ok) return
+
+  spa("/taps")
+}
