@@ -1,0 +1,21 @@
+<div>
+    % if len(beers) == 0:
+    <p>No results</p>
+    % else:
+        % for beer in beers:
+        <div
+            onclick="selectSearchedBeer()"
+            data-beer_id="{{beer['beer_id']}}"
+            data-beer_name="{{beer['beer_name']}}"
+            data-brewery_name="{{beer['brewery_name']}}"
+            data-beer_style="{{beer['beer_style_name']}}"
+            data-beer_alc="{{beer['beer_alc']}}"
+            data-beer_ebc="{{beer['beer_ebc']}}"
+            data-beer_ibu="{{beer['beer_ibu']}}"
+            >
+            <p>{{beer["beer_name"]}}</p>
+            <p>{{beer["brewery_name"]}}</p>
+        </div>
+        % end
+    % end
+</div>
