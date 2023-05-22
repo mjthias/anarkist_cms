@@ -1,6 +1,6 @@
 % rebase("base", page_title="Taps")
 
-<div id="spa" data-page_title="Taps" data-page_url="/taps">
+<div id="spa" data-page_title="Taps" data-page_url="/taps/{{tap['tap_id']}}">
     <header>
         <h2>Tap nr: {{tap["tap_number"] or "OFF THE WALL"}}</h2>
         % if session["role_id"] != 3:
