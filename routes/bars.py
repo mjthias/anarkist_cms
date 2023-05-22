@@ -27,7 +27,6 @@ def _():
             bars = bars
             )
 
-
     except Exception as ex:
         print(ex)
         return g.respond(500, "Server error")
