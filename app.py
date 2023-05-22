@@ -17,6 +17,9 @@ import api.breweries_post
 import api.breweries_by_id_put
 import api.breweries_by_id_delete
 import api.bars_get
+import api.bars_post
+import api.bars_by_id_put
+import api.bars_by_id_delete
 import api.beer_post
 import api.beer_by_id_put
 import api.beer_by_id_delete
@@ -38,6 +41,8 @@ import routes.select_location
 import routes.sign_out
 import routes.home
 import routes.bars
+import routes.bars_create
+import routes.bars_by_id
 import routes.breweries
 import routes.breweries_create
 import routes.breweries_by_id
