@@ -3,20 +3,25 @@
 // Init state - the first loaded page
 history.replaceState({ spaUrl: location.pathname }, "", location.pathname);
 let memoUrl = location.pathname;
+let doSpaOnError = true
 
 async function spa(spaUrl, doPushState = true) {
   // if new and current url are same - end
   // if (spaUrl == memoUrl) return;
-  console.log(spaUrl)
   // Fetch spaUrl if not in DOMM
   const conn = await fetch(spaUrl, {
     method: "GET",
     headers: { spa: true },
   });
 
-  if (!conn.status == 200) {
-    console.log("Can't connect to endpoint");
+  if (!conn.ok && doSpaOnError) {
+    errorUrl = spaUrl.replace("/", "");
+    spaUrl = conn.status;
+    spa(`/${spaUrl}?url=${errorUrl}`, true);
+    doSpaOnError = false;
     return;
+  } else {
+    doSpaOnError = true;
   }
   const html = await conn.text();
 
@@ -26,6 +31,14 @@ async function spa(spaUrl, doPushState = true) {
   document.querySelector("main").insertAdjacentHTML("afterbegin", html);
 
   // Get and set title
+  console.log(spaUrl)
+  if (spaUrl.includes("?")) {
+    pushUrl = spaUrl;
+    spaUrl = spaUrl.substring(0, spaUrl.indexOf("?"))
+  } else {
+    pushUrl = spaUrl;
+  }
+  
   const title = document.querySelector(`[data-page_url="${spaUrl}"]`).dataset.page_title;
   document.querySelector("title").textContent = title;
 
@@ -34,7 +47,7 @@ async function spa(spaUrl, doPushState = true) {
 
   // Push state
   if (doPushState) {
-    history.pushState({ spaUrl: spaUrl }, "", spaUrl);
+    history.pushState({ spaUrl: pushUrl }, "", pushUrl);
   }
 }
 
