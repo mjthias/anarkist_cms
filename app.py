@@ -37,6 +37,7 @@ import routes.sign_in
 import routes.select_location
 import routes.sign_out
 import routes.home
+import routes.bars
 import routes.breweries
 import routes.breweries_create
 import routes.breweries_by_id
