@@ -1,0 +1,6 @@
+<form  onsubmit="return false" novalidate="true">
+    <input type="hidden" id="id_delete" name="id" value="{{ id }}" required />
+    <label for="confirm_delete">Confirm deletion</label>
+    <input type="text" id="confirm_deletion" name="confirm_deletion" pattern="DELETE" required /> 
+    <button onclick="{{ callBack }}">Delete</button>
+</form>

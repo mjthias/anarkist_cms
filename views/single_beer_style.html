@@ -2,4 +2,5 @@
 
 <div id="spa" data-page_title="{{beer_style['beer_style_name']}}" data-page_url="/beer-styles/{{beer_style['beer_style_id']}}">
     % include("components/beer_style_form")
+    % include("components/deletion_form", id=beer_style['beer_style_id'], callBack='validateForm(deleteBeerStyle)')
 </div>

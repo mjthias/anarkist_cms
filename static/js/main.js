@@ -301,6 +301,22 @@ async function updateBeerStyle(form) {
   // SUCCESS
 }
 
+async function deleteBeerStyle(form) {
+  const beerStyleId = form.id.value;
+  const conn = await fetch(`/api/v1/beer-styles/${beerStyleId}`, {
+    method: "DELETE",
+    body: new FormData(form)
+  });
+
+  if (!conn.ok) {
+    const error = await conn.json();
+    console.log(error);
+    return;
+  }
+
+  spa('/beer-styles')
+}
+
 async function searchBeerStyle() {
   searchTerm = event.target.value;
   console.log(searchTerm);
