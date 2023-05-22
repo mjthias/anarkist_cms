@@ -6,9 +6,9 @@ import pymysql
 
 ##############################
 
-@get("/bars")
-@view("bars")
-def _():
+@get("/bars/<bar_id>")
+@view("single_bar")
+def _(bar_id):
     # VALIDATE SESSION
     session = validate.session()
     if not session: return redirect("/sign-in")
@@ -17,14 +17,25 @@ def _():
     if not session["role_id"] == 1:
         return redirect("/")
     
+    # VALIDATE BAR ID
+    bar_id, error = validate.id(bar_id)
+    if error: return g.respond(404, "Page not found")
+    
+    # GET BAR FROM DB
     try:
         db = pymysql.connect(**var.DB_CONFIG)
         cursor = db.cursor()
-        cursor.execute("SELECT * FROM bars")
-        bars = cursor.fetchall()
+        cursor.execute("""
+        SELECT * FROM bars
+        WHERE bar_id = %s
+        LIMIT 1
+        """, (bar_id))
+        bar = cursor.fetchone()
+        if not bar: return g.respond(404, "Page not found")
+        
         return dict(
             session = session,
-            bars = bars
+            bar = bar
             )
 
     except Exception as ex:

@@ -478,3 +478,40 @@ async function deleteTap(form) {
 
   spa("/taps")
 }
+
+
+async function updateBar(form) {
+  const barId = form.bar_id.value
+  const conn = await fetch(`/api/v1/bars/${barId}`, {
+    method: "PUT",
+    body: new FormData(form)
+  })
+
+  if (!conn.ok) return
+
+  spa(`/bars/${barId}`)
+}
+
+async function postBar(form) {
+  const conn = await fetch("/api/v1/bars", {
+    method: "POST",
+    body: new FormData(form)
+  })
+
+  if (!conn.ok) return
+
+  const newBarId = await conn.json()
+  spa(`/bars/${newBarId}`)
+}
+
+async function deleteBar(form) {
+  const barId = form.id.value
+  const conn = await fetch(`/api/v1/bars/${barId}`, {
+    method: "DELETE",
+    body: new FormData(form)
+  })
+
+  if (!conn.ok) return
+
+  spa("/bars")
+}
