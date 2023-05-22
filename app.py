@@ -40,6 +40,7 @@ import routes.beers
 import routes.beers_create
 import routes.beers_by_id
 import routes.beer_styles
+import routes.beer_styles_create
 import routes.beer_style_by_id
 import routes.taps
 import routes.users

@@ -13,7 +13,7 @@ def _(beer_style_id=""):
         if not session: return g.respond(401, "Unauthorized attempt.")
 
         # VALIDATE ALLOWED KEYS
-        allowed_keys = ["beer_style_id", "confirm_deletion"]
+        allowed_keys = ["id", "confirm_deletion"]
         for key in request.forms.keys():
             if not key in allowed_keys: return g.respond(403, f"Forbidden key: {key}")
 
