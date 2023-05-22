@@ -15,9 +15,8 @@ async function spa(spaUrl, doPushState = true) {
   });
 
   if (!conn.ok && doSpaOnError) {
-    errorUrl = spaUrl.replace("/", "");
-    spaUrl = conn.status;
-    spa(`/${spaUrl}?url=${errorUrl}`, true);
+    const url = errorUrl(spaUrl, conn.status);
+    spa(url);
     doSpaOnError = false;
     return;
   } else {
@@ -26,20 +25,12 @@ async function spa(spaUrl, doPushState = true) {
   const html = await conn.text();
 
   // Remove old data
-  document.querySelector(`[data-page_url="${memoUrl}"]`).remove();
+  document.querySelector(`[data-page_url="${cleanUrl(memoUrl)}"]`).remove();
   // Append the new data and set dataset-spa_url
   document.querySelector("main").insertAdjacentHTML("afterbegin", html);
 
   // Get and set title
-  console.log(spaUrl)
-  if (spaUrl.includes("?")) {
-    pushUrl = spaUrl;
-    spaUrl = spaUrl.substring(0, spaUrl.indexOf("?"))
-  } else {
-    pushUrl = spaUrl;
-  }
-  
-  const title = document.querySelector(`[data-page_url="${spaUrl}"]`).dataset.page_title;
+  const title = document.querySelector(`[data-page_url="${cleanUrl(spaUrl)}"]`).dataset.page_title;
   document.querySelector("title").textContent = title;
 
   // Memo the appended url
@@ -47,7 +38,7 @@ async function spa(spaUrl, doPushState = true) {
 
   // Push state
   if (doPushState) {
-    history.pushState({ spaUrl: pushUrl }, "", pushUrl);
+    history.pushState({ spaUrl: spaUrl }, "", spaUrl);
   }
 }
 
@@ -55,6 +46,18 @@ async function spa(spaUrl, doPushState = true) {
 window.addEventListener("popstate", (e) => {
   spa(e.state.spaUrl, false);
 });
+
+function errorUrl(spaUrl, status) {
+    url = spaUrl.replace("/", "");
+    return `/${status}?url=${url}`;
+}
+
+function cleanUrl(url) {
+  if (url.includes("?")) {
+    url = url.substring(0, url.indexOf("?"))
+  } 
+  return url;
+}
 
 // ##############################
 // ##############################
