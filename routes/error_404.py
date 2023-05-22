@@ -1,4 +1,4 @@
-from bottle import get, view, error, redirect, request
+from bottle import get, view, redirect, request
 import utils.validation as validate
 
 ##############################
