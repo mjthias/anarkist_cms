@@ -3,7 +3,6 @@
 // Init state - the first loaded page
 history.replaceState({ spaUrl: location.pathname }, "", location.pathname);
 let memoUrl = location.pathname;
-let doSpaOnError = true
 
 async function spa(spaUrl, doPushState = true) {
   // if new and current url are same - end
@@ -14,14 +13,11 @@ async function spa(spaUrl, doPushState = true) {
     headers: { spa: true },
   });
 
-  if (!conn.ok && doSpaOnError) {
+  if (!conn.ok) {
     const url = errorUrl(spaUrl, conn.status);
     spa(url);
-    doSpaOnError = false;
     return;
-  } else {
-    doSpaOnError = true;
-  }
+  } 
   const html = await conn.text();
 
   // Remove old data
