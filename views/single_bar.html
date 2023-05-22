@@ -1,0 +1,12 @@
+% rebase("base", page_title=bar["bar_name"])
+
+<div id="spa" data-page_title="{{bar['bar_name']}}" data-page_url="/bars/{{bar['bar_id']}}">
+    <header>
+        <h2>{{bar["bar_name"]}}</h2>
+    </header>
+    
+    <section>
+        % include("components/bar_form")
+        % include("components/deletion_form", id=bar['bar_id'], callBack='validateForm(deleteBar)')
+    </section>
+</div>

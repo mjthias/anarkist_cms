@@ -183,6 +183,14 @@ def name(value):
     return str(value), None
 
 ##############################
+def zip_code(value):
+    if not value: return None, "Zip code missing"
+    pattern = '^(?:[1-9][0-9]{3}|9900)$'
+    invalid_message = "Zip code is a 4 digit integer, between 1000 and 9990"
+    if not re.match(pattern, value): return None, invalid_message
+    return str(value), None
+
+##############################
 def ebc(value):
     if not value: return "", None
     pattern = '^[0-9]*$'
