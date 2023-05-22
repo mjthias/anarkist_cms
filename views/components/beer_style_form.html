@@ -1,0 +1,27 @@
+<form onsubmit="return false" novalidate="true">
+    % if defined('beer_style'):
+        <input type="hidden" value="{{ beer_style['beer_style_id'] }}" name="beer_style_id" pattern="[1-9][0-9]" />
+    % end
+    <div>
+        <label for="beer_style_name">Name</label>
+        <input 
+            type="text"
+            id="beer_style_name"
+            name="beer_style_name"
+            % if defined('beer_style'):
+                value="{{ beer_style['beer_style_name'] }}"
+            % end
+            minlength="2"
+            maxlength="50"
+            required
+        />
+    </div>
+    <div>
+        % if defined('beer_style'):
+            <button onclick="validateForm(updateBeerStyle)">Update</button>
+            <!-- TODO: Some modal button -->
+            % else:
+            <button onclick="validateForm(postBeerStyle)">Create</button>
+        % end
+    </div>
+</form>
