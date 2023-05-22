@@ -1,0 +1,18 @@
+% rebase("base", page_title="Bars") 
+
+<div
+    id="spa"
+    data-page_title="Bars"
+    data-page_url="/bars"
+    >
+
+    <header>
+        <h2>Bars</h2>
+        <a href="/bars/create" onclick="spa('/bars/create'); return false">New bar</a>
+    </header>
+    <section>
+        % for bar in bars:
+            % include("components/bar")
+        % end
+    </section>
+</div>
