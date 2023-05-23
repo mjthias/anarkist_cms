@@ -1,4 +1,4 @@
-from bottle import response
+from bottle import response, view, request
 import pymysql
 import utils.vars as var
 import json
@@ -65,3 +65,13 @@ def format_price(value):
         return format(value, ".0f")
     else:
         return format(value, ".2f")
+    
+
+##############################
+@view("error")
+def error_view(code=404, info = "Page not found"):
+    error = {}
+    error["code"] = code
+    error["info"] = info
+    error["page_url"] = request.path
+    return dict(error = error)

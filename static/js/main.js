@@ -2,35 +2,30 @@
 //SPA
 // Init state - the first loaded page
 history.replaceState({ spaUrl: location.pathname }, "", location.pathname);
-let memoUrl = location.pathname;
 
 async function spa(spaUrl, doPushState = true) {
-  // if new and current url are same - end
-  // if (spaUrl == memoUrl) return;
-  // Fetch spaUrl if not in DOMM
   const conn = await fetch(spaUrl, {
     method: "GET",
     headers: { spa: true },
   });
 
-  if (!conn.ok) {
-    const url = errorUrl(spaUrl, conn.status);
-    spa(url);
-    return;
-  } 
-  const html = await conn.text();
+  // Get HTML
+  let html
+  try {
+    html = await conn.text();
+  }
+  catch {
+    console.warn("An error occured")
+    return
+  }
 
   // Remove old data
-  document.querySelector(`[data-page_url="${cleanUrl(memoUrl)}"]`).remove();
-  // Append the new data and set dataset-spa_url
+  document.querySelector("main").innerHTML = "";
   document.querySelector("main").insertAdjacentHTML("afterbegin", html);
 
   // Get and set title
-  const title = document.querySelector(`[data-page_url="${cleanUrl(spaUrl)}"]`).dataset.page_title;
+  const title = document.querySelector(`[data-page_url="${spaUrl}"]`).dataset.page_title;
   document.querySelector("title").textContent = title;
-
-  // Memo the appended url
-  memoUrl = spaUrl;
 
   // Push state
   if (doPushState) {

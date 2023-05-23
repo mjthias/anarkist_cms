@@ -15,7 +15,7 @@ def _(brewery_id):
 
     # VALIDATE ID
     brewery_id, error = validate.id(brewery_id)
-    if error: return g.respond(404, "Page not found")
+    if error: return g.error_view(404, "Page not found")
 
     try:
         db = pymysql.connect(**var.DB_CONFIG)
@@ -28,19 +28,18 @@ def _(brewery_id):
             LIMIT 1
             """, (brewery_id))
         brewery = cursor.fetchone()
+
+        if not brewery: return g.error_view(404, "Page not found")
+        
+        return dict(
+            session = session,
+            brewery = brewery
+            )
     
     except Exception as ex:
         print(ex)
-        return g.respond(500, "Server error")
+        return g.error_view(500, "Server error")
     
     finally:
         cursor.close()
         db.close()
-
-    if not brewery:
-        return g.respond(404, "Page not found")
-
-    return dict(
-        session = session,
-        brewery = brewery
-        )
