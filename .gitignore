@@ -9,3 +9,4 @@ production.py
 *.png
 *.jpg
 *.jpeg
+node_modules
