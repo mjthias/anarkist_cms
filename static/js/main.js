@@ -52,6 +52,17 @@ function toggleTopSubMenu() {
   document.querySelector(`${target.dataset.target}`).classList.toggle("active");
 }
 
+function toggleSideMenu() {
+  const open = event.target.querySelector("#burger_open");
+  const close = event.target.querySelector("#burger_close")
+  const sideMenu = document.querySelector(`${event.target.dataset.target}`); // I have no clue why queryselecter doesn't work...
+  open.classList.toggle("opacity-0");
+  open.classList.toggle("rotate");
+  close.classList.toggle("opacity-0");
+  close.classList.toggle("rotate");
+  sideMenu.classList.toggle("-translate-x-full");
+}
+
 // ##############################
 // ##############################
 // ##############################
