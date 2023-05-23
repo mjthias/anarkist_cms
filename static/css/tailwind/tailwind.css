@@ -7,7 +7,6 @@
 .top-sub-menu {
     @apply max-h-0 overflow-hidden;
     transition: max-height .2s ease-in-out;
-    top: calc(100% + 1px);
 }
 
 .top-sub-menu.active {
@@ -16,6 +15,10 @@
 
 #side_menu {
     height: calc(100vh - 50px);
+}
+
+.side-menu-link.active {
+    @apply bg-highlight-bg;
 }
 
 .rotate {
