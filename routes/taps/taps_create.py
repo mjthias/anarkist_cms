@@ -2,17 +2,19 @@ from bottle import get, view, redirect
 import utils.validation as validate
 import utils.g as g
 
+
 ##############################
 
-@get("/users/create")
-@view("users_create")
+@get("/taps/create")
+@view("taps/create")
 def _():
-    # VALDATE SESSION
+    # VALIATE SESSION
     session = validate.session()
     if not session: return redirect("/sign-in")
-    # Staff no access
+
+    # VALIDATE ROLE
     if session["role_id"] == 3:
         return g.error_view(401)
-
     
-    return dict(session = session)
+    return dict(session=session)
+

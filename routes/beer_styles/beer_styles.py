@@ -6,7 +6,7 @@ import pymysql
 
 ##############################
 @get("/beer-styles")
-@view("beer_styles")
+@view("beer_styles/index")
 def _():
     session = validate.session()
     if not session: return redirect("/sign-in")

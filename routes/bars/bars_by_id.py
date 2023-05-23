@@ -7,7 +7,7 @@ import pymysql
 ##############################
 
 @get("/bars/<bar_id>")
-@view("single_bar")
+@view("bars/by_id")
 def _(bar_id):
     # VALIDATE SESSION
     session = validate.session()

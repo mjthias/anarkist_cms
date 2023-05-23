@@ -5,7 +5,7 @@ import utils.vars as var
 import pymysql
 
 @get("/users")
-@view("users")
+@view("users/index")
 def _():
     # VALIDATE
     session = validate.session()

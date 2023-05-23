@@ -5,7 +5,7 @@ import utils.vars as var
 import pymysql
 
 @get("/users/<search_user_id>")
-@view("single_user")
+@view("users/by_id")
 def _(search_user_id):
     # VALIDATE
     session = validate.session()

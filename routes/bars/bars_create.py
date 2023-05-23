@@ -1,20 +1,21 @@
 from bottle import get, view, redirect
 import utils.validation as validate
+import utils.vars as var
 import utils.g as g
-
+import pymysql
 
 ##############################
 
-@get("/taps/create")
-@view("taps_create")
+@get("/bars/create")
+@view("bars/create")
 def _():
-    # VALIATE SESSION
+    # VALIDATE SESSION
     session = validate.session()
     if not session: return redirect("/sign-in")
 
     # VALIDATE ROLE
-    if session["role_id"] == 3:
+    if not session["role_id"] == 1:
         return g.error_view(401)
     
-    return dict(session=session)
+    return dict(session = session)
 

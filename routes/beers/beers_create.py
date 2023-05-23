@@ -3,7 +3,7 @@ import utils.validation as validate
 
 ##############################
 @get("/beers/create")
-@view("beers_create")
+@view("beers/create")
 def _():
     
     # VALIDATE SESSION
