@@ -5,15 +5,20 @@
 @tailwind utilities;
 
 .top-sub-menu {
-    @apply max-h-0 overflow-hidden border-0;
+    @apply max-h-0 overflow-hidden;
     transition: max-height .2s ease-in-out;
     top: calc(100% + 1px);
 }
 
 .top-sub-menu.active {
-    @apply max-h-[40px] border border-line 
+    @apply max-h-[40px];
+}
+
+#side_menu {
+    height: calc(100vh - 50px);
 }
 
 .rotate {
-    transform: rotate(180deg);   
+    transform: rotate(180deg);
+    transform-origin: center; 
 }
