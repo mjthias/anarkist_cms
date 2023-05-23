@@ -1,25 +1,43 @@
-<nav>
-    <div>
-        {{ session["bar_name"] }}
-    </div>
-    <div>
-        % for bar in session["bar_access"]:
-        <div>
-            % if not session["bar_id"] == bar["bar_id"]:
-            {{ bar["bar_name"] }}
+<nav class="col-span-12 h-[50px] flex justify-between items-center py-4 bg-background  border border-line border-t-0 border-x-0 fixed w-full">
+    <div class="relative w-[fit-content]">
+        <a class="py-3 px-4 flex flex-nowrap items-center transition-colors text-secondary cursor-pointer hover:text-primary">
+            <span>{{ session["bar_name"] }}</span>
+            <div class="w-6 h-6 inline-flex items-center justify-center pt-1">
+                <i class="fa-solid fa-caret-down text-xs"></i>
+            </div>
+        </a>
+        <ul class=" absolute w-full bg-background border border-line border-l-0">
+            % for bar in session["bar_access"]:
+                % if not session["bar_id"] == bar["bar_id"]:
+                    <li>
+                        <a class="px-4 py-2 text-sm transition-colors text-secondary cursor-pointer hover:text-primary">
+                            {{ bar["bar_name"] }}
+
+                        </a>
+                    </li>
+                % end
             % end
-        </div>
-        % end
+        </ul>
     </div>
-    <div>
-        <i class="fa-solid fa-circle-user"></i><span>{{ session["user_name"] }}</span>
+    <div class="relative">
+        <a class="py-3 px-4 flex flex-nowrap items-center transition-colors text-secondary cursor-pointer hover:text-primary">
+            <div class="w-6 h-6 inline-flex items-center justify-center mr-3">
+                <i class="fa-solid fa-circle-user text-2xl"></i>
+            </div>
+            <span class="">{{ session["user_name"] }}</span>
+            <div class="w-6 h-6 inline-flex items-center justify-center pt-1">
+                <i class="fa-solid fa-caret-down text-xs"></i>
+            </div>
+        </a>
+        <ul class=" absolute w-full bg-background border border-line border-r-0">
+            <li>
+                <a class="px-4 py-2 flex flex-nowrap items-center transition-colors text-secondary cursor-pointer hover:text-primary" href="/sign-out">
+                    <div class="w-6 h-6 inline-flex items-center justify-center mr-2">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    </div>
+                    <span class="text-sm">Sign out</span>
+                </a>
+            </li>
+        </ul>
     </div>
-    <ul>
-        <li>
-            <a href="/sign-out">
-                <i class="fa-solid fa-arrow-right-from-bracket"></i>
-                <span>Sign out</span>
-            </a>
-        </li>
-    </ul>
 </nav>
