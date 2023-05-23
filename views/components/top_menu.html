@@ -15,7 +15,7 @@
                 <i class="fa-solid fa-caret-down text-xs transition-transform"></i>    
             </div>
         </a>
-        <ul id="location_sub_menu" class="absolute w-full bg-background top-sub-menu border-l-0 border border-line border-t-0">
+        <ul id="location_sub_menu" class="absolute w-full bg-background top-sub-menu border-l-0 border border-line border-b-background border-t-0 transition-colors">
             % for bar in session["bar_access"]:
                 % if not session["bar_id"] == bar["bar_id"]:
                     <li class="h-[40px] flex items-center">
@@ -38,7 +38,7 @@
                 <i class="fa-solid fa-caret-down text-xs transition-transform"></i>
             </div>
         </a>
-        <ul id="user_sub_menu" class="absolute w-full bg-background top-sub-menu border-r-0 border border-line border-t-0">
+        <ul id="user_sub_menu" class="absolute w-full bg-background top-sub-menu border-r-0 border border-line border-b-background border-t-0 transition-colors">
             <li>
                 <a class="px-4 py-2 flex flex-nowrap items-center transition-colors text-secondary cursor-pointer hover:text-primary" href="/sign-out">
                     <div class="w-6 h-6 inline-flex items-center justify-center mr-2">
