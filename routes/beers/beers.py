@@ -7,7 +7,7 @@ import pymysql
 ##############################
 
 @get("/beers")
-@view("beers")
+@view("beers/index")
 def _():
     session = validate.session()
     if not session: 

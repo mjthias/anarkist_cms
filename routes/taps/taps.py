@@ -6,38 +6,31 @@ import pymysql
 
 ##############################
 
-@get("/taps/<tap_id>")
-@view("single_tap")
-def _(tap_id):
+@get("/taps")
+@view("taps/index")
+def _():
     # VALIDATE SESSION
     session = validate.session()
     if not session: return redirect("/sign-in")
 
-    # VALIDATE ID PARAM
-    tap_id, error = validate.id(tap_id)
-    if error: g.error_view(404)
-
-    # GET TAP FROM DB
+    # GET TAPS FROM DB
     try:
         db = pymysql.connect(**var.DB_CONFIG)
         cursor = db.cursor()
         cursor.execute("""
             SELECT * FROM taps_list
-            WHERE tap_id = %s
-            AND fk_bar_id = %s
-            LIMIT 1
-            """, (tap_id, session["bar_id"]))
-        tap = cursor.fetchone()
-        if not tap: return g.error_view(404)
+            WHERE fk_bar_id = %s
+            """, (session["bar_id"]))
+        taps = cursor.fetchall()
         
         return dict(
             session = session,
-            tap = tap,
+            taps = taps,
             )
 
     except Exception as ex:
         print(ex)
-        return g.error_view(500)
+        return g.respond(500)
     
     finally:
         cursor.close()

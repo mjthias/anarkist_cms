@@ -6,7 +6,7 @@ import pymysql
 
 ##############################
 @get("/beer-styles/<beer_style_id>")
-@view("single_beer_style")
+@view("beer_styles/by_id")
 def _(beer_style_id):
     # VALIDATE SESSION
     session = validate.session()

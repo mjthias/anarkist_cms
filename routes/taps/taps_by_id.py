@@ -6,36 +6,35 @@ import pymysql
 
 ##############################
 
-@get("/breweries/<brewery_id>")
-@view("single_brewery")
-def _(brewery_id):
-    #VALIDATE SESSION
+@get("/taps/<tap_id>")
+@view("taps/by_id")
+def _(tap_id):
+    # VALIDATE SESSION
     session = validate.session()
     if not session: return redirect("/sign-in")
 
-    # VALIDATE ID
-    brewery_id, error = validate.id(brewery_id)
-    if error: return g.error_view(404)
+    # VALIDATE ID PARAM
+    tap_id, error = validate.id(tap_id)
+    if error: g.error_view(404)
 
+    # GET TAP FROM DB
     try:
         db = pymysql.connect(**var.DB_CONFIG)
         cursor = db.cursor()
         cursor.execute("""
-            SELECT breweries.*, taps_list.brewery_name AS brewery_on_tap FROM breweries
-            LEFT JOIN taps_list 
-            ON breweries.brewery_name = taps_list.brewery_name
-            WHERE brewery_id = %s
+            SELECT * FROM taps_list
+            WHERE tap_id = %s
+            AND fk_bar_id = %s
             LIMIT 1
-            """, (brewery_id))
-        brewery = cursor.fetchone()
-
-        if not brewery: return g.error_view(404)
+            """, (tap_id, session["bar_id"]))
+        tap = cursor.fetchone()
+        if not tap: return g.error_view(404)
         
         return dict(
             session = session,
-            brewery = brewery
+            tap = tap,
             )
-    
+
     except Exception as ex:
         print(ex)
         return g.error_view(500)

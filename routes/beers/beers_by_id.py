@@ -7,7 +7,7 @@ import pymysql
 ##############################
 
 @get("/beers/<beer_id>")
-@view("single_beer")
+@view("beers/by_id")
 def _(beer_id=""):
     session = validate.session()
     if not session:
