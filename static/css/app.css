@@ -524,6 +524,10 @@ video {
   --tw-backdrop-sepia:  ;
 }
 
+.pointer-events-none{
+  pointer-events: none;
+}
+
 .fixed{
   position: fixed;
 }
@@ -534,6 +538,10 @@ video {
 
 .relative{
   position: relative;
+}
+
+.z-50{
+  z-index: 50;
 }
 
 .col-span-12{
@@ -570,6 +578,10 @@ video {
   margin-right: 1rem;
 }
 
+.mt-\[50px\]{
+  margin-top: 50px;
+}
+
 .flex{
   display: flex;
 }
@@ -594,17 +606,24 @@ video {
   height: 1px;
 }
 
+.h-\[40px\]{
+  height: 40px;
+}
+
 .h-\[50px\]{
   height: 50px;
 }
 
-.w-6{
-  width: 1.5rem;
+.min-h-screen{
+  min-height: 100vh;
 }
 
-.w-\[fit-content\]{
-  width: -moz-fit-content;
-  width: fit-content;
+.w-1\/4{
+  width: 25%;
+}
+
+.w-6{
+  width: 1.5rem;
 }
 
 .w-full{
@@ -709,6 +728,10 @@ video {
   padding-top: 0.5rem;
 }
 
+.pt-\[50px\]{
+  padding-top: 50px;
+}
+
 .text-2xl{
   font-size: 1.5rem;
   line-height: 2rem;
@@ -747,6 +770,30 @@ video {
   transition-duration: 150ms;
 }
 
+.transition-transform{
+  transition-property: transform;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+.top-sub-menu{
+  max-height: 0px;
+  overflow: hidden;
+  border-width: 0px;
+  transition: max-height .2s ease-in-out;
+  top: calc(100% + 1px);
+}
+
+.top-sub-menu.active{
+  max-height: 40px;
+  border-width: 1px;
+  border-color: rgba(71,71,71,100);
+}
+
+.rotate {
+  transform: rotate(180deg);
+}
+
 .hover\:bg-highlight-bg:hover{
   background-color: rgba(45,45,45,100);
 }
@@ -758,5 +805,9 @@ video {
 @media (min-width: 1280px){
   .xl\:col-span-2{
     grid-column: span 2 / span 2;
+  }
+
+  .xl\:w-1\/6{
+    width: 16.666667%;
   }
 }

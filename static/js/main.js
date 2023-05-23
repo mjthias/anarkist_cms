@@ -38,16 +38,18 @@ window.addEventListener("popstate", (e) => {
   spa(e.state.spaUrl, false);
 });
 
-function errorUrl(spaUrl, status) {
-    url = spaUrl.replace("/", "");
-    return `/${status}?url=${url}`;
-}
+// ##############################
+// ##############################
+// ##############################
 
-function cleanUrl(url) {
-  if (url.includes("?")) {
-    url = url.substring(0, url.indexOf("?"))
-  } 
-  return url;
+// CMS functionalities
+
+function toggleTopSubMenu() {
+  const target = event.target;
+  const caret = target.querySelector(`.fa-caret-down`);
+  target.classList.toggle("text-secondary")
+  caret.classList.toggle("rotate");
+  document.querySelector(`${target.dataset.target}`).classList.toggle("active");
 }
 
 // ##############################

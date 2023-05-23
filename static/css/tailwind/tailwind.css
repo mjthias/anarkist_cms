@@ -3,3 +3,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.top-sub-menu {
+    @apply max-h-0 overflow-hidden border-0;
+    transition: max-height .2s ease-in-out;
+    top: calc(100% + 1px);
+}
+
+.top-sub-menu.active {
+    @apply max-h-[40px] border border-line 
+}
+
+.rotate {
+    transform: rotate(180deg);   
+}
