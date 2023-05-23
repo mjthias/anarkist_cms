@@ -1,6 +1,6 @@
 <nav class="col-span-12 h-[50px] flex justify-between items-center py-4 bg-background  border border-line border-t-0 border-x-0 fixed w-full z-50 max-w-[1500px]">
     
-    <div class="relative w-1/2 sm:w-1/3 md:w-1/4 xl:w-1/6 flex items-center">
+    <div class="relative flex items-center">
         <div onclick="toggleSideMenu()" data-target="#side_menu" class="md:hidden w-6 h-6 inline-flex items-center justify-center ml-4 relative cursor-pointer">
             <span id="burger_open" class="absolute w-full h-full text-center pointer-events-none transition-all">
                 <i class="fa-solid fa-bars"></i>
@@ -9,27 +9,16 @@
                 <i class="fa-solid fa-xmark text-xl -translate-y-1"></i>
             </span>
         </div>
-        <a onclick="toggleTopSubMenu()" data-target="#location_sub_menu" class="relative z-10 py-3 px-4 flex flex-nowrap items-center transition-colors text-secondary cursor-pointer hover:text-primary bg-background">
+        <a onclick="toggleTopSubMenu()" data-target="#location_sub_menu" class="py-3 px-4 flex flex-nowrap items-center transition-colors text-secondary cursor-pointer hover:text-primary">
             <span class="pointer-events-none">{{ session["bar_name"] }}</span>
             <div class="pointer-events-none w-6 h-6 inline-flex items-center justify-center pt-1">
                 <i class="fa-solid fa-caret-down text-xs transition-transform"></i>    
             </div>
         </a>
-        <ul id="location_sub_menu" class="absolute w-full bg-background top-sub-menu border-l-0 border border-line border-b-background border-t-0 transition-colors">
-            % for bar in session["bar_access"]:
-                % if not session["bar_id"] == bar["bar_id"]:
-                    <li class="h-[40px] flex items-center">
-                        <a class="px-4 py-2 text-sm transition-colors text-secondary cursor-pointer hover:text-primary">
-                            {{ bar["bar_name"] }}
-                        </a>
-                    </li>
-                % end
-            % end
-        </ul>
     </div>
 
     <div class="relative">
-        <a onclick="toggleTopSubMenu()" data-target="#user_sub_menu" class="relative z-10 bg-background py-3 px-4 flex flex-nowrap items-center transition-colors text-secondary cursor-pointer hover:text-primary">
+        <a onclick="toggleTopSubMenu()" data-target="#user_sub_menu" class="py-3 px-4 flex flex-nowrap items-center transition-colors text-secondary cursor-pointer hover:text-primary">
             <div class="pointer-events-none w-6 h-6 inline-flex items-center justify-center mr-3">
                 <i class="fa-solid fa-circle-user text-2xl"></i>
             </div>
@@ -38,16 +27,28 @@
                 <i class="fa-solid fa-caret-down text-xs transition-transform"></i>
             </div>
         </a>
-        <ul id="user_sub_menu" class="absolute w-full bg-background top-sub-menu border-r-0 border border-line border-b-background border-t-0 transition-colors">
-            <li>
-                <a class="px-4 py-2 flex flex-nowrap items-center transition-colors text-secondary cursor-pointer hover:text-primary" href="/sign-out">
-                    <div class="w-6 h-6 inline-flex items-center justify-center mr-2">
-                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
-                    </div>
-                    <span class="text-sm">Sign out</span>
-                </a>
-            </li>
-        </ul>
     </div>
     
 </nav>
+
+<ul id="location_sub_menu" class="bg-background top-sub-menu border-l-0 border border-line border-b-background border-t-0 transition-colors fixed z-40 top-[49px] left-0">
+    % for bar in session["bar_access"]:
+        % if not session["bar_id"] == bar["bar_id"]:
+            <li class="h-[40px] flex items-center">
+                <a class="px-4 py-2 text-sm transition-colors text-secondary cursor-pointer hover:text-primary">
+                    {{ bar["bar_name"] }}
+                </a>
+            </li>
+        % end
+    % end
+</ul>
+<ul id="user_sub_menu" class="bg-background top-sub-menu border-r-0 border border-line border-b-background border-t-0 transition-colors fixed z-40 top-[49px] right-0">
+    <li>
+        <a class="px-4 py-2 flex flex-nowrap items-center transition-colors text-secondary cursor-pointer hover:text-primary" href="/sign-out">
+            <div class="w-6 h-6 inline-flex items-center justify-center mr-2">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+            </div>
+            <span class="text-sm">Sign out</span>
+        </a>
+    </li>
+</ul>
