@@ -2,8 +2,8 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:8889
--- Generation Time: May 22, 2023 at 03:10 PM
+-- Host: localhost
+-- Generation Time: May 23, 2023 at 07:29 AM
 -- Server version: 5.7.39
 -- PHP Version: 8.2.0
 
@@ -226,7 +226,9 @@ INSERT INTO `beer_styles` (`beer_style_id`, `beer_style_name`) VALUES
 (5, 'Double IPA'),
 (2, 'Hazy IPA'),
 (1, 'IPA'),
+(6, 'New England IPA'),
 (3, 'Sour'),
+(10, 'Triple IPA'),
 (4, 'Weissbier');
 
 -- --------------------------------------------------------
@@ -325,7 +327,8 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`session_id`, `fk_user_id`, `session_iat`) VALUES
-(128, 1, 1684767645);
+(128, 1, 1684673419),
+(129, 1, 1684761919);
 
 -- --------------------------------------------------------
 
