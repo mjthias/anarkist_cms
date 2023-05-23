@@ -688,14 +688,14 @@ video {
   border-width: 1px;
 }
 
-.border-x-0{
-  border-left-width: 0px;
-  border-right-width: 0px;
-}
-
 .border-y-0{
   border-top-width: 0px;
   border-bottom-width: 0px;
+}
+
+.border-x-0{
+  border-left-width: 0px;
+  border-right-width: 0px;
 }
 
 .border-l-0{
@@ -710,8 +710,16 @@ video {
   border-top-width: 0px;
 }
 
+.border-background{
+  border-color: rgba(14, 14,14,100);
+}
+
 .border-line{
   border-color: rgba(71,71,71,100);
+}
+
+.border-b-background{
+  border-bottom-color: rgba(14, 14,14,100);
 }
 
 .bg-background{
@@ -821,6 +829,7 @@ video {
 
 .top-sub-menu.active{
   max-height: 40px;
+  border-bottom-color: rgba(71,71,71,100);
 }
 
 #side_menu {

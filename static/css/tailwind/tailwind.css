@@ -11,7 +11,7 @@
 }
 
 .top-sub-menu.active {
-    @apply max-h-[40px];
+    @apply max-h-[40px] border-b-line;
 }
 
 #side_menu {
