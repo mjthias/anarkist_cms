@@ -15,7 +15,7 @@ def _(tap_id):
 
     # VALIDATE ID PARAM
     tap_id, error = validate.id(tap_id)
-    if error: g.error_view(404, "Page not found")
+    if error: g.error_view(404)
 
     # GET TAP FROM DB
     try:
@@ -28,7 +28,7 @@ def _(tap_id):
             LIMIT 1
             """, (tap_id, session["bar_id"]))
         tap = cursor.fetchone()
-        if not tap: return g.error_view(404, "Page not found")
+        if not tap: return g.error_view(404)
         
         return dict(
             session = session,
@@ -37,7 +37,7 @@ def _(tap_id):
 
     except Exception as ex:
         print(ex)
-        return g.error_view(500, "Server error")
+        return g.error_view(500)
     
     finally:
         cursor.close()

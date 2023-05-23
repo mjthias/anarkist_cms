@@ -32,7 +32,7 @@ def _():
 
     except Exception as ex:
         print(str(ex))
-        return g.respond(500, "Server error.")
+        return g.error_view(500)
     
     finally:
         cursor.close()

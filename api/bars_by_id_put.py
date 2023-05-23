@@ -12,11 +12,11 @@ def _(bar_id):
     # Session
     session = validate.session()
     if not session: 
-        return g.respond(401, "Unauthorized attempt.")
+        return g.respond(401)
 
     # Role
     if not session["role_id"] == 1:
-        return g.respond(401, "Unauthorized attempt.")
+        return g.respond(401)
 
     # bar id param
     bar_id, error = validate.id(bar_id)
@@ -48,14 +48,14 @@ def _(bar_id):
         WHERE bar_id = %s
         """, (bar_name, bar_street, bar_city, bar_zip_code, bar_id))
         counter = cursor.rowcount
-        if not counter: return g.respond(204, "")
+        if not counter: return g.respond(204)
         db.commit()
 
         return g.respond(200, "Bar updated")
 
     except Exception as ex:
         print(str(ex))
-        return g.respond(500, "Server error")
+        return g.respond(500)
 
     finally:
         cursor.close()

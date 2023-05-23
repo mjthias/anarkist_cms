@@ -8,13 +8,10 @@ import pymysql
 
 @delete(f"{var.API_PATH}/taps/<tap_id>")
 def _(tap_id):
-    # VALIDATE SESSION
+    # VALIDATE SESSION AND ROLE - staff not allowed
     session = validate.session()
-    if not session: return g.respond(401, "Unauthorized attempt")
-
-    # VALIDATE ROLE
-    if session["role_id"] == 3:
-        return g.respond(401, "Unauthorized attempt")
+    if not session or session["role_id"] == 3: 
+        return g.respond(401)
     
     # VALIDATE ID PARAM
     tap_id, error = validate.id(tap_id)
@@ -25,13 +22,13 @@ def _(tap_id):
         cursor = db.cursor()
         cursor.execute("CALL delete_tap(%s, %s)", (tap_id, session["bar_id"]))
         counter = cursor.rowcount
-        if not counter: return g.respond(204, "")
+        if not counter: return g.respond(204)
         db.commit()
         return g.respond(200, "Tap deleted")
 
     except Exception as ex:
         print(ex)
-        return g.respond(500, "Server error")
+        return g.respond(500)
 
     finally:
         cursor.close()

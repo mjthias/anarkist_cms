@@ -14,7 +14,7 @@ def _(search_user_id):
     
     search_user_id, error = validate.id(search_user_id)
     if error:
-        return g.error_view(404, "Page not found")
+        return g.error_view(404)
     
     # Extract needed values from session
     role_id=int(session["role_id"])
@@ -50,7 +50,7 @@ def _(search_user_id):
                 """, (search_user_id))
         
         user = cursor.fetchone()
-        if not user: return g.error_view(404, "Page not found")
+        if not user: return g.error_view(404)
 
         # Select users bar_access
         if user and user["user_role_id"] != "1":
@@ -77,7 +77,7 @@ def _(search_user_id):
 
     except Exception as ex:
         print(str(ex))
-        return g.error_view(500, "Server error")
+        return g.error_view(500)
 
     finally:
         cursor.close()

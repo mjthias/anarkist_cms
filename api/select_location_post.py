@@ -9,7 +9,7 @@ import jwt
 def _():
     # VALIDATE
     session = validate.partial_session()
-    if not session: return g.respond(401, "Unauthorized attempt.")
+    if not session: return g.respond(401)
 
     try:
         bar_id, error = validate.id(request.forms.get("bars"))
@@ -38,4 +38,4 @@ def _():
         return g.respond(200, "Location successfully selected.")
     except Exception as ex:
         print(str(ex))
-        return g.respond(500, "Server error.")
+        return g.respond(500)

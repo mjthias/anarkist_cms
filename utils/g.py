@@ -4,12 +4,37 @@ import utils.vars as var
 import json
 
 ##############################
-def respond(status = 400, data = "Unknown error"):
+def respond(status = 400, data = None):
+    if not data:
+        data = set_response_message(status)
     response.content_type = 'application/json'
     response.status = status
     if type(data) is str:
         return json.dumps({ "info": data })
     return json.dumps(data)
+
+##############################
+@view("error")
+def error_view(status=404, info = None):
+    if not info:
+        info  = set_response_message(status)
+    error = {}
+    error["code"] = status
+    error["info"] = info
+    error["page_url"] = request.path
+    response.status = status
+    return dict(error = error)
+
+##############################
+def set_response_message(status):
+    if status == 404: return "Page not found"
+    if status == 400: return "Client error"
+    if status == 401: return "Access denied"
+    if status == 500: return "Server error"
+    if status == 204: return ""
+    if status == 201: return "Row created"
+    if status == 200: return "Success"
+    else: return "No message"
 
 ##############################
 def delete_session(session=None):
@@ -66,12 +91,3 @@ def format_price(value):
     else:
         return format(value, ".2f")
     
-
-##############################
-@view("error")
-def error_view(code=404, info = "Page not found"):
-    error = {}
-    error["code"] = code
-    error["info"] = info
-    error["page_url"] = request.path
-    return dict(error = error)

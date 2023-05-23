@@ -14,7 +14,7 @@ def _(beer_style_id):
 
     # VALIDATE ID
     beer_style_id, error = validate.id(beer_style_id)
-    if error: return g.error_view(404, "Page not found")
+    if error: return g.error_view(404)
 
     # CONNECT TO DB
     try:
@@ -27,13 +27,13 @@ def _(beer_style_id):
             LIMIT 1
         """, (beer_style_id,))
         beer_style = cursor.fetchone()
-        if not beer_style: g.error_view(404, "Page not found")
+        if not beer_style: g.error_view(404)
 
         return dict(session=session, beer_style=beer_style)
     
     except Exception as ex:
         print(str(ex))
-        return g.error_view(500, "Server error.")
+        return g.error_view(500)
     
     finally:
         cursor.close()

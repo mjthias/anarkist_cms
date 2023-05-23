@@ -9,7 +9,7 @@ import pymysql
 def _(beer_style_name=""):
     # VALIDATE SESSION/USER
     session = validate.session()
-    if not session: return g.respond(401, "Unauthorized attempt.")
+    if not session: return g.respond(401)
 
     # VALIDATE INPUT/QUERYSTRING VALUES
     try:
@@ -21,7 +21,7 @@ def _(beer_style_name=""):
         if error: return g.respond(400, error)
     except Exception as ex:
         print(str(ex))
-        return g.respond(500, "Server error.")
+        return g.respond(500)
     
     # CONNECT TO DB
     try:
@@ -30,12 +30,12 @@ def _(beer_style_name=""):
 
         cursor.execute("CALL get_beer_style_by_fuzzy_name(%s, %s, %s)", (beer_style_name, offset, limit))
         beer_styles = cursor.fetchall()
-        if not beer_styles: return g.respond(204, "")
+        if not beer_styles: return g.respond(204)
 
         return g.respond(200, beer_styles)
     except Exception as ex:
         print(str(ex))
-        return g.respond(500, "Server error.")
+        return g.respond(500)
     finally:
         cursor.close()
         db_connect.close()

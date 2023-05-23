@@ -11,10 +11,10 @@ def _():
     try:
         # VALIDATE
         session = validate.session()
-        if not session: return g.respond(401, "Unauthorized attempt.")
+        if not session: return g.respond(401)
 
         # Staffs are 401
-        if session["role_id"] == 3: return g.respond(401, "Unauthorized attempt.")
+        if session["role_id"] == 3: return g.respond(401)
 
         bar_id = session["bar_id"]
 
@@ -23,7 +23,7 @@ def _():
 
     except Exception as ex:
         print(ex)
-        g.respond(500, "Server error.")
+        g.respond(500)
 
     try:
         db = pymysql.connect(**var.DB_CONFIG)
@@ -33,11 +33,11 @@ def _():
         SET fk_user_id = %s, fk_bar_id = %s
         """, (user_id, bar_id))
         db.commit()
-        return g.respond(200, "Bar access created.")
+        return g.respond(201, "Bar access created")
 
     except Exception as ex:
         print(ex)
-        g.respond(500, "Server error")
+        g.respond(500)
     
     finally:
         cursor.close()

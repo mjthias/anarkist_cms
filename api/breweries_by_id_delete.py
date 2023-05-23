@@ -11,10 +11,10 @@ def _(brewery_id):
     #VALIDATE SESSION & ROLE AUTH
     session = validate.session()
     if not session:
-        return g.respond(401, "Unautorized attempt")
+        return g.respond(401)
     
     if session["role_id"] == 3:
-        return g.respond(401, "Unautorized attempt")
+        return g.respond(401)
     
     # VALIDATE BREWERY ID PARAM
     brewery_id, error = validate.id(brewery_id)
@@ -33,14 +33,14 @@ def _(brewery_id):
             WHERE brewery_id = %s
             """, (brewery_id))
         counter = cursor.rowcount
-        if not counter: return g.respond(204, "")
+        if not counter: return g.respond(204)
         db.commit()
 
         return g.respond(200, f"Brewery with id: {brewery_id}, deleted")
 
     except Exception as ex:
         print(ex)
-        return g.respond(500, "Server error")
+        return g.respond(500)
     
     finally:
         cursor.close()

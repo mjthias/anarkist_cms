@@ -12,11 +12,11 @@ def _():
     # Session
     session = validate.session()
     if not session: 
-        return g.respond(401, "Unauthorized attempt.")
+        return g.respond(401)
 
     # Role
     if not session["role_id"] == 1:
-        return g.respond(401, "Unauthorized attempt.")
+        return g.respond(401)
 
     # Input values
     bar_name, error = validate.name(request.forms.get("bar_name"))
@@ -46,7 +46,7 @@ def _():
 
     except Exception as ex:
         print(str(ex))
-        return g.respond(500, "Server error")
+        return g.respond(500)
 
     finally:
         cursor.close()

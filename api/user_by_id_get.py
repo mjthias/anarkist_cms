@@ -1,4 +1,4 @@
-from bottle import get, response, request
+from bottle import get
 import utils.vars as var
 import utils.g as g
 import utils.validation as validate
@@ -7,10 +7,13 @@ import pymysql
 ##############################
 @get(f"{var.API_PATH}/users/<user_id>")
 def _(user_id=""):
-    # VALIDATE SESSION/USER
+    # VALIDATE SESSION AND ROLE 
     session = validate.session()
-    if not session: return g.respond(401, "Unauthorized attempt.")
-    if (not session["user_id"] == int(user_id)) and (not session["role_id"] in var.AUTH_USER_ROLES): return g.respond(401, "Unauthorized attempt.")
+    if not session: return g.respond(401)
+
+    # Staff can only acces their own user
+    if not session["user_id"] == int(user_id) and session["role_id"] == 3: 
+        return g.respond(401)
 
     # VALIDATE INPUT VALUES
     try:
@@ -21,7 +24,7 @@ def _(user_id=""):
 
     except Exception as ex:
         print(str(ex))
-        return g.respond(500, "Server error.")
+        return g.respond(500)
     
     # CONNECT TO DB
     try:
@@ -43,12 +46,14 @@ def _(user_id=""):
                 LIMIT 1
             """, (user_id, bar_id))
         user = cursor.fetchone()
-        if not user: return g.respond(204, "")
+        if not user: return g.respond(204)
 
         return g.respond(200, user)
+    
     except Exception as ex:
         print(str(ex))
-        return g.respond(500, "Server error")
+        return g.respond(500)
+    
     finally:
         cursor.close()
         db_connect.close()

@@ -12,7 +12,7 @@ def _(brewery_id):
     # VALIDATE SESSION
     session = validate.session()
     if not session:
-        return g.respond(401, "Unautorized attmept.")
+        return g.respond(401)
     
     # VALIDATE BREWERY_ID PARAM
     brewery_id, error = validate.id(brewery_id)
@@ -44,7 +44,7 @@ def _(brewery_id):
             WHERE brewery_id = %s
             """, (brewery_name, brewery_menu_name, brewery_id))
         counter = cursor.rowcount
-        if not counter: return g.respond(204, "")
+        if not counter: return g.respond(204)
         db.commit()
         return g.respond(200, "Brewery updated")
 
@@ -52,7 +52,7 @@ def _(brewery_id):
         print(ex)
         if "brewery_name" in str(ex): return g.respond(400, "Brewery name already registered")
         if "brewery_menu_name" in str(ex): return g.respond(400, "Brewery menu name already registered")
-        return g.respond(500, "Server error")
+        return g.respond(500)
     
     finally:
         cursor.close()

@@ -14,13 +14,14 @@ def _():
     try:
         user_email, error = validate.email(request.forms.get("user_email"))
         if error: return g.respond(400, error)
+        
         user_password, error = validate.password(request.forms.get("user_password"))
         if error: return g.respond(400, error)
         user_password_bytes = user_password.encode('utf-8')
 
     except Exception as ex:
         print(str(ex))
-        return g.respond(500, "Server error.")
+        return g.respond(500)
 
     # CONNTECT TO DB
     try:
@@ -37,8 +38,7 @@ def _():
         user = cursor.fetchone()
 
         # Validate password
-        if not user: return g.respond(400, "Invalid email or password.")
-        if not bcrypt.checkpw(user_password_bytes, str(user['user_password']).encode('utf-8')): 
+        if not user or not bcrypt.checkpw(user_password_bytes, str(user['user_password']).encode('utf-8')):
             return g.respond(400, "Invalid email or password.")
 
         # Create session
@@ -67,7 +67,7 @@ def _():
     except Exception as ex:
         print(ex)
         db_connect.rollback()
-        return g.respond(500, "Server error")
+        return g.respond(500)
     
     finally:
         cursor.close()
