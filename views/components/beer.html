@@ -1,23 +1,29 @@
-<!-- <a href="/beers/{{beer['beer_id']}}">{{beer["beer_name"]}}</a> -->
-
-<article id="{{ beer['beer_id'] }}" href="{{ href }}" onclick="spa('{{ href }}')">
-    <div>
+<article
+    id="{{ beer['beer_id'] }}"
+    href="{{ href }}" 
+    onclick="spa('{{ href }}')"
+    class="flex gap-2 cursor-pointer hover:bg-highlight-bg p-2 rounded"
+    >
+    <div class="w-20 h-20 bg-danger rounded overflow-hidden">
         % if beer['beer_image']:
         <img src="/static/images/{{ beer['beer_image']}}" />
         % else:
         <i class="fa-solid fa-beer-mug-empty"></i>
         % end
     </div>
-    <div>
-        <header>
-            <h3>{{ beer['beer_name'] }}</h3>
-        </header>
-        <div>
+    <div class="grid flex-1">
+        <h2 class="text-lg font-medium leading-none">{{ beer['beer_name'] }}</h2>
+        <div class="text-sm leading-none">
             <p>{{ beer['beer_style_name'] }}</p>
-            <p>{{ beer['brewery_name'] }}</p>
-            <p>Alc.: {{ beer['beer_alc'] }}%</p>
-            <p>IBU: {{ beer['beer_ibu'] }}</p>
-            <p>EBC: {{ beer['beer_ebc'] }}</p>
+            <p class="mt-1">{{ beer['brewery_name'] }}</p>
+        </div>
+
+        <div class="self-end text-xs flex justify-between max-w-[12rem]">
+            <p>ALC.: {{ beer['beer_alc'] }}%</p>
+            <span>|</span>
+            <p>IBU: {{ beer['beer_ibu'] or "-" }}</p>
+            <span>|</span>
+            <p>EBC: {{ beer['beer_ebc'] or "-" }}</p>
         </div>
     </div>
 </article>
