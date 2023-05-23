@@ -10,7 +10,7 @@ import pymysql
 def _(tap_id):
     # VALIDATE SESSION
     session = validate.session()
-    if not session: return g.respond(401, "Unauthorized attempt.")
+    if not session: return g.respond(401)
 
     bar_id = session["bar_id"]
 
@@ -35,13 +35,13 @@ def _(tap_id):
             AND fk_bar_id = %s
             """, (beer_id, tap_unavailable, tap_id, bar_id))
         counter = cursor.rowcount
-        if not counter: return g.respond(204, "")
+        if not counter: return g.respond(204)
         db.commit()
         return g.respond(200, "Tap updated")
     
     except Exception as ex:
         print(ex)
-        return g.respond(500, "Server error")
+        return g.respond(500)
 
     finally:
         cursor.close()

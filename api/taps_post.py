@@ -9,12 +9,11 @@ import pymysql
 
 @post(f"{var.API_PATH}/taps")
 def _():
-    # VALIDATE SESSION
+    # VALIDATE SESSION AND ROLE - staff not allowed
     session = validate.session()
-    if not session: return g.respond(401, "Unauthorized attampt.")
-
-    # VALIADTE USER ROLE
-    if session["role_id"] == 3: return g.respond(401, "Unauthorized attempt.")
+    if not session or session["role_id"] == 3:
+        return g.respond(401)
+    
     bar_id = session["bar_id"]
 
     # VALIDATE BEER ID
@@ -33,7 +32,7 @@ def _():
     
     except Exception as ex:
         print(ex)
-        return g.respond(500, "Server error")
+        return g.respond(500)
 
     finally:
         cursor.close()

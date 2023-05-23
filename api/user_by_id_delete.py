@@ -12,7 +12,7 @@ def _(user_id):
     try:
         # VALIDATE SESSION/USER
         session = validate.session()
-        if not session: return g.respond(401, "Unauthorized attempt.")
+        if not session: return g.respond(401)
 
         # VALIDATE ALLOWED KEYS
         allowed_keys = ["user_id", "confirm_deletion"]
@@ -25,7 +25,7 @@ def _(user_id):
 
         # Staffs can only delete themselves
         if session["role_id"] == 3 and session["user_id"] != user_id:
-            return g.respond(401, "Unauthorized attempt.")
+            return g.respond(401)
         
         # type 'DELETE' to confirm
         confirm_deletion, error = validate.confirm_deletion(request.forms.get("confirm_deletion"))
@@ -33,7 +33,7 @@ def _(user_id):
         
     except Exception as ex:
         print(str(ex))
-        return g.respond(500, "Server error")
+        return g.respond(500)
     
     # CONNECT TO DB
     try:
@@ -49,7 +49,7 @@ def _(user_id):
             LIMIT 1
             """, (user_id, session["bar_id"]))
             user = cursor.fetchone()
-            if not user: g.respond(204, "")
+            if not user: g.respond(204)
         
         cursor.execute("""
             DELETE FROM users 
@@ -59,14 +59,14 @@ def _(user_id):
 
         counter = cursor.rowcount
         print(counter)
-        if not counter: return g.respond(204, "")
+        if not counter: return g.respond(204)
         db.commit()
 
         return g.respond(200, f"Successfully deleted user with ID: {user_id}")
     
     except Exception as ex:
         print(str(ex))
-        return g.respond(500, "Server error.")
+        return g.respond(500)
     
     finally:
         cursor.close()

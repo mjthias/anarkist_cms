@@ -13,12 +13,12 @@ def _():
         cursor.execute("SELECT * FROM breweries")
         breweries = cursor.fetchall()
         if not breweries:
-            return g.respond(204, "")
+            return g.respond(204)
         g.respond(200, breweries)
 
     except Exception as ex:
         print(str(ex))
-        return g.respond(500, "Server error")
+        return g.respond(500)
 
     finally:
         cursor.close()

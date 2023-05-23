@@ -15,7 +15,7 @@ def _():
     # redirect if role = staff (3)
     role_id=int(session["role_id"])
     if role_id == 3:
-        return g.error_view(401, "Unauthoriized attempt")
+        return g.error_view(401)
     
     user_id=int(session["user_id"])
     
@@ -42,7 +42,7 @@ def _():
 
     except Exception as ex:
         print(str(ex))
-        return g.error_view(500, "Server error")
+        return g.error_view(500)
 
     finally:
         cursor.close()

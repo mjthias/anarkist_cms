@@ -15,11 +15,11 @@ def _(bar_id):
 
     # VALIDATE ROLE
     if not session["role_id"] == 1:
-        return g.error_view(401, "Unauthorized attempt")
+        return g.error_view(401)
     
     # VALIDATE BAR ID
     bar_id, error = validate.id(bar_id)
-    if error: return g.error_view(404, "Page not found")
+    if error: return g.error_view(404)
     
     # GET BAR FROM DB
     try:
@@ -31,7 +31,7 @@ def _(bar_id):
         LIMIT 1
         """, (bar_id))
         bar = cursor.fetchone()
-        if not bar: return g.error_view(404, "Page not found")
+        if not bar: return g.error_view(404)
         
         return dict(
             session = session,
@@ -40,7 +40,7 @@ def _(bar_id):
 
     except Exception as ex:
         print(ex)
-        return g.error_view(500, "Server error")
+        return g.error_view(500)
 
     finally:
         cursor.close()

@@ -12,8 +12,8 @@ import jwt
 def _():
     # VALIDATE SESSION AND USER ROLE
     session = validate.session()
-    if not session: return g.respond(401, "Unauthorized attempt.")
-    if session["role_id"] == 3: return g.respond(401, "Unauthorized attempt.")
+    if not session: return g.respond(401)
+    if session["role_id"] == 3: return g.respond(401)
 
     bar_id = session["bar_id"]
 
@@ -53,7 +53,7 @@ def _():
         
     except Exception as ex:
         print(str(ex))
-        return g.respond(500, "Server error.")
+        return g.respond(500)
     
     # CONNECT TO DB
     try:
@@ -92,7 +92,7 @@ def _():
         if "user_email" in str(ex): return g.respond(400, "Email already exists.")
         if "user_role_id" in str(ex): return g.respond(400, "User role does not exist.")
         if "bar_id" in str(ex): return g.respond(400, "Bar does not exist.")
-        return g.respond(500, "Server error.")
+        return g.respond(500)
     
     finally:
         cursor.close()

@@ -12,7 +12,7 @@ def _(beer_id=""):
     try:
         # VALIDATE SESSION/USER
         session = validate.session()
-        if not session: return g.respond(401, "Unauthorized attempt.")
+        if not session: return g.respond(401)
 
         # VALIDATE ALLOWED KEYS
         allowed_keys = ["beer_id", "beer_name", "beer_ebc", "beer_ibu", "beer_alc", "beer_price", "beer_image", "beer_image_name", "beer_description_en", "beer_description_dk", "brewery_id", "brewery_name", "beer_style_id", "beer_style_name"]
@@ -53,7 +53,7 @@ def _(beer_id=""):
         
     except Exception as ex:
         print(str(ex))
-        return g.respond(500, "Server error.")
+        return g.respond(500)
 
     # CONNECT TO DB
     try:
@@ -64,7 +64,7 @@ def _(beer_id=""):
         # SELECT DB BEER
         cursor.execute("SELECT * FROM beers WHERE beer_id = %s LIMIT 1", (beer_id,))
         beer = cursor.fetchone()
-        if not beer: return g.respond(204, "")
+        if not beer: return g.respond(204)
 
         # SAVE OLD IMAGE PATH
         beer_image_old = beer["beer_image"]
@@ -102,7 +102,7 @@ def _(beer_id=""):
         """, (beer['beer_name'], beer['fk_brewery_id'], beer['beer_ebc'], beer['beer_ibu'], beer['beer_alc'], beer['fk_beer_style_id'], beer['beer_price'], beer['beer_image'], beer['beer_description_en'], beer['beer_description_dk'], beer['beer_updated_at'], beer['fk_beer_updated_by'], beer['beer_id']))
 
         counter = cursor.rowcount
-        if not counter: return g.respond(204, "")
+        if not counter: return g.respond(204)
         print(f"Rows updated: {counter}")
         db_connect.commit()
 
@@ -117,7 +117,7 @@ def _(beer_id=""):
         return g.respond(200, beer)
     except Exception as ex:
         print(str(ex))
-        return g.respond(500, "Server error.")
+        return g.respond(500)
     finally:
         cursor.close()
         db_connect.close()

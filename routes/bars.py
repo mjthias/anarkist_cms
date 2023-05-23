@@ -15,7 +15,7 @@ def _():
 
     # VALIDATE ROLE
     if not session["role_id"] == 1:
-        return g.error_view(401, "Unauthorized attempt")
+        return g.error_view(401)
     
     try:
         db = pymysql.connect(**var.DB_CONFIG)
@@ -29,7 +29,7 @@ def _():
 
     except Exception as ex:
         print(ex)
-        return g.error_view(500, "Server error")
+        return g.error_view(500)
 
     finally:
         cursor.close()

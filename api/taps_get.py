@@ -1,9 +1,8 @@
-from bottle import get, request, response
+from bottle import get, request
 import utils.vars as var
 import utils.validation as validate
 import utils.g as g
 import pymysql
-import json
 
 ##############################
 
@@ -44,13 +43,13 @@ def _():
         else: 
             taps = cursor.fetchall()
         if not taps:
-            return g.respond(204, "")
+            return g.respond(204)
 
         return g.respond(200, taps)
 
     except Exception as ex:
         print(str(ex))
-        return g.respond(500, "Server error")
+        return g.respond(500)
 
     finally:
         cursor.close()

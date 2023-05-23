@@ -10,20 +10,21 @@ def _(user_id):
     try:
         # VALIDATE SESSION/USER
         session = validate.session()
-        if not session: return g.respond(401, "Unauthorized attempt.")
+        if not session: return g.respond(401)
+
+        # VALIDATE INPUT VALUES
+        user_id, error = validate.id(user_id)
+        if error: return g.respond(400, error)
+
+        if not user_id == session["user_id"] and user_id == 3:
+            return g.respond(401)
+
+        is_own_user = session["user_id"] == user_id
 
         # VALIDATE ALLOWED KEYS
         allowed_keys = ["user_id", "user_name", "user_email", "user_role_id"]
         for key in request.forms.keys():
             if not key in allowed_keys: return g.respond(403, f"Forbidden key: {key}")
-
-
-        # VALIDATE INPUT VALUES
-        # if (not session["user_id"] == int(user_id)) and (not session["role_id"] in var.AUTH_USER_ROLES): return g.respond(401, "Unauthorized attempt.")
-        user_id, error = validate.id(user_id)
-        if error: return g.respond(400, error)
-
-        is_own_user = session["user_id"] == user_id
 
         # Staffs can only update themselves
         if session["role_id"] == 3 and not is_own_user:
@@ -42,13 +43,13 @@ def _(user_id):
 
             # Admins cant update role to super users
             if session["role_id"] == 2 and user_role_id == 1:
-                return g.respond(401, "Unauthorized attempt")
+                return g.respond(401)
             
         else: user_role_id = None
 
     except Exception as ex:
         print(str(ex))
-        return g.respond(500, "Server error")
+        return g.respond(500)
     
     # CONNECT TO DB
     try:
@@ -73,12 +74,11 @@ def _(user_id):
                 LIMIT 1 
             """, (user_id, session["bar_id"]))
         user = cursor.fetchone()
-        if not user: return g.respond(204, "")
+        if not user: return g.respond(204)
 
         # IF INPUT VALUES ARE NEW, APPEND TO USER-DICT
         if user_email != user["user_email"]: user["user_email"] = user_email
         if user_name != user["user_name"]: user["user_name"] = user_name
-        # user_role_id = None if is_own_user or session-role_id = 3
         if user_role_id and user_role_id != user["user_role_id"]: user["user_role_id"] = user_role_id
 
         cursor.execute("""
@@ -90,16 +90,16 @@ def _(user_id):
         """, (user["user_email"], user["user_name"], user["user_role_id"], user["user_id"]))
 
         counter = cursor.rowcount
-        if not counter: return g.respond(204, "")
+        if not counter: return g.respond(204)
         print(f"Rows updated: {counter}")
         db_connect.commit()
 
-        return g.respond(200, "User updated.")
+        return g.respond(200)
     
     except Exception as ex:
         print(str(ex))
         db_connect.rollback()
-        return g.respond(500, "Server error.")
+        return g.respond(500)
     
     finally:
         cursor.close()

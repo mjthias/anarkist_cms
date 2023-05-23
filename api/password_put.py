@@ -13,7 +13,7 @@ def _():
         # VALIDATE
         # Session
         session = validate.session()
-        if not session: return g.respond(401, "Unauthorized attempt.")
+        if not session: return g.respond(401)
 
         user_id = session["user_id"]
 
@@ -36,7 +36,7 @@ def _():
         
     except Exception as ex:
         print(str(ex))
-        return g.respond(500, "Server error.")
+        return g.respond(500)
     
     # CONNECT TO DB
     try:
@@ -47,7 +47,7 @@ def _():
         # Select the user
         cursor.execute("SELECT * FROM users WHERE user_id = %s LIMIT 1", (user_id,))
         user = cursor.fetchone()
-        if not user: return g.respond(204, "")
+        if not user: return g.respond(204)
 
         # VALIDATE PASSWORD
         user_password_bytes = user_password.encode("utf-8")
@@ -69,7 +69,7 @@ def _():
 
         # No user affected
         counter = cursor.rowcount
-        if not counter: return g.respond(204, "")
+        if not counter: return g.respond(204)
         
         db_connect.commit()
         return g.respond(200, "Password was successfully updated.")
@@ -77,7 +77,7 @@ def _():
     except Exception as ex:
         print(str(ex))
         db_connect.rollback()
-        return g.respond(500, "Server error.")
+        return g.respond(500)
     
     finally:
         cursor.close()

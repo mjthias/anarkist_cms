@@ -10,7 +10,7 @@ def _(beer_id=""):
     try:
         # VALIDATE SESSION
         session = validate.session()
-        if not session: return g.respond(401, "Unauthorized attempt.")
+        if not session: return g.respond(401)
 
         # VALIDATE ALLOWED KEYS
         allowed_keys = ["id", "confirm_deletion"]

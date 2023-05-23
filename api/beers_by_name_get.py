@@ -10,7 +10,7 @@ import pymysql
 def _():
     # VALIDATE SESSION
     session = validate.session()
-    if not session: return g.respond(401, "Unauthorized attempt")
+    if not session: return g.respond(401)
 
     #VALIDATE PARAM
     beer_name, error = validate.name(request.params.get("name"))
@@ -31,7 +31,7 @@ def _():
 
     except Exception as ex:
         print(ex)
-        return g.respond(500, "Server error")
+        return g.respond(500)
     
     finally:
         cursor.close()
