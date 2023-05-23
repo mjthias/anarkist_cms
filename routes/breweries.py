@@ -27,7 +27,7 @@ def _():
     
     except Exception as ex:
         print(ex)
-        return g.respond(500, "Server error")
+        return g.error_view(500, "Server error")
     
     finally:
         cursor.close()

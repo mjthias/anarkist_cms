@@ -11,9 +11,9 @@ def _():
         session = jwt.decode(cookie, var.JWT_SECRET, algorithms=["HS256"])
         g.delete_session(session)
         response.set_cookie("anarkist", cookie, path="/", expires=0)
-        return g.respond(200, "Successfully signed out.")
+
     except Exception as ex:
         print(str(ex))
-        return g.respond(500, "Server error.")
+        
     finally:
-        redirect("/sign-in")
+        return redirect("/sign-in")

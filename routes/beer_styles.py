@@ -19,9 +19,11 @@ def _():
         beer_styles = cursor.fetchall()
 
         return dict(session=session, beer_styles=beer_styles)
+    
     except Exception as ex:
         print(str(ex))
-        return g.respond(500, "Server error")
+        return g.error_view(500, "Server error")
+    
     finally:
         cursor.close()
         db_connect.close()

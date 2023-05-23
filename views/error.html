@@ -1,9 +1,9 @@
-% rebase("base", page_title=error['code']) 
+% rebase("base", page_title=error['code'], render_navigation=False) 
 
 <div
     id="spa"
     data-page_title="{{ error['code'] }}"
-    data-page_url="/{{ error['code'] }}"
+    data-page_url="{{ error['page_url'] }}"
     >
         {{ error['info'] }}
 </div>

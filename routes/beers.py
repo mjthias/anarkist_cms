@@ -1,6 +1,7 @@
 from bottle import get, view, response, redirect
 import utils.vars as var
 import utils.validation as validate
+import utils.g as g
 import pymysql
 
 ##############################
@@ -21,8 +22,7 @@ def _():
 
     except Exception as ex:
         print(str(ex))
-        response.status = 500
-        return "Server error"
+        return g.error_view(500, "Server error")
 
     finally:
         cursor.close()

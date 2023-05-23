@@ -1,5 +1,6 @@
 from bottle import get, view, redirect
 import utils.validation as validate
+import utils.g as g
 
 ##############################
 
@@ -11,6 +12,7 @@ def _():
     if not session: return redirect("/sign-in")
     # Staff no access
     if session["role_id"] == 3:
-        return redirect("/")
+        return g.error_view(401, "Unauthorized attempt")
+
     
     return dict(session = session)

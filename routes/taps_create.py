@@ -14,7 +14,7 @@ def _():
 
     # VALIDATE ROLE
     if session["role_id"] == 3:
-        return g.respond(401, "Unauthorized attempt")
+        return g.error_view(401, "Unauthorized attempt")
     
     return dict(session=session)
 
