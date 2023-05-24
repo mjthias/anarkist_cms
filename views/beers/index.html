@@ -6,7 +6,7 @@
     data-page_url="/beers"
     >
 
-    <div class="content-grid">
+    <div class="content-grid content-container">
         % for beer in beers:
             % include("components/beer", href=f"/beers/{ beer['beer_id'] }")
         % end
