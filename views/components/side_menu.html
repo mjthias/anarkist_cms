@@ -1,18 +1,24 @@
 <aside id="side_menu" class="-translate-x-full md:translate-x-0 w-full fixed top-0 md:sticky col-span-12 md:col-span-3 md:top-[50px] xl:col-span-2 border border-line border-y-0 border-l-0 pt-2 mt-[50px] transition-transform bg-background">
+    % if not session["role_id"] == 3:
     <ul>
         % include("components/side_menu_item", href="/users", text="Users", icon="fa-solid fa-users")
-        % include("components/side_menu_item", href="/bars", text="Bars", icon="fa-solid fa-location-dot")
+        % if session["role_id"] == 1:
+            % include("components/side_menu_item", href="/bars", text="Bars", icon="fa-solid fa-location-dot")
+        % end
     </ul>
     <div class="h-[1px] w-full bg-line my-2"></div>
+    % end
     <ul>
         % include("components/side_menu_item", href="/beers", text="Beers", icon="fa-solid fa-beer-mug-empty")
         % include("components/side_menu_item", href="/breweries", text="Breweries", icon="fa-solid fa-city")
         % include("components/side_menu_item", href="/taps", text="Taps", icon="fa-solid fa-faucet")
         % include("components/side_menu_item", href="/beer-styles", text="Beer styles", icon="fa-solid fa-wheat-awn")
     </ul>
+    % if not session["role_id"] == 3:
     <div class="h-[1px] w-full bg-line my-2"></div>
     <ul>
         % include("components/side_menu_item", href="pizzas", text="Pizzas", icon="fa-solid fa-pizza-slice")
         % include("components/side_menu_item", href="/ingredients", text="Ingredients", icon="fa-solid fa-pepper-hot")
     </ul>
+    % end
 </aside>
