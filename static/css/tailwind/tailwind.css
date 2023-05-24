@@ -10,7 +10,7 @@
 }
 
 .top-sub-menu.active {
-    @apply max-h-[40px] border-b-line;
+    @apply max-h-[40px];
 }
 
 #side_menu {

@@ -50,9 +50,17 @@ window.addEventListener("popstate", (e) => {
 function toggleTopSubMenu() {
   const target = event.target;
   const caret = target.querySelector(`.fa-caret-down`);
+  const subMenu = document.querySelector(target.dataset.target);
   target.classList.toggle("text-secondary")
   caret.classList.toggle("rotate");
-  document.querySelector(`${target.dataset.target}`).classList.toggle("active");
+
+  const childElems = subMenu.querySelectorAll(`li`);
+  if (subMenu.getAttribute("style")) {
+    subMenu.removeAttribute("style");
+  } else {
+    subMenu.style.maxHeight = `${childElems.length * 50}px`;
+  }
+  
 }
 
 function toggleSideMenu() {
