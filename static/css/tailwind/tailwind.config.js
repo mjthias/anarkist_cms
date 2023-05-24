@@ -12,7 +12,7 @@ module.exports = {
       'line': 'rgba(71,71,71,100)',
       'input-bg': 'rgba(45,45,45,1)',
       'highlight-bg': 'rgba(45,45,45,1)',
-      'highlight-bg-hover': 'rgba(45,45,45,0.5)',
+      'highlight-bg-hover': 'rgba(45,45,45,0.35)',
       'primary': 'rgba(255,255,255,1)',
       'secondary': 'rgba(156,156,156,1)',
       'btn': {

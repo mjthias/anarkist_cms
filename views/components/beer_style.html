@@ -1,4 +1,8 @@
 % beer_style_url = f"/beer-styles/{beer_style['beer_style_id']}"
-<article href="{{ beer_style_url }}" onclick="spa('{{ beer_style_url }}'); return false;">
+<article
+    href="{{ beer_style_url }}" 
+    onclick="spa('{{ beer_style_url }}'); return false;"
+    class="text-lg"
+    >
     <h3>{{ beer_style['beer_style_name'] }}</h3>
 </article>

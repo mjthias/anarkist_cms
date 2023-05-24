@@ -34,3 +34,15 @@
 .content-container {
     @apply p-3 md:p-6 xl:p-12
 }
+
+.list-topic {
+    @apply text-3xl border-b border-outline mb-4 pb-1 font-medium
+}
+
+.list-topic:not(:first-child) {
+    @apply mt-14
+}
+
+.list-topic + ul {
+    @apply content-grid
+}
