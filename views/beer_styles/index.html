@@ -5,22 +5,25 @@
     data-page_title="Beer styles"
     data-page_url="/beer-styles"
 >
-    % first_char = None
-    % init_loop = True
 
-    % for beer_style in beer_styles:
-        % if beer_style['beer_style_name'][0].capitalize() !=  first_char:
-            % first_char = beer_style['beer_style_name'][0].capitalize()
-            % if not init_loop:
-                </ul>
+    <section class="content-container">
+        % first_char = None
+        % init_loop = True
+
+        % for beer_style in beer_styles:
+            % if beer_style['beer_style_name'][0].capitalize() !=  first_char:
+                % first_char = beer_style['beer_style_name'][0].capitalize()
+                % if not init_loop:
+                    </ul>
+                % end
+                % init_loop = False
+                <h2>{{ beer_style['beer_style_name'][0].capitalize() }}</h2>
+                <ul>
             % end
-            % init_loop = False
-            <h2>{{ beer_style['beer_style_name'][0].capitalize() }}</h2>
-            <ul>
+            <li>
+                % include("components/beer_style")
+            </li>
         % end
-        <li>
-            % include("components/beer_style")
-        </li>
-    % end
-    </ul>
+        </ul>
+    </section>
 </div>

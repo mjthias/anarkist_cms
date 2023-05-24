@@ -696,6 +696,10 @@ video {
   gap: 0.5rem;
 }
 
+.gap-5{
+  gap: 1.25rem;
+}
+
 .self-end{
   align-self: flex-end;
 }
@@ -810,8 +814,22 @@ video {
   line-height: 1rem;
 }
 
+.text-4xl{
+  font-size: 2.25rem;
+  line-height: 2.5rem;
+}
+
+.text-3xl{
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+}
+
 .font-medium{
   font-weight: 500;
+}
+
+.font-bold{
+  font-weight: 700;
 }
 
 .capitalize{
