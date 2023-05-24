@@ -676,6 +676,10 @@ video {
   cursor: pointer;
 }
 
+.flex-col{
+  flex-direction: column;
+}
+
 .flex-nowrap{
   flex-wrap: nowrap;
 }
@@ -824,6 +828,25 @@ video {
   line-height: 2.25rem;
 }
 
+.text-\[1\.7rem\]{
+  font-size: 1.7rem;
+}
+
+.text-5xl{
+  font-size: 3rem;
+  line-height: 1;
+}
+
+.text-6xl{
+  font-size: 3.75rem;
+  line-height: 1;
+}
+
+.text-7xl{
+  font-size: 4.5rem;
+  line-height: 1;
+}
+
 .font-medium{
   font-weight: 500;
 }
@@ -838,6 +861,10 @@ video {
 
 .leading-none{
   line-height: 1;
+}
+
+.leading-3{
+  line-height: .75rem;
 }
 
 .text-primary{

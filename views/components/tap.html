@@ -1,21 +1,34 @@
 % tap_url = f"/taps/{tap['tap_id']}"
-<a href="{{tap_url}}" onclick="spa('{{tap_url}}'); return false;">
+<article 
+    href="{{tap_url}}"
+    onclick="spa('{{tap_url}}')"
+    class="flex gap-2 cursor-pointer hover:bg-highlight-bg-hover p-2 rounded transition-colors"
+    >
 
-    % if tap["tap_number"]:
-        <p>{{tap["tap_number"]}}</p>
-    % else:
-        <p>
-            <span>off</span>
-            <span>the</span>
-            <span>wall</span>
-        </p>
-    % end
-        <h2>{{tap["beer_name"]}}</h2>
-        <p>{{tap["beer_style_name"]}}</p>
-        <p>{{tap["brewery_name"]}}</p>
-        <p>
-            <span>ALC.:{{tap["beer_alc"] or "-"}}%</span>|
-            <span>EBC:{{tap["beer_ebc"] or "-"}}</span>]
-            <span>IBU:{{tap["beer_ibu"] or "-"}}</span>
-        </p>
-</a>
+    <div class="w-20 h-20 flex flex-col justify-center items-center">
+        % if tap["tap_number"]:
+            <p class="text-7xl font-medium">{{tap["tap_number"]}}</p>
+        % else:
+            <p class="grid leading-none text-center text-[1.7rem] font-medium">
+                <span>OFF</span>
+                <span>THE</span>
+                <span>WALL</span>
+            </p>
+        % end
+    </div>
+    <div class="grid flex-1">
+        <h2 class="text-lg font-medium leading-none">{{ tap['beer_name'] }}</h2>
+        <div class="text-sm leading-none">
+            <p>{{ tap['beer_style_name'] }}</p>
+            <p class="mt-1">{{ tap['brewery_name'] }}</p>
+        </div>
+
+        <div class="self-end text-xs flex justify-between max-w-[12rem]">
+            <p>ALC.: {{ tap['beer_alc'] }}%</p>
+            <span>|</span>
+            <p>IBU: {{ tap['beer_ibu'] or "-" }}</p>
+            <span>|</span>
+            <p>EBC: {{ tap['beer_ebc'] or "-" }}</p>
+        </div>
+    </div>
+</article>
