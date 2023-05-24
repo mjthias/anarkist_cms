@@ -1,6 +1,9 @@
     
     % brewery_url = f"/breweries/{brewery['brewery_id']}"
-    <a href="{{brewery_url}}" onclick="spa('{{brewery_url}}'); return false;">
-
-        <h2>{{brewery["brewery_name"]}}</h2>
+    <a
+        href="{{brewery_url}}"
+        onclick="spa('{{brewery_url}}'); return false;"
+        class="text-lg"
+        >
+        {{brewery["brewery_name"]}}
     </a>

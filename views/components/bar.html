@@ -1,5 +1,8 @@
 % bar_url = f"/bars/{bar['bar_id']}"
-<article onclick="spa('{{bar_url}}')">
-    <h2>{{bar["bar_name"]}}</h2>
+<article 
+    onclick="spa('{{bar_url}}')"
+    class="cursor-pointer p-2 rounded hover:bg-highlight-bg-hover transition-colors"
+    >
+    <h2 class="text-xl font-medium">{{bar["bar_name"]}}</h2>
     <p>{{bar["bar_street"]}}, {{bar["bar_zip_code"]}} {{bar["bar_city"]}}</p>
 </article>
