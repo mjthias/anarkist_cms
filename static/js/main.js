@@ -82,6 +82,25 @@ function toggleActiveLink(elem) {
   toggleSideMenu();
 }
 
+function displayPreviewImage() {
+  const input = (event.target);
+  const image = input.files[0];
+  const preview = document.querySelector(".image-preview");
+  preview.querySelector("img").src = URL.createObjectURL(image);
+  preview.classList.remove("hidden");
+}
+
+function removePreviewImage() {
+  const inputId = event.target.dataset.inputId;
+  document.querySelector(".image-preview").classList.add("hidden");
+  document.querySelector(".image-preview img").src = "";
+  document.querySelector(inputId).value = "";
+  const inputHidden = document.querySelector(`[type='hidden'][data-input-id='${inputId}']`)
+  if (inputHidden) {
+      inputHidden.value = "";
+  }
+}
+
 // ##############################
 // ##############################
 // ##############################
@@ -250,6 +269,29 @@ async function postBrewery(form) {
   spa(`/breweries/${breweryId}`)
 }
 
+async function postSearchBrewery() {
+  const breweryName = event.target.dataset.brewery_name;
+
+  if (breweryName.length < 2 || breweryName.length > 50) return;
+
+  const form = new FormData();
+  form.append("brewery_name", breweryName);
+
+  const conn = await fetch("/api/v1/breweries", {
+    method: "POST",
+    body: form
+  });
+
+  if (!conn.ok) {
+    const err = await conn.json();
+    console.log(err);
+    return;
+  }
+  const breweryId = await conn.json();
+  // document.querySelector("#brewery_id").value = breweryId;
+  selectSearchedBrewery(breweryId, breweryName);
+}
+
 async function updateBrewery(form) {
   const breweryId = form.brewery_id.value
   const conn = await fetch(`/api/v1/breweries/${breweryId}`, {
@@ -284,27 +326,41 @@ async function deleteBrewery(form) {
 }
 
 async function searchBrewery() {
-  searchTerm = event.target.value;
-  console.log(searchTerm);
-  if (searchTerm.length < 2) {
+  const form = event.target.form;
+  const breweryName = form.brewery_name.value;
+  const searchList = document.querySelector(".search-list");
+  searchList.textContent = "";
+
+  if (breweryName.length < 2) {
+    searchList.classList.add("hidden");
     return;
   }
 
-  const conn = await fetch(`/api/v1/breweries/${searchTerm}?offset=0&limit=5`, {
-    method: "GET"
+  searchList.classList.remove("hidden");
+
+  const conn = await fetch(`/api/v1/breweries/${breweryName}?offset=0&limit=5`, {
+    method: "GET",
+    headers: {as_html: true}
   });
-  const resp = await conn.json();
+  
   if (!conn.ok) {
-    // TODO: Handle error
-    console.log(resp);
+    const error = await conn.json()
+    console.log(error);
     return;
   }
 
-  // TODO: Handle multiple results, and display to the user
-  
-  if (resp.length === 1) {
-    document.querySelector("#brewery_id").value = resp[0].brewery_id;
-  }
+  const html = await conn.text();
+  searchList.insertAdjacentHTML("afterbegin", html);
+}
+
+function selectSearchedBrewery(id=0, name="") {
+  if (!id && !name) {
+    id = event.target.dataset.brewery_id;
+    name = event.target.dataset.brewery_name;
+  } 
+  document.querySelector("#brewery_id").value = id;
+  document.querySelector("#brewery_name").value = name;
+  document.querySelector("#brewery_search").classList.add("hidden");
 }
 
 async function postBeerStyle(form) {

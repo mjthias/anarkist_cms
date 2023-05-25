@@ -47,6 +47,89 @@
     @apply content-grid
 }
 
+.form-container {
+    @apply max-w-lg mx-auto p-4;
+}
+
+.form-grid {
+    @apply w-full grid grid-cols-2 gap-4;
+}
+
+.input-container-half {
+    @apply col-span-1 w-full relative
+}
+
+.input-container {
+    @apply col-span-2 md:col-span-1 w-full relative;
+}
+
+.input-container-full {
+    @apply col-span-2 w-full relative;
+}
+
+input:not([type="file"]), textarea {
+    @apply w-full outline-none bg-input-bg border border-outline h-[2.5rem] px-2 rounded focus:border-outline-focus transition-colors mt-1;
+}
+
+input[type='file'] {
+    visibility: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+/* Change Autocomplete styles in Chrome*/
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  @apply border border-outline focus:border-outline-focus;
+  -webkit-text-fill-color: #fff;
+  -webkit-box-shadow: 0 0 0px 1000px rgba(45,45,45,1) inset;
+  transition: background-color 5000s ease-in-out 0s, border-color .15s ease-in-out;
+}
+
+/* REMOVE ARROWS FROM NUMBER INPUTS
+/*** Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/*** Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+/* REMOVE ARROWS FROM NUMBER INPUTS END */
+
+textarea {
+    @apply py-2 h-20;
+    resize: none;
+}
+
+input:not(:focus):not(:placeholder-shown):invalid,
+textarea:not(:focus):not(:placeholder-shown):invalid {
+    @apply border-danger;
+}
+
+.hint {
+    @apply text-sm text-secondary;
+}
+
+.image-preview {
+    @apply input-container-half relative;
+}
+
+.search-list {
+    @apply absolute z-10 w-full bg-background border border-line py-2 rounded min-h-[3.25rem];
+    top: calc(100% - 1rem);
+}
+
 .sub-menu {
     @apply flex justify-between px-4 py-3 items-center border-b border-line bg-background sticky top-[50px]
 }
