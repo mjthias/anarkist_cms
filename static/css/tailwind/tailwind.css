@@ -32,7 +32,7 @@
 }
 
 .content-container {
-    @apply p-3 md:p-6 xl:p-12
+    @apply p-3 md:p-6 xl:p-12 max-w-7xl mx-auto
 }
 
 .list-topic {
