@@ -1,0 +1,22 @@
+<ul>
+    % if len(beer_styles) == 0:
+    <li 
+        onclick="postSearchBeerStyle()"
+        data-beer_style_name="{{ search_term }}" 
+        class="p-2  hover:bg-highlight-bg-hover transition-colors cursor-pointer"
+    >
+        Add brewery '{{ search_term }}'.
+    </li>
+    % else:
+        % for beer_style in beer_styles:
+        <li
+            onclick="selectSearchedBeerStyle()"
+            data-beer_style_id="{{beer_style['beer_style_id']}}"
+            data-beer_style_name="{{beer_style['beer_style_name']}}"
+            class="p-2 cursor-pointer hover:bg-highlight-bg-hover transition-colors"
+        >
+            {{beer_style["beer_style_name"]}}
+        </li>
+        % end
+    % end
+</ul>

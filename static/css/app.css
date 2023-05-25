@@ -606,18 +606,6 @@ video {
   display: block;
 }
 
-.ml-2{
-  margin-left: 0.5rem;
-}
-
-.ml-4{
-  margin-left: 1rem;
-}
-
-.mr-1{
-  margin-right: 0.25rem;
-}
-
 .flex{
   display: flex;
 }
@@ -716,10 +704,6 @@ video {
   gap: 0.5rem;
 }
 
-.gap-4{
-  gap: 1rem;
-}
-
 .gap-8{
   gap: 2rem;
 }
@@ -807,10 +791,6 @@ video {
 
 .pt-2{
   padding-top: 0.5rem;
-}
-
-.text-left{
-  text-align: left;
 }
 
 .text-center{
