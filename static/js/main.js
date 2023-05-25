@@ -288,7 +288,6 @@ async function postSearchBrewery() {
     return;
   }
   const breweryId = await conn.json();
-  // document.querySelector("#brewery_id").value = breweryId;
   selectSearchedBrewery(breweryId, breweryName);
 }
 
@@ -328,7 +327,7 @@ async function deleteBrewery(form) {
 async function searchBrewery() {
   const form = event.target.form;
   const breweryName = form.brewery_name.value;
-  const searchList = document.querySelector(".search-list");
+  const searchList = document.querySelector("#brewery_search");
   searchList.textContent = "";
 
   if (breweryName.length < 2) {
@@ -380,6 +379,28 @@ async function postBeerStyle(form) {
 
 }
 
+async function postSearchBeerStyle() {
+  const beerStyleName = event.target.dataset.beer_style_name;
+
+  if (beerStyleName.length < 2 || beerStyleName.length > 50) return;
+
+  const form = new FormData();
+  form.append("beer_style_name", beerStyleName);
+
+  const conn = await fetch("/api/v1/beer-styles", {
+    method: "POST",
+    body: form
+  });
+
+  if (!conn.ok) {
+    const err = await conn.json();
+    console.log(err);
+    return;
+  }
+  const beerStyleId = await conn.json();
+  selectSearchedBeerStyle(beerStyleId, beerStyleName);
+}
+
 async function updateBeerStyle(form) {
   const beerStyleId = form.beer_style_id.value;
   const conn = await fetch(`/api/v1/beer-styles/${beerStyleId}`, {
@@ -413,27 +434,41 @@ async function deleteBeerStyle(form) {
 }
 
 async function searchBeerStyle() {
-  searchTerm = event.target.value;
-  console.log(searchTerm);
-  if (searchTerm.length < 2) {
+  const form = event.target.form;
+  const beerStyleName = form.beer_style_name.value;
+  const searchList = document.querySelector("#beer_styles_search");
+  searchList.textContent = "";
+
+  if (beerStyleName.length < 2) {
+    searchList.classList.add("hidden");
     return;
   }
 
-  const conn = await fetch(`/api/v1/beer-styles/${searchTerm}?offset=0&limit=5`, {
-    method: "GET"
+  searchList.classList.remove("hidden");
+
+  const conn = await fetch(`/api/v1/beer-styles/${beerStyleName}?offset=0&limit=5`, {
+    method: "GET",
+    headers: {as_html: true}
   });
-  const resp = await conn.json();
+  
   if (!conn.ok) {
-    // TODO: Handle error
-    console.log(resp);
+    const error = await conn.json()
+    console.log(error);
     return;
   }
 
-  // TODO: Handle multiple results, and display to the user
+  const html = await conn.text();
+  searchList.insertAdjacentHTML("afterbegin", html);
+}
 
-  if (resp.length === 1) {
-    document.querySelector("#beer_style_id").value = resp[0].beer_style_id;
-  }
+function selectSearchedBeerStyle(id=0, name="") {
+  if (!id && !name) {
+    id = event.target.dataset.beer_style_id;
+    name = event.target.dataset.beer_style_name;
+  } 
+  document.querySelector("#beer_style_id").value = id;
+  document.querySelector("#beer_style_name").value = name;
+  document.querySelector("#beer_styles_search").classList.add("hidden");
 }
 
 async function postBeer(form) {
