@@ -31,7 +31,7 @@ def _():
         user_confirm_password, error = validate.confirm_password(user_password, request.forms.get("user_confirm_password"))
         if error: return g.respond(400, error)
 
-        user_role_id, error = validate.id(request.forms.get("user_role_id"))
+        user_role_id, error = validate.role_id(request.forms.get("user_role_id"))
         if error: return g.respond(400, f"User Role {error}")
 
         # Admins cant create super users

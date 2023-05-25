@@ -38,7 +38,7 @@ def _(user_id):
         
         # Admins and Supers can change user_role for other users
         if session["role_id"] != 3 and not is_own_user:
-            user_role_id, error = validate.id(request.forms.get("user_role_id"))
+            user_role_id, error = validate.role_id(request.forms.get("user_role_id"))
             if error: return g.respond(400, f"User role {error}")
 
             # Admins cant update role to super users
