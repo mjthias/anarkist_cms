@@ -56,15 +56,15 @@
 }
 
 .input-container-half {
-    @apply col-span-1 w-full
+    @apply col-span-1 w-full relative
 }
 
 .input-container {
-    @apply col-span-2 md:col-span-1 w-full;
+    @apply col-span-2 md:col-span-1 w-full relative;
 }
 
 .input-container-full {
-    @apply col-span-2 w-full;
+    @apply col-span-2 w-full relative;
 }
 
 input:not([type="file"]), textarea {
@@ -123,4 +123,9 @@ textarea:not(:focus):not(:placeholder-shown):invalid {
 
 .image-preview {
     @apply input-container-half relative;
+}
+
+.search-list {
+    @apply absolute z-10 w-full bg-background border border-line py-2 rounded min-h-[3.25rem];
+    top: calc(100% - 1rem);
 }

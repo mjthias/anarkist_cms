@@ -1,4 +1,4 @@
-from bottle import get, request
+from bottle import get, request, view
 import utils.vars as var
 import utils.validation as validate
 import utils.g as g
@@ -30,6 +30,11 @@ def _(brewery_name=""):
 
         cursor.execute("CALL get_brewery_by_fuzzy_name(%s, %s, %s)", (brewery_name, offset, limit))
         breweries = cursor.fetchall()
+        
+
+        if request.headers.get("as_html"):
+            return as_html(breweries, brewery_name)
+        
         if not breweries: return g.respond(204)
 
         return g.respond(200, breweries)
@@ -40,3 +45,6 @@ def _(brewery_name=""):
         cursor.close()
         db_connect.close()
 
+@view("components/breweries_search_results")
+def as_html(breweries, search_term):
+    return dict(breweries=breweries, search_term=search_term)
