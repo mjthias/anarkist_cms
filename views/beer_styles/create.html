@@ -1,5 +1,12 @@
-% rebase("base", page_title="Beer styles", render_sub_menu=True)
+% rebase("base", page_title="Beer styles")
 
 <div id="spa" data-page_title="Beer styles" data-page_url="/beer-styles/create">
-    % include("components/beer_style_form")
+
+    <header class="sub-menu">
+        <h1>New beer style</h1>
+    </header>
+
+    <section>
+        % include("components/beer_style_form")
+    </section>
 </div>

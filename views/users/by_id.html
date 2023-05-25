@@ -1,14 +1,10 @@
 % import utils.g as g
-% page_title = user["user_name"] if user else "User not found"
+% page_title = user["user_name"]
 % rebase("base", page_title=page_title)
 
 <div id="spa" data-page_title={{page_title}} data-page_url="/users/{{search_user_id}}">
-    <header>
-        % if user:
-            <h2>{{user["user_name"]}}</h2>
-        % else:
-            <h2>User not found</h2>
-        % end
+    <header class="sub-menu">
+        <h1>{{user["user_name"]}}</h1>
     </header>
 
     % if user:
