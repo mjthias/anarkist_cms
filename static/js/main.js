@@ -82,6 +82,25 @@ function toggleActiveLink(elem) {
   toggleSideMenu();
 }
 
+function displayPreviewImage() {
+  const input = (event.target);
+  const image = input.files[0];
+  const preview = document.querySelector(".image-preview");
+  preview.querySelector("img").src = URL.createObjectURL(image);
+  preview.classList.remove("hidden");
+}
+
+function removePreviewImage() {
+  const inputId = event.target.dataset.inputId;
+  document.querySelector(".image-preview").classList.add("hidden");
+  document.querySelector(".image-preview img").src = "";
+  document.querySelector(inputId).value = "";
+  const inputHidden = document.querySelector(`[type='hidden'][data-input-id='${inputId}']`)
+  if (inputHidden) {
+      inputHidden.value = "";
+  }
+}
+
 // ##############################
 // ##############################
 // ##############################

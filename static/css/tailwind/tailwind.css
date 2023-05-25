@@ -52,15 +52,19 @@
 }
 
 .form-grid {
-    @apply w-full grid grid-cols-1 md:grid-cols-2 gap-4;
+    @apply w-full grid grid-cols-2 gap-4;
+}
+
+.input-container-half {
+    @apply col-span-1 w-full
 }
 
 .input-container {
-    @apply col-span-1 w-full;
+    @apply col-span-2 md:col-span-1 w-full;
 }
 
 .input-container-full {
-    @apply input-container md:col-span-2;
+    @apply col-span-2 w-full;
 }
 
 input:not([type="file"]), textarea {
@@ -115,4 +119,8 @@ textarea:not(:focus):not(:placeholder-shown):invalid {
 
 .hint {
     @apply text-sm text-secondary;
+}
+
+.image-preview {
+    @apply input-container-half relative;
 }
