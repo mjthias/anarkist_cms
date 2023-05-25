@@ -6,9 +6,9 @@
     data-page_url="/bars"
     >
 
-    <header>
-        <h2>Bars</h2>
-        <a href="/bars/create" onclick="spa('/bars/create'); return false">New bar</a>
+    <header class="sub-menu">
+        <h1>Bars</h1>
+        % include("components/href_plus", href="/bars/create")
     </header>
 
     <section class="content-container content-grid">

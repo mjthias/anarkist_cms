@@ -129,3 +129,10 @@ textarea:not(:focus):not(:placeholder-shown):invalid {
     @apply absolute z-10 w-full bg-background border border-line py-2 rounded min-h-[3.25rem];
     top: calc(100% - 1rem);
 }
+
+.sub-menu {
+    @apply flex justify-between px-4 py-3 items-center border-b border-line bg-background sticky top-[50px]
+}
+.sub-menu h1 {
+    @apply text-lg
+}

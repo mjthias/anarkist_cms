@@ -606,6 +606,18 @@ video {
   display: block;
 }
 
+.ml-2{
+  margin-left: 0.5rem;
+}
+
+.ml-4{
+  margin-left: 1rem;
+}
+
+.mr-1{
+  margin-right: 0.25rem;
+}
+
 .flex{
   display: flex;
 }
@@ -702,6 +714,14 @@ video {
 
 .gap-2{
   gap: 0.5rem;
+}
+
+.gap-4{
+  gap: 1rem;
+}
+
+.gap-8{
+  gap: 2rem;
 }
 
 .self-end{
@@ -1140,6 +1160,26 @@ textarea:not(:focus):not(:placeholder-shown):invalid{
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
   top: calc(100% - 1rem);
+}
+
+.sub-menu{
+  position: sticky;
+  top: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom-width: 1px;
+  border-color: rgba(71,71,71,100);
+  background-color: rgba(14, 14,14,1);
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+
+.sub-menu h1{
+  font-size: 1.125rem;
+  line-height: 1.75rem;
 }
 
 .hover\:bg-highlight-bg-hover:hover{

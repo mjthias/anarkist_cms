@@ -68,6 +68,7 @@ def session():
 ##############################
 
 def limit(value):
+    value = str(value)
     if not value: return 100, None
     pattern = '^[1-9][0-9]*|(-1$)'
     invalid_message = "Limit must be a positive integer or '-1'."
@@ -77,6 +78,7 @@ def limit(value):
 ##############################
 
 def offset(value):
+    value = str(value)
     if not value: return 0, None
     pattern = '^[0-9]*$'
     invalid_message = "Offset must be a positive integer."
@@ -89,19 +91,33 @@ def id(value):
     pattern = '^[1-9][0-9]*$'
     missing_message = "ID is missing."
     invalid_message = "ID must be a positive integer."
+    invalid_max_message = "ID can't be higher than 18446744073709551615."
     if not value: return None, missing_message
+    value = str(value)
     if not re.match(pattern, value): return None, invalid_message
+    if int(value) > 18446744073709551615: return None, invalid_max_message
+    return int(value), None
+
+##############################
+
+def role_id(value):
+    missing_message = "Role id is missing."
+    invalid_message = "Role id must be a integer between 1 and 3."
+    if not value: return None, missing_message
+    try:
+        if int(value) < 1 or int(value) > 3: return None, invalid_message
+    except: return None, invalid_message
     return int(value), None
 
 ##############################
 def email(value):
-    pattern = '^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$'
+    pattern = '^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,3}))$'
     missing_message = "Email is missing."
     invalid_message = "Email is invalid"
-
     if not value: return None, missing_message
     value = value.strip()
     if not re.match(pattern, value): return None, invalid_message
+    value = value.lower()
     return str(value), None
 
 ##############################
@@ -125,14 +141,17 @@ def confirm_password(value1, value2):
 
 ##############################
 def user_name(value):
+    value = str(value)
     missing_message = "User name is missing."
     invalid_min_message = f"User name must be at least {var.NAME_MIN_LEN} characters."
     invalid_max_message = f"User name must be less than {var.NAME_MAX_LEN} characters."
+    invalid_message = "Names can only consist of alphabetic characters, spaces and '-'"
     if not value: return None, missing_message
     value = value.strip()
     if len(value) < var.NAME_MIN_LEN: return None, invalid_min_message
     if len(value) > var.NAME_MAX_LEN: return None, invalid_max_message
-    value = value.capitalize()
+    pattern = "^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$"
+    if not re.match(pattern, value): return None, invalid_message
     return str(value), None
 
 ##############################
@@ -145,7 +164,7 @@ def brewery_name(value):
     value = value.strip()
     if len(value) < 2: return None, invalid_min_message
     if len(value) > 100: return None, invalid_max_message
-    pattern = '^[a-zA-Z -]*$'
+    pattern = "^[a-zA-Z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$"
     if not re.match(pattern, value): return None, invalid_message
     return str(value), None
 
@@ -159,7 +178,7 @@ def brewery_menu_name(value):
     value = value.strip()
     if len(value) < 2: return None, invalid_min_message
     if len(value) > 100: return None, invalid_max_message
-    pattern = '^[a-zA-Z -]*$'
+    pattern = "^[a-zA-Z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$"
     if not re.match(pattern, value): return None, invalid_message
     return str(value), None
 
@@ -185,25 +204,30 @@ def name(value):
 ##############################
 def zip_code(value):
     if not value: return None, "Zip code missing"
-    pattern = '^(?:[1-9][0-9]{3}|9900)$'
+    pattern = '^[1-9][0-9]{3}$'
     invalid_message = "Zip code is a 4 digit integer, between 1000 and 9990"
     if not re.match(pattern, value): return None, invalid_message
+    if int(value) > 9990: return None, invalid_message
     return str(value), None
 
 ##############################
 def ebc(value):
     if not value: return "", None
     pattern = '^[0-9]*$'
-    invalid_message = "EBC must be a positive integer."
+    invalid_message = "EBC must be an integer between 1 and 600."
     if not re.match(pattern, value): return None, invalid_message
+    if int(value) > 600: return None, invalid_message
+    if int(value) < 1: return None, invalid_message
     return str(value), None
 
 ##############################
 def ibu(value):
     if not value: return "", None
-    pattern = '^[0-9]*$'
-    invalid_message = "IBU must be a positive integer."
+    pattern = '^[0-9]*$' 
+    invalid_message = "IBU must be an integer between 1 and 600."
     if not re.match(pattern, value): return None, invalid_message
+    if int(value) > 600: return None, invalid_message
+    if int(value) < 1: return None, invalid_message
     return str(value), None
 
 ##############################
@@ -222,7 +246,8 @@ def price(value):
     invalid_message = "Price must be at least 0 DKK."
     if not value: return None, missing_message
     value = str(value).replace(",", ".")
-    value = float(value)
+    try: value = float(value)
+    except: return None, invalid_message
     if value < 0: return None, invalid_message
     return value, None
 

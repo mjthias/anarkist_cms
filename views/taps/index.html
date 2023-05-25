@@ -1,9 +1,11 @@
 % rebase("base", page_title="Taps")
 
 <div id="spa" data-page_title="Taps" data-page_url="/taps">
-    <header>
-        <h2>Users</h2>
-        <a href="/taps/create" onclick="spa('/taps/create'); return false;">New tap</a>
+    <header class="sub-menu">
+        <h1>Taps</h1>
+        % if session["role_id"] != 3:
+            % include("components/href_plus", href="/taps/create")
+        % end
     </header>
     
     <section class="content-container content-grid">

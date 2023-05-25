@@ -1,10 +1,21 @@
-% rebase("base", page_title="Beers", render_sub_menu=True) 
+% rebase("base", page_title="Beers") 
 
 <div
     id="spa"
     data-page_title="Beers"
     data-page_url="/beers"
     >
+
+    <header class="sub-menu">
+        <h1>Beers</h1>
+        <div class="flex gap-8">
+            <form>
+                <input type="text" name="search_param" class="mr-1">
+                <button><i class="fa-solid fa-magnifying-glass"></i></button>
+            </form>
+            % include("components/href_plus", href="/beers/create")
+        </div>
+    </header>
 
     <section class="content-grid content-container">
         % for beer in beers:
