@@ -1,9 +1,9 @@
 % rebase("base", page_title="Users")
 
 <div id="spa" data-page_title="Users" data-page_url="/users">
-    <header>
-        <h2>Users</h2>
-        <a href="/users/create" onclick="spa('/users/create'); return false;">New user</a>
+    <header class="sub-menu">
+        <h1>Users</h1>
+        % include("components/href_plus", href="/users/create")
     </header>
     
     <section class="content-container">

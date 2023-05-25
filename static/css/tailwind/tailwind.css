@@ -46,3 +46,10 @@
 .list-topic + ul {
     @apply content-grid
 }
+
+.sub-menu {
+    @apply flex justify-between px-4 py-3 items-center border-b border-line bg-background sticky top-[50px]
+}
+.sub-menu h1 {
+    @apply text-lg
+}

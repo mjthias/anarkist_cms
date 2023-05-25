@@ -1,10 +1,14 @@
-% rebase("base", page_title="Beer styles", render_sub_menu=True) 
+% rebase("base", page_title="Beer styles") 
 
 <div
     id="spa"
     data-page_title="Beer styles"
     data-page_url="/beer-styles"
->
+>   
+    <header class="sub-menu">
+        <h1>Beer styles</h1>
+        % include("components/href_plus", href="/beer-styles/create")
+    </header>
 
     <section class="content-container">
         % first_char = None
