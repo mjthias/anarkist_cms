@@ -162,6 +162,11 @@ function removePreviewImage() {
   }
 }
 
+function toggleDeleteModal() {
+  document.querySelector("body").classList.toggle("overflow-y-hidden");
+  document.querySelector("#delete_modal").classList.toggle("hidden");
+}
+
 // ##############################
 // ##############################
 // ##############################
@@ -171,9 +176,11 @@ function removePreviewImage() {
 function validateForm(callback) {
   event.preventDefault()
   const form = event.target.form
+  let path = "";
+  if (event.target.dataset.path) path = event.target.dataset.path;
   const isValid = form.checkValidity()
   if (!isValid) return
-  callback(form)
+  callback(form, path);
 }
 
 
@@ -192,23 +199,6 @@ async function postUser(form) {
   const userId = await conn.json()
   spa(`/users/${userId}`)
 }
-
-
-async function deleteUser(form) {
-  const userId = form.user_id.value
-  const conn = await fetch(`/api/v1/users/${userId}`, {
-    method: 'DELETE',
-    body: new FormData(form)
-  })
-
-  if (!conn.ok) {
-    return
-  }
-
-  const res = await conn.json()
-  console.log(res)
-}
-
 
 async function updateUserInfo(form) {
   const userId = form.user_id.value;
@@ -330,15 +320,19 @@ async function postBrewery(form) {
   spa(`/breweries/${breweryId}`)
 }
 
-async function postSearchBrewery() {
-  const breweryName = event.target.dataset.brewery_name;
+async function postSearchItem() {
+  const name = event.target.dataset.name;
+  const key = event.target.dataset.key;
+  const path = event.target.dataset.path;
+  const target = event.target.dataset.target;
+  const entryType = event.target.dataset.entry_type;
 
-  if (breweryName.length < 2 || breweryName.length > 50) return;
+  if (name.length < 2 || name.length > 50) return;
 
   const form = new FormData();
-  form.append("brewery_name", breweryName);
+  form.append(key, name);
 
-  const conn = await fetch("/api/v1/breweries", {
+  const conn = await fetch(`/api/v1/${path}`, {
     method: "POST",
     body: form
   });
@@ -348,8 +342,9 @@ async function postSearchBrewery() {
     console.log(err);
     return;
   }
-  const breweryId = await conn.json();
-  selectSearchedBrewery(breweryId, breweryName);
+
+  const id = await conn.json();
+  selectSearchedItem(id, name, target, entryType);
 }
 
 async function updateBrewery(form) {
@@ -413,16 +408,6 @@ async function searchBrewery() {
   searchList.innerHTML = html;
 }
 
-function selectSearchedBrewery(id=0, name="") {
-  if (!id && !name) {
-    id = event.target.dataset.brewery_id;
-    name = event.target.dataset.brewery_name;
-  } 
-  document.querySelector("#brewery_id").value = id;
-  document.querySelector("#brewery_name").value = name;
-  document.querySelector("#brewery_search").classList.add("hidden");
-}
-
 async function postBeerStyle(form) {
   const conn = await fetch('/api/v1/beer-styles', {
     method: "POST",
@@ -440,27 +425,7 @@ async function postBeerStyle(form) {
 
 }
 
-async function postSearchBeerStyle() {
-  const beerStyleName = event.target.dataset.beer_style_name;
 
-  if (beerStyleName.length < 2 || beerStyleName.length > 50) return;
-
-  const form = new FormData();
-  form.append("beer_style_name", beerStyleName);
-
-  const conn = await fetch("/api/v1/beer-styles", {
-    method: "POST",
-    body: form
-  });
-
-  if (!conn.ok) {
-    const err = await conn.json();
-    console.log(err);
-    return;
-  }
-  const beerStyleId = await conn.json();
-  selectSearchedBeerStyle(beerStyleId, beerStyleName);
-}
 
 async function updateBeerStyle(form) {
   const beerStyleId = form.beer_style_id.value;
@@ -522,16 +487,6 @@ async function searchBeerStyle() {
   searchList.innerHTML = html;
 }
 
-function selectSearchedBeerStyle(id=0, name="") {
-  if (!id && !name) {
-    id = event.target.dataset.beer_style_id;
-    name = event.target.dataset.beer_style_name;
-  } 
-  document.querySelector("#beer_style_id").value = id;
-  document.querySelector("#beer_style_name").value = name;
-  document.querySelector("#beer_styles_search").classList.add("hidden");
-}
-
 async function postBeer(form) {
   const conn = await fetch("/api/v1/beers", {
     method: "POST",
@@ -564,22 +519,23 @@ async function updateBeer(form) {
   // SUCCESS
 }
 
-async function deleteBeer(form) {
-  const beerId = form.delete_beer_id.value;
-  
-  const conn = await fetch(`/api/v1/beers/${beerId}`, {
+async function deleteItem(form, path) {
+  const id = form.id.value;
+
+  const conn = await fetch(`/api/v1/${path}/${id}`, {
     method: "DELETE",
     body: new FormData(form)
   });
 
   if (!conn.ok) {
-    const error = await conn.json();
-    console.log(error);
+    const err = await conn.json();
+    console.log(err);
     return;
   }
 
-  // SUCCESS
-  spa(`/beers`);
+  // Success
+  toggleDeleteModal();
+  spa(`/${path}`);
 }
 
 async function searchBeers(){
@@ -699,4 +655,16 @@ async function deleteBar(form) {
   if (!conn.ok) return
 
   spa("/bars")
+}
+
+function selectSearchedItem(id=0, name="", target="", entryType="") {
+  if (!id && !name && !target && !entryType) {
+    id = event.target.dataset.id;
+    name = event.target.dataset.name;
+    target = event.target.dataset.target;
+    entryType = event.target.dataset.entry_type;
+  }
+  document.querySelector(`#${entryType}_id`).value = id;
+  document.querySelector(`#${entryType}_name`).value = name;
+  document.querySelector(target).classList.add("hidden");
 }

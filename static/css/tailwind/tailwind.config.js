@@ -6,7 +6,7 @@ module.exports = {
     colors: {
       'danger': "rgba(220,38,37,1)",
       'success': 'rgba(23,163,74,1)',
-      'background': 'rgba(14, 14,14,1)',
+      'background': 'rgba(14,14,14, var(--tw-bg-opacity))',
       'outline': 'rgba(82,82,82,1)',
       'outline-focus': 'rgba(138,138,138,1)', 
       'line': 'rgba(71,71,71,100)',

@@ -4,6 +4,14 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+    --tw-bg-opacity: 1;
+}
+
+.overflow-y-hidden {
+    overflow-y: hidden;
+}
+
 .top-sub-menu {
     @apply max-h-0 overflow-hidden;
     transition: max-height .2s ease-in-out;
@@ -75,6 +83,10 @@ input[type='file'] {
     visibility: hidden;
     position: absolute;
     z-index: -1;
+}
+
+select {
+    @apply w-full outline-none bg-input-bg border border-outline h-[2.5rem] pl-1 rounded focus:border-outline-focus transition-colors mt-1;
 }
 
 /* Change Autocomplete styles in Chrome*/
