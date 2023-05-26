@@ -36,7 +36,7 @@ class UnitTest(unittest.TestCase):
     # LIMIT
     def test_valid_limits(self):
         cases = [
-            ("", 100),
+            ("", 50),
             ("-1", -1),
             (-1, -1),
             ("1", 1),
