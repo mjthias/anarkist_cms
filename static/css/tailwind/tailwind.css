@@ -85,6 +85,10 @@ input[type='file'] {
     z-index: -1;
 }
 
+select {
+    @apply w-full outline-none bg-input-bg border border-outline h-[2.5rem] pl-1 rounded focus:border-outline-focus transition-colors mt-1;
+}
+
 /* Change Autocomplete styles in Chrome*/
 input:-webkit-autofill,
 input:-webkit-autofill:hover, 
