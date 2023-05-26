@@ -2,6 +2,8 @@
 //SPA
 // Init state - the first loaded page
 history.replaceState({ spaUrl: location.pathname }, "", location.pathname);
+// Highlight menu-link
+toggleActiveLink(location.pathname)
 
 async function spa(spaUrl, doPushState = true) {
   const conn = await fetch(spaUrl, {
@@ -74,12 +76,12 @@ function toggleSideMenu() {
   sideMenu.classList.toggle("-translate-x-full");
 }
 
-function toggleActiveLink(elem) {
-  document.querySelectorAll(".side-menu-link").forEach(link => {
-    link.classList.remove("active");
-  });
-  document.querySelector(`.side-menu-link[href="${elem}"]`).classList.add("active");
-  toggleSideMenu();
+function toggleActiveLink(path) {
+  const href = `/${path.split("/")[1]}`
+  const activeElm = document.querySelector(".side-menu-link.active");
+  if ( activeElm ) activeElm.classList.remove("active");
+  const newActiveElm = document.querySelector(`.side-menu-link[href="${href}"]`);
+  if ( newActiveElm ) newActiveElm.classList.add("active")
 }
 
 function displayPreviewImage() {
@@ -531,7 +533,7 @@ async function searchBeers(){
     searchList.classList.add("hidden")
     return
   }
-  
+
   searchList.classList.remove("hidden")
 
 
