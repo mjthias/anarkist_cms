@@ -2,6 +2,10 @@
 //SPA
 // Init state - the first loaded page
 history.replaceState({ spaUrl: location.pathname }, "", location.pathname);
+// Highlight menu-link
+toggleActiveLink(location.pathname)
+// Start infinite loader listener
+startInfiniteListener()
 
 async function spa(spaUrl, doPushState = true) {
   const conn = await fetch(spaUrl, {
@@ -34,12 +38,69 @@ async function spa(spaUrl, doPushState = true) {
 
   // Set active class on site menu item
   toggleActiveLink(spaUrl);
+  // Start infinite loader listener
+  startInfiniteListener()
 }
 
 // History back/forth
 window.addEventListener("popstate", (e) => {
   spa(e.state.spaUrl, false);
 });
+
+// ##############################
+// ##############################
+// ##############################
+
+// Infinite scroll
+let isLoading = false;
+
+function startInfiniteListener() {
+  window.removeEventListener("scroll", determineLoad) // rm old
+  if (!document.querySelector("#loader")) return; // set none if no loader
+  window.addEventListener("scroll", determineLoad) // set new
+  determineLoad() // init call (for if content is above the fold)
+}
+
+function determineLoad() {
+  if (document.querySelector("#all-loaded")) {
+    window.removeEventListener("scroll", determineLoad)
+  }
+  const loader = document.querySelector("#loader");
+  const loaderY = loader.getBoundingClientRect().y;
+  if (loaderY < window.innerHeight && !isLoading) {
+    isLoading = true
+    fetchChunck(location.pathname, loader.dataset.offset);
+  }
+}
+
+async function fetchChunck(endpoint, offset) {
+  const loader = document.querySelector("#loader")
+  loader.classList.remove("hide")
+
+  const conn = await fetch(`${endpoint}?offset=${offset}`, {
+    headers: {as_chunk: true}
+  })
+
+  if (!conn.ok) {
+    console.warn("Could not fetch chunk")
+    return
+  }
+
+  const html = await conn.text()
+
+  loader.dataset.offset = Number(offset) + 50
+  loader.insertAdjacentHTML("beforebegin", html)
+
+  const elms = document.querySelectorAll("section article")
+  console.log(elms.length)
+
+  if (document.querySelector("#all-loaded")) {
+    window.removeEventListener("scroll", determineLoad)
+  }
+
+  loader.classList.add("hide")
+  isLoading = false
+}
 
 // ##############################
 // ##############################
@@ -74,12 +135,12 @@ function toggleSideMenu() {
   sideMenu.classList.toggle("-translate-x-full");
 }
 
-function toggleActiveLink(elem) {
-  document.querySelectorAll(".side-menu-link").forEach(link => {
-    link.classList.remove("active");
-  });
-  document.querySelector(`.side-menu-link[href="${elem}"]`).classList.add("active");
-  toggleSideMenu();
+function toggleActiveLink(path) {
+  const href = `/${path.split("/")[1]}`
+  const activeElm = document.querySelector(".side-menu-link.active");
+  if ( activeElm ) activeElm.classList.remove("active");
+  const newActiveElm = document.querySelector(`.side-menu-link[href="${href}"]`);
+  if ( newActiveElm ) newActiveElm.classList.add("active")
 }
 
 function displayPreviewImage() {
@@ -487,7 +548,7 @@ async function searchBeers(){
     searchList.classList.add("hidden")
     return
   }
-  
+
   searchList.classList.remove("hidden")
 
 
