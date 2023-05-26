@@ -1,4 +1,4 @@
-from bottle import get, static_file, run, default_app, error, view
+from bottle import get, static_file, run, default_app, error
 import utils.g as g
 
 ##############################
