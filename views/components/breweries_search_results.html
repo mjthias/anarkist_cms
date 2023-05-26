@@ -1,9 +1,13 @@
 <ul>
     % if len(breweries) == 0:
     <li 
-        onclick="postSearchBrewery()"
-        data-brewery_name="{{ search_term }}" 
-        class="p-2  hover:bg-highlight-bg-hover transition-colors cursor-pointer"
+        onclick="postSearchItem()"
+        data-name="{{ search_term }}"
+        data-key="brewery_name"
+        data-path="breweries"
+        data-target="#brewery_search"
+        data-entry_type="brewery"
+        class="p-2 hover:bg-highlight-bg-hover transition-colors cursor-pointer"
     >
         Add brewery '{{ search_term }}'.
     </li>

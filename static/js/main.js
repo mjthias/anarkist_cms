@@ -269,15 +269,19 @@ async function postBrewery(form) {
   spa(`/breweries/${breweryId}`)
 }
 
-async function postSearchBrewery() {
-  const breweryName = event.target.dataset.brewery_name;
+async function postSearchItem() {
+  const name = event.target.dataset.name;
+  const key = event.target.dataset.key;
+  const path = event.target.dataset.path;
+  const target = event.target.dataset.target;
+  const entryType = event.target.dataset.entry_type;
 
-  if (breweryName.length < 2 || breweryName.length > 50) return;
+  if (name.length < 2 || name.length > 50) return;
 
   const form = new FormData();
-  form.append("brewery_name", breweryName);
+  form.append(key, name);
 
-  const conn = await fetch("/api/v1/breweries", {
+  const conn = await fetch(`/api/v1/${path}`, {
     method: "POST",
     body: form
   });
@@ -287,8 +291,9 @@ async function postSearchBrewery() {
     console.log(err);
     return;
   }
-  const breweryId = await conn.json();
-  selectSearchedItem(breweryId, breweryName, "#brewery_search", "brewery");
+
+  const id = await conn.json();
+  selectSearchedItem(id, name, target, entryType);
 }
 
 async function updateBrewery(form) {
@@ -369,27 +374,7 @@ async function postBeerStyle(form) {
 
 }
 
-async function postSearchBeerStyle() {
-  const beerStyleName = event.target.dataset.beer_style_name;
 
-  if (beerStyleName.length < 2 || beerStyleName.length > 50) return;
-
-  const form = new FormData();
-  form.append("beer_style_name", beerStyleName);
-
-  const conn = await fetch("/api/v1/beer-styles", {
-    method: "POST",
-    body: form
-  });
-
-  if (!conn.ok) {
-    const err = await conn.json();
-    console.log(err);
-    return;
-  }
-  const beerStyleId = await conn.json();
-  selectSearchedItem(beerStyleId, beerStyleName, "#beer_styles_search", "beer_style");
-}
 
 async function updateBeerStyle(form) {
   const beerStyleId = form.beer_style_id.value;
