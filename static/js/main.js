@@ -288,7 +288,7 @@ async function postSearchBrewery() {
     return;
   }
   const breweryId = await conn.json();
-  selectSearchedBrewery(breweryId, breweryName);
+  selectSearchedItem(breweryId, breweryName, "#brewery_search", "brewery");
 }
 
 async function updateBrewery(form) {
@@ -352,16 +352,6 @@ async function searchBrewery() {
   searchList.innerHTML = html;
 }
 
-function selectSearchedBrewery(id=0, name="") {
-  if (!id && !name) {
-    id = event.target.dataset.brewery_id;
-    name = event.target.dataset.brewery_name;
-  } 
-  document.querySelector("#brewery_id").value = id;
-  document.querySelector("#brewery_name").value = name;
-  document.querySelector("#brewery_search").classList.add("hidden");
-}
-
 async function postBeerStyle(form) {
   const conn = await fetch('/api/v1/beer-styles', {
     method: "POST",
@@ -398,7 +388,7 @@ async function postSearchBeerStyle() {
     return;
   }
   const beerStyleId = await conn.json();
-  selectSearchedBeerStyle(beerStyleId, beerStyleName);
+  selectSearchedItem(beerStyleId, beerStyleName, "#beer_styles_search", "beer_style");
 }
 
 async function updateBeerStyle(form) {
@@ -459,16 +449,6 @@ async function searchBeerStyle() {
 
   const html = await conn.text();
   searchList.innerHTML = html;
-}
-
-function selectSearchedBeerStyle(id=0, name="") {
-  if (!id && !name) {
-    id = event.target.dataset.beer_style_id;
-    name = event.target.dataset.beer_style_name;
-  } 
-  document.querySelector("#beer_style_id").value = id;
-  document.querySelector("#beer_style_name").value = name;
-  document.querySelector("#beer_styles_search").classList.add("hidden");
 }
 
 async function postBeer(form) {
@@ -638,4 +618,16 @@ async function deleteBar(form) {
   if (!conn.ok) return
 
   spa("/bars")
+}
+
+function selectSearchedItem(id=0, name="", target="", entryType="") {
+  if (!id && !name && !target && !entryType) {
+    id = event.target.dataset.id;
+    name = event.target.dataset.name;
+    target = event.target.dataset.target;
+    entryType = event.target.dataset.entry_type;
+  }
+  document.querySelector(`#${entryType}_id`).value = id;
+  document.querySelector(`#${entryType}_name`).value = name;
+  document.querySelector(target).classList.add("hidden");
 }

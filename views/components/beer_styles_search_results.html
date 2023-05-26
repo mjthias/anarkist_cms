@@ -10,9 +10,11 @@
     % else:
         % for beer_style in beer_styles:
         <li
-            onclick="selectSearchedBeerStyle()"
-            data-beer_style_id="{{beer_style['beer_style_id']}}"
-            data-beer_style_name="{{beer_style['beer_style_name']}}"
+            onclick="selectSearchedItem()"
+            data-id="{{beer_style['beer_style_id']}}"
+            data-name="{{beer_style['beer_style_name']}}"
+            data-target="#beer_styles_search"
+            data-entry_type="beer_style"
             class="p-2 cursor-pointer hover:bg-highlight-bg-hover transition-colors"
         >
             {{beer_style["beer_style_name"]}}
