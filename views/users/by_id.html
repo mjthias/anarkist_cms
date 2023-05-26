@@ -7,114 +7,157 @@
         <h1>{{user["user_name"]}}</h1>
     </header>
 
-    % if user:
-    <form >
-        <h2>User info</h2>
-        <input type="text" hidden name="user_id" value="{{user['user_id']}}">
-        <label for="name">Name</label>
-        <input type="text" name="user_name" id="name" value="{{user['user_name']}}">
-        <label for="email">Email</label>
-        <input type="text" name="user_email" id="email" value="{{user['user_email']}}">
-
-        % if session["role_id"] == 1:
-            <label for="user-role"></label>
-            <select name="user_role_id" id="user-role">
-                <option 
-                    value="3"
-                    % if user['user_role_id'] == 3: 
-                    selected 
-                    % end
-                    >Bar staff
-                </option>
-                <option 
-                    value="2"
-                    % if user['user_role_id'] == 2: 
-                    selected 
-                    % end
-                    >Bar admin
-                </option>
-                <option 
-                    value="1"
-                    % if user['user_role_id'] == 1: 
-                    selected 
-                    % end
-                    >Super user
-                </option>
-            </select>
-
-        % elif session["role_id"] == 2:
-            <label for="user-role"></label>
-            <select name="user_role_id" id="user-role">
-                <option 
-                    value="3"
-                    % if user['user_role_id'] == 3:
-                    selected 
-                    % end
-                    >Bar staff
-                </option>
-                <option 
-                    value="2"
-                    % if user['user_role_id'] == 2:
-                    selected 
-                    % end
-                    >Bar admin
-                </option>
-            </select>
-        % end 
-
-        <button onclick="validateForm( updateUserInfo )">Save changes</button>
-    </form>
-
-    % if session["user_id"] == search_user_id:
-    <form >
-        <h2>Reset password</h2>
-        <input type="text" hidden name="user_id" value="{{user['user_id']}}">
-
-        <label for="user_password">Old password</label>
-        <input type="password" id="user_password" name="user_password">
-
-        <label for="user_new_password">New password</label>
-        <input type="password" id="user_new_password" name="user_new_password">
-
-        <label for="user_confirm_new_password">Repeat password</label>
-        <input type="password" id="user_confirm_new_password" name="user_confirm_new_password">
-
-        <button onclick="validateForm( updateUserPassword )">Reset password</button>
-    </form>
-    % end
-
-    % if user["bar_access"] and session["user_id"] != search_user_id:
-        <div>
-            <h2>Bar access</h2>
-            % this_bar_access = False
-            % for bar in user["bar_access"]:
-                % if bar["bar_id"] == session["bar_id"]:
-                    % this_bar_access = True
-                    <form>
-                        <input type="text" hidden name="user_id" value="{{user['user_id']}}">
-                        <button onclick="deleteBarAccess()">Remove acces</button>
-                    </form>
-                % end
-                <p>{{bar["bar_name"]}}</p>
-                <p>{{bar["bar_street"]}}, {{bar["bar_city"]}}</p>
-            % end
-            % if len(user["bar_access"]) > 1:
-                % if not this_bar_access:
-                    <form>
-                        <input type="text" hidden name="user_id" value="{{user['user_id']}}">
-                        <span><button onclick="postBarAccess()">Give acces</button> to {{session["bar_name"]}}</span>
-                    </form>
-                % end
-            % end
-        </div>
-    % end
-
-    % if user["user_role_id"] == session["role_id"] or session["role_id"] != 3:
-        <form>
+    <section class="form-container relative">
+        <form onsubmit="return false" novalidate="true" class="form-grid">
+            <h2>User info</h2>
             <input type="text" hidden name="user_id" value="{{user['user_id']}}">
-            <label for="confirm_deletion">Type 'DELETE'</label>
-            <input type="text" name="confirm_deletion" id="confirm_deletion">
-            <button onclick="validateForm( deleteUser )">Delete user</button>
+            <div class="input-container-full">
+                <label for="name">Name</label>
+                <input
+                    type="text" 
+                    name="user_name"
+                    id="name" 
+                    value="{{user['user_name']}}"
+                    minlength="2"
+                    maxlength="50"
+                    placeholder=" "
+                    required
+                />
+                <span class="hint">Min. 2 and max. 50 characters.</span>    
+            </div>
+            <div class="input-container-full">
+                <label for="email">Email</label>
+                <input
+                    type="text"
+                    name="user_email"
+                    id="email"
+                    value="{{user['user_email']}}"
+                    pattern='^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,3}))$'
+                    placeholder=" "
+                    required
+                />
+                <span class="hint">Enter a valid e-mail.</span>
+            </div>
+            % if not session["role_id"] == 3:
+                <div class="input-container-full">
+                    <label for="user_role">User role</label>
+                    <select 
+                        name="user_role_id"
+                        id="user_role"
+                        required
+                    >
+                        <option
+                            value="3"
+                            % if user['user_role_id'] == 3:
+                                selected
+                            % end
+                        >
+                            Bar staff
+                        </option>
+                        <option
+                            value="2"
+                            % if user['user_role_id'] == 2:
+                                selected
+                            % end
+                        >
+                            Bar admin
+                        </option>
+                        % if session["role_id"]:
+                            <option 
+                                value="1"
+                                % if user['user_role_id'] == 1: 
+                                    selected 
+                                % end
+                            >
+                                Super user
+                            </option>
+                        % end
+                    </select>
+                    <span class="hint">Select a user role.</span>
+                </div>
+            % end
+            <div>
+                <button onclick="validateForm( updateUserInfo )">Save changes</button>
+            </div>
         </form>
+        % if user["user_id"] == session["user_id"] or session["role_id"] != 3:
+            <button onclick="toggleDeleteModal()">Delete</button>
+            % include("components/deletion_form", id=user['user_id'], callBack='validateForm(deleteItem)', path='users')
+        % end
+    </section>
+
+    % if session["user_id"] == user['user_id']:
+    <section class="form-container">
+        <form onsubmit="return false" novalidate="true" class="form-grid">
+            <h2>Reset password</h2>
+            <input type="text" hidden name="user_id" value="{{user['user_id']}}">
+            <div class="input-container-full">
+                <label for="user_password">Old password</label>
+                <input
+                    type="password"
+                    id="user_password"
+                    name="user_password"
+                    pattern="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$" 
+                    placeholder=" "
+                    required
+                />
+                <span class="hint">Enter your current password.</span>
+            </div>
+            <div class="input-container-full">
+                <label for="user_new_password">New password</label>
+                <input
+                    type="password"
+                    id="user_new_password"
+                    name="user_new_password"
+                    pattern="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$" 
+                    placeholder=" "
+                    required
+                />
+                <span class="hint">Must include one uppercase letter, one lowercase letter, one digit, and a special character (#?!@$%^&*-).</span>
+            </div>
+            <div class="input-container-full">
+                <label for="user_confirm_new_password">Repeat password</label>
+                <input
+                    type="password"
+                    id="user_confirm_new_password"
+                    name="user_confirm_new_password"
+                    pattern="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$" 
+                    placeholder=" "
+                    required
+                />    
+                <span class="hint">Repeat your chosen password.</span>
+            </div>
+            <div>
+                <button onclick="validateForm( updateUserPassword )">Reset password</button>
+            </div>    
+        </form>
+    </section>
+    % end
+
+    % if user["bar_access"] and session["user_id"] != user['user_id']:
+    <section class="form-container">
+        <h2>Bar access</h2>
+        % this_bar_access = False
+        % for bar in user["bar_access"]:
+            % if bar["bar_id"] == session["bar_id"]:
+                % this_bar_access = True
+                <form>
+                    <input type="text" hidden name="user_id" value="{{user['user_id']}}">
+                    <button onclick="deleteBarAccess()">Remove acces</button>
+                </form>
+            % end
+            <p>{{bar["bar_name"]}}</p>
+            <p>{{bar["bar_street"]}}, {{bar["bar_city"]}}</p>
+        % end
+
+        % if len(user["bar_access"]) > 1:
+            % if not this_bar_access:
+                <form>
+                    <input type="text" hidden name="user_id" value="{{user['user_id']}}">
+                    <span><button onclick="postBarAccess()">Give acces</button> to {{session["bar_name"]}}</span>
+                </form>
+            % end
+        % end
+    </section>
     % end
 </div>
