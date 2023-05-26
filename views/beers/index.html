@@ -18,8 +18,7 @@
     </header>
 
     <section class="content-grid content-container">
-        % for beer in beers:
-            % include("components/beer", href=f"/beers/{ beer['beer_id'] }")
-        % end
+        % include("components/beer_list")
+        % include("components/loader")
     </section>
 </div>
