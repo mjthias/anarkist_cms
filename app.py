@@ -1,4 +1,5 @@
-from bottle import get, static_file, run, default_app, error, view
+from bottle import get, static_file, run, default_app, error
+import utils.g as g
 
 ##############################
 
@@ -72,6 +73,16 @@ def _(image):
 
 ##############################
 
+# Non-spa error pages
+@error(404)
+def _(error):
+    return g.error_view(404)
+
+@error(500)
+def _(error):
+    return g.error_view(500)
+
+##############################
 
 try:
     # Prod
