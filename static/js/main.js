@@ -328,9 +328,9 @@ async function searchBrewery() {
   const form = event.target.form;
   const breweryName = form.brewery_name.value;
   const searchList = document.querySelector("#brewery_search");
-  searchList.textContent = "";
 
   if (breweryName.length < 2) {
+    searchList.textContent = "";
     searchList.classList.add("hidden");
     return;
   }
@@ -349,7 +349,7 @@ async function searchBrewery() {
   }
 
   const html = await conn.text();
-  searchList.insertAdjacentHTML("afterbegin", html);
+  searchList.innerHTML = html;
 }
 
 function selectSearchedBrewery(id=0, name="") {
@@ -437,9 +437,9 @@ async function searchBeerStyle() {
   const form = event.target.form;
   const beerStyleName = form.beer_style_name.value;
   const searchList = document.querySelector("#beer_styles_search");
-  searchList.textContent = "";
 
   if (beerStyleName.length < 2) {
+    searchList.textContent = "";
     searchList.classList.add("hidden");
     return;
   }
@@ -458,7 +458,7 @@ async function searchBeerStyle() {
   }
 
   const html = await conn.text();
-  searchList.insertAdjacentHTML("afterbegin", html);
+  searchList.innerHTML = html;
 }
 
 function selectSearchedBeerStyle(id=0, name="") {
@@ -525,20 +525,26 @@ async function searchBeers(){
   const form = event.target.form
   const beerName = form.beer_name.value
   const searchList = form.querySelector(".search-list")
-  searchList.textContent = ""
 
   if (beerName.length < 2) {
+    searchList.textContent = ""
+    searchList.classList.add("hidden")
     return
   }
+  
+  searchList.classList.remove("hidden")
+
 
   const conn = await fetch(`/api/v1/beers?name=${beerName}`, {
     headers: {as_html : true}
   })
 
-  if (!conn.ok) return
+  if (conn.status != 200) return
+
 
   const html = await conn.text()
-  searchList.insertAdjacentHTML("afterbegin", html)
+  console.log("html")
+  searchList.innerHTML = html
 }
 
 async function selectSearchedBeer() {
