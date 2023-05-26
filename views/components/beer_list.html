@@ -1,3 +1,5 @@
+% for beer in beers:
+% href=f"/beers/{beer['beer_id']}"
 <article
     id="{{ beer['beer_id'] }}"
     href="{{ href }}" 
@@ -27,3 +29,7 @@
         </div>
     </div>
 </article>
+% end
+
+% include("components/all_loaded", len=len(beers))
+
