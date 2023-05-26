@@ -150,14 +150,14 @@
     <div class="input-container-full">
         <label for="beer_description_en">Description (English)</label>
         % if defined('beer'):
-            desc_en = beer['beer_description_en']
+        % desc_en = beer['beer_description_en']
         % end
         <textarea id="beer_description_en" name="beer_description_en" minlength="0" maxlength="500" placeholder=" ">{{ desc_en }}</textarea>
         <span class="hint">Min. 2 and max. 500 characters.</span>
     </div>
     <div class="input-container-full">
         % if defined('beer'):
-            desc_dk = beer['beer_description_dk']
+        % desc_dk = beer['beer_description_dk']
         % end
         <label for="beer_description_dk">Description (Danish)</label>
         <textarea id="beer_description_dk" name="beer_description_dk" minlength="0" maxlength="500" placeholder=" ">{{ desc_dk }}</textarea>
@@ -196,7 +196,7 @@
     <div>
         % if defined('beer'):
             <button onclick="validateForm(updateBeer)">Update</button>
-            <!-- TODO: Some modal button -->
+            <button onclick="toggleDeleteModal()">Delete</button>
         % else:
             <button onclick="validateForm(postBeer)">Create</button>
         % end

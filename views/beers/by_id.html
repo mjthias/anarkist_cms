@@ -10,7 +10,7 @@
         <h1>{{beer["beer_name"]}}</h1>
     </header>
 
-    <section>
+    <section class="form-container relative">
         % include("components/beer_form")
         % include("components/deletion_form", id=beer['beer_id'], callBack='validateForm(deleteBeer)')
     </section>

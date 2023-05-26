@@ -101,6 +101,11 @@ function removePreviewImage() {
   }
 }
 
+function toggleDeleteModal() {
+  document.querySelector("body").classList.toggle("overflow-y-hidden");
+  document.querySelector("#delete_modal").classList.toggle("hidden");
+}
+
 // ##############################
 // ##############################
 // ##############################
@@ -469,7 +474,7 @@ async function updateBeer(form) {
 }
 
 async function deleteBeer(form) {
-  const beerId = form.delete_beer_id.value;
+  const beerId = form.id.value;
   
   const conn = await fetch(`/api/v1/beers/${beerId}`, {
     method: "DELETE",
@@ -483,6 +488,7 @@ async function deleteBeer(form) {
   }
 
   // SUCCESS
+  toggleDeleteModal();
   spa(`/beers`);
 }
 
