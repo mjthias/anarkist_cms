@@ -76,7 +76,6 @@ def _(image):
 # Non-spa error pages
 @error(404)
 def _(error):
-    print("test")
     return g.error_view(404)
 
 @error(500)
