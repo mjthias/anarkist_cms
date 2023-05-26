@@ -15,7 +15,7 @@ def _(user_id):
         if not session: return g.respond(401)
 
         # VALIDATE ALLOWED KEYS
-        allowed_keys = ["user_id", "confirm_deletion"]
+        allowed_keys = ["id", "confirm_deletion"]
         for key in request.forms.keys():
             if not key in allowed_keys: return g.respond(403, f"Forbidden key: {key}")
         

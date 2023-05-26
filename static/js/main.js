@@ -115,9 +115,11 @@ function toggleDeleteModal() {
 function validateForm(callback) {
   event.preventDefault()
   const form = event.target.form
+  let path = "";
+  if (event.target.dataset.path) path = event.target.dataset.path;
   const isValid = form.checkValidity()
   if (!isValid) return
-  callback(form)
+  callback(form, path);
 }
 
 
@@ -136,23 +138,6 @@ async function postUser(form) {
   const userId = await conn.json()
   spa(`/users/${userId}`)
 }
-
-
-async function deleteUser(form) {
-  const userId = form.user_id.value
-  const conn = await fetch(`/api/v1/users/${userId}`, {
-    method: 'DELETE',
-    body: new FormData(form)
-  })
-
-  if (!conn.ok) {
-    return
-  }
-
-  const res = await conn.json()
-  console.log(res)
-}
-
 
 async function updateUserInfo(form) {
   const userId = form.user_id.value;
@@ -473,23 +458,23 @@ async function updateBeer(form) {
   // SUCCESS
 }
 
-async function deleteBeer(form) {
-  const beerId = form.id.value;
-  
-  const conn = await fetch(`/api/v1/beers/${beerId}`, {
+async function deleteItem(form, path) {
+  const id = form.id.value;
+
+  const conn = await fetch(`/api/v1/${path}/${id}`, {
     method: "DELETE",
     body: new FormData(form)
   });
 
   if (!conn.ok) {
-    const error = await conn.json();
-    console.log(error);
+    const err = await conn.json();
+    console.log(err);
     return;
   }
 
-  // SUCCESS
+  // Success
   toggleDeleteModal();
-  spa(`/beers`);
+  spa(`/${path}`);
 }
 
 async function searchBeers(){

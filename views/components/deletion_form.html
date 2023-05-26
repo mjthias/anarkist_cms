@@ -9,7 +9,12 @@
                 <span class="hint">Enter 'DELETE' to confirm deletion.</span>
             </div>
             <div class="col-span-full">
-                <button onclick="{{ callBack }}">Delete</button>
+                <button
+                    onclick="{{ callBack }}"
+                    data-path="{{ path }}"
+                >
+                    Delete
+                </button>
             </div>
         </form>
     </div>

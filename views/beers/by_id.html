@@ -12,6 +12,6 @@
 
     <section class="form-container relative">
         % include("components/beer_form")
-        % include("components/deletion_form", id=beer['beer_id'], callBack='validateForm(deleteBeer)')
+        % include("components/deletion_form", id=beer['beer_id'], callBack='validateForm(deleteItem)', path='beers')
     </section>
 </div>
