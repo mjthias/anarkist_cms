@@ -4,6 +4,14 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+    --tw-bg-opacity: 1;
+}
+
+.overflow-y-hidden {
+    overflow-y: hidden;
+}
+
 .top-sub-menu {
     @apply max-h-0 overflow-hidden;
     transition: max-height .2s ease-in-out;
