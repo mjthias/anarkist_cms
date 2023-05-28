@@ -1,15 +1,6 @@
 % desc_dk = ""
 % desc_en = ""
 <form id="beer_form" onsubmit="return false" novalidate="true" class="form-grid">
-    % if defined('beer'):
-        <input 
-            type="hidden" 
-            value="{{ beer['beer_id'] }}"
-            name="beer_id" 
-            pattern="[1-9][0-9]*" 
-            required 
-        />
-    % end 
     <div class="input-container-full">
         <label for="beer_name">Name <span class="text-danger">*</span></label>
         <input 
@@ -195,6 +186,13 @@
     </div>
     <div>
         % if defined('beer'):
+            <input 
+                type="hidden" 
+                value="{{ beer['beer_id'] }}"
+                name="beer_id" 
+                pattern="[1-9][0-9]*" 
+                required 
+            />
             <button onclick="validateForm(updateBeer)">Update</button>
             <button onclick="toggleDeleteModal()">Delete</button>
         % else:
