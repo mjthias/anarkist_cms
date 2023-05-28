@@ -1,0 +1,54 @@
+% if defined('brewery') and brewery['brewery_name'] == brewery['brewery_menu_name']:
+    % brewery['brewery_menu_name'] = ""
+% end
+
+<form onsubmit="return false" novalidate="true" class="form-grid">
+    <div class="input-container-full">
+        <label for="brewery_name">Name</label>
+        <input 
+            type="text" 
+            name="brewery_name" 
+            id="brewery_name" 
+            required
+            placeholder=" "
+            minlength="2"
+            maxlength="50"
+            % if defined('brewery'):
+                value="{{brewery['brewery_name']}}"
+            % end
+        >
+        <span class="hint">Min. 2 and max. 50 characters.</span>
+    </div>
+    <div class="input-container-full">
+        <label for="brewery_menu_name">Menu name</label>
+        <input 
+            type="text" 
+            name="brewery_menu_name" 
+            id="brewery_menu_name" 
+            placeholder=" "
+            minlength="2"
+            maxlength="50"
+            % if defined('brewery'):
+                value="{{brewery['brewery_menu_name']}}"
+            % end
+        >
+        <span class="hint">Min. 2 and max. 50 characters.</span>
+    </div>
+    <div>
+        % if defined('brewery'):
+            <input 
+                type="hidden" 
+                value="{{ brewery['brewery_id'] }}"
+                name="brewery_id" 
+                pattern="[1-9][0-9]*" 
+                required 
+            />
+            <button onclick="validateForm(updateBrewery)">Update</button>
+            % if not brewery['brewery_on_tap']:
+                <button onclick="toggleDeleteModal()">Delete</button>
+            % end
+        % else:
+            <button onclick="validateForm(postBrewery)">Create</button>
+        % end
+    </div>
+</form>
