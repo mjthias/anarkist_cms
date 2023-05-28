@@ -330,33 +330,38 @@ async function postBarAccess() {
   spa(`/users/${userId}`)
 }
 
-async function signIn() {
-  const form = event.target.form;
-  // TODO: VALIDATE INPUT VALUES
+async function signIn(form) {
+  const errElm = document.querySelector(".hint-error");
+  errElm.classList.add("hidden");
+  errElm.textContent = "";
 
-  const connection = await fetch('/sign-in', {
+  const conn = await fetch('/sign-in', {
     method: "POST",
     body: new FormData(form)
   }); 
-  const response = await connection.json()
-  if (!connection.ok) {
-    // TODO: Display error message to user
+  if (!conn.ok) {
+    const err = await conn.json();
+    form.user_password.value = "";
+    errElm.textContent = err.info;
+    errElm.classList.remove("hidden");
   } else {
     window.location.href = "/select-location";
   }
 }
 
-async function selectLocation() {
-  const form = event.target.form;
-  // TODO: VALIDATE INPUT VALUES
+async function selectLocation(form) {
+  const errElm = document.querySelector(".hint-error");
+  errElm.classList.add("hidden");
+  errElm.textContent = "";
 
-  const connection = await fetch('/select-location', {
+  const conn = await fetch('/select-location', {
     method: "POST",
     body: new FormData(form)
   });
-  const response = await connection.json();
-  if (!connection.ok) {
-    // TODO: Display error to user
+  if (!conn.ok) {
+    const err = await conn.json();
+    errElm.textContent = err.info;
+    errElm.classList.remove("hidden");
   } else {
     window.location.href = "/";
   }

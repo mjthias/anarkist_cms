@@ -1,12 +1,19 @@
 % rebase("base", page_title="Select location", render_navigation=False)
 
-<form onsubmit="return false" novalidate="true">
-    <label for="bars">Bars</label>
-    <select id="bars" name="bars">
-        <option selected>Please choose a location</option>
-        % for bar in bars:
-            <option value="{{ bar['bar_id'] }}">{{ bar['bar_name'] }}</option>
-        % end
-    </select>
-    <button onclick="selectLocation()">Submit</button>
-</form>
+<section class="form-container-sm">
+    <form onsubmit="return false" novalidate="true" class="form-grid">
+        <div class="input-container-full mb-6">
+            <label for="bars">Bars</label>
+            <select id="bars" name="bars">
+                <option selected>Please choose a location</option>
+                % for bar in bars:
+                    <option value="{{ bar['bar_id'] }}">{{ bar['bar_name'] }}</option>
+                % end
+            </select>
+        </div>
+        <div class="relative col-span-full flex justify-center">
+            <span class="hint-error absolute -top-full hidden"></span>
+            <button class="btn-primary" onclick="validateForm(selectLocation)">Select location</button>
+        </div>
+    </form>
+</section>
