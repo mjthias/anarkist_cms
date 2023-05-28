@@ -329,39 +329,23 @@ async function postSearchItem() {
 }
 
 async function searchBrewery() {
-  const form = event.target.form;
-  const breweryName = form.brewery_name.value;
+  const breweryName = event.target.form.brewery_name.value;
+  const path = "breweries";
   const searchList = document.querySelector("#brewery_search");
 
-  if (breweryName.length < 2) {
-    searchList.textContent = "";
-    searchList.classList.add("hidden");
-    return;
-  }
-
-  searchList.classList.remove("hidden");
-
-  const conn = await fetch(`/api/v1/breweries/${breweryName}?offset=0&limit=5`, {
-    method: "GET",
-    headers: {as_html: true}
-  });
-  
-  if (!conn.ok) {
-    const error = await conn.json()
-    console.log(error);
-    return;
-  }
-
-  const html = await conn.text();
-  searchList.innerHTML = html;
+  searchItem(breweryName, path, searchList);
 }
 
 async function searchBeerStyle() {
-  const form = event.target.form;
-  const beerStyleName = form.beer_style_name.value;
+  const beerStyleName = event.target.form.beer_style_name.value;
+  const path = "beer-styles";
   const searchList = document.querySelector("#beer_styles_search");
 
-  if (beerStyleName.length < 2) {
+  searchItem(beerStyleName, path, searchList);
+}
+
+async function searchItem(name, path, searchList) {
+  if (name.length < 2) {
     searchList.textContent = "";
     searchList.classList.add("hidden");
     return;
@@ -369,7 +353,7 @@ async function searchBeerStyle() {
 
   searchList.classList.remove("hidden");
 
-  const conn = await fetch(`/api/v1/beer-styles/${beerStyleName}?offset=0&limit=5`, {
+  const conn = await fetch(`/api/v1/${path}/${name}?offset=0&limit=5`, {
     method: "GET",
     headers: {as_html: true}
   });
