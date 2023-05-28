@@ -1,21 +1,19 @@
-<div id="delete_modal" class="hidden">
-    <div onclick="toggleDeleteModal()" class="w-full h-screen bg-background bg-opacity-50 fixed top-0 left-0"></div>
-    <div class="absolute top-1/2 w-full flex items-center justify-center pointer-events-none">
-        <form  onsubmit="return false" novalidate="true" class="bg-background w-2/3 grid border border-line p-4 gap-4 pointer-events-auto">
-            <div class="col-span-full">
-                <input type="hidden" id="id_delete" name="id" value="{{ id }}" required />
-                <label for="confirm_delete">Confirm deletion</label>
-                <input type="text" id="confirm_deletion" name="confirm_deletion" pattern="DELETE" placeholder=" " required />
-                <span class="hint">Enter 'DELETE' to confirm deletion.</span>
-            </div>
-            <div class="col-span-full">
-                <button
-                    onclick="{{ callBack }}"
-                    data-path="{{ path }}"
-                >
-                    Delete
-                </button>
-            </div>
-        </form>
-    </div>
+<div id="delete_modal" onclick="toggleDeleteModal()" class="hidden w-full h-screen bg-background bg-opacity-50 fixed top-0 left-0 z-10"></div>
+<div class="absolute top-1/2 w-full flex items-center justify-center pointer-events-none z-10">
+    <form  onsubmit="return false" novalidate="true" class="bg-background w-2/3 grid border border-line p-4 gap-4 pointer-events-auto">
+        <div class="col-span-full">
+            <input type="hidden" id="id_delete" name="id" value="{{ id }}" required />
+            <label for="confirm_delete">Confirm deletion</label>
+            <input type="text" id="confirm_deletion" name="confirm_deletion" pattern="DELETE" placeholder=" " required />
+            <span class="hint">Enter 'DELETE' to confirm deletion.</span>
+        </div>
+        <div class="col-span-full">
+            <button
+                onclick="{{ callBack }}"
+                data-path="{{ path }}"
+            >
+                Delete
+            </button>
+        </div>
+    </form>
 </div>

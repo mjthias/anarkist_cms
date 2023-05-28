@@ -564,8 +564,16 @@ video {
   top: 49px;
 }
 
+.z-10{
+  z-index: 10;
+}
+
 .z-50{
   z-index: 50;
+}
+
+.z-20{
+  z-index: 20;
 }
 
 .col-span-12{
@@ -610,8 +618,8 @@ video {
   margin-top: 0.25rem;
 }
 
-.mt-\[50px\]{
-  margin-top: 50px;
+.mt-\[var\(--menu-height\)\]{
+  margin-top: var(--menu-height);
 }
 
 .block{
@@ -650,8 +658,8 @@ video {
   height: 40px;
 }
 
-.h-\[50px\]{
-  height: 50px;
+.h-\[var\(--menu-height\)\]{
+  height: var(--menu-height);
 }
 
 .h-full{
@@ -923,6 +931,7 @@ video {
 
 :root {
   --tw-bg-opacity: 1;
+  --menu-height: 3.375rem;
 }
 
 .overflow-y-hidden {
@@ -1249,7 +1258,8 @@ textarea:not(:focus):not(:placeholder-shown):invalid{
 
 .sub-menu{
   position: sticky;
-  top: 50px;
+  top: var(--menu-height);
+  z-index: 10;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1267,6 +1277,10 @@ textarea:not(:focus):not(:placeholder-shown):invalid{
   line-height: 1.75rem;
 }
 
+#delete_modal.hidden ~ div {
+  display: none;
+}
+
 .hover\:bg-highlight-bg-hover:hover{
   background-color: rgba(45,45,45,0.35);
 }
@@ -1280,8 +1294,8 @@ textarea:not(:focus):not(:placeholder-shown):invalid{
     position: sticky;
   }
 
-  .md\:top-\[50px\]{
-    top: 50px;
+  .md\:top-\[var\(--menu-height\)\]{
+    top: var(--menu-height);
   }
 
   .md\:col-span-3{

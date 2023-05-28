@@ -6,6 +6,7 @@
 
 :root {
     --tw-bg-opacity: 1;
+    --menu-height: 3.375rem;
 }
 
 .overflow-y-hidden {
@@ -165,8 +166,12 @@ textarea:not(:focus):not(:placeholder-shown):invalid {
 }
 
 .sub-menu {
-    @apply flex justify-between px-4 py-3 items-center border-b border-line bg-background sticky top-[50px]
+    @apply flex justify-between px-4 py-3 items-center border-b border-line bg-background sticky top-[var(--menu-height)] z-10
 }
 .sub-menu h1 {
     @apply text-lg
+}
+
+#delete_modal.hidden ~ div {
+    display: none;
 }
