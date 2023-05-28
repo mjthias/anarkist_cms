@@ -24,6 +24,7 @@ async function spa(spaUrl, doPushState = true) {
 
   // Remove old data
   document.querySelector("main").innerHTML = "";
+  window.scrollTo(0,0)
   document.querySelector("main").insertAdjacentHTML("afterbegin", html);
 
   // Get and set title
