@@ -68,7 +68,7 @@
         % if defined("bar"):
             <input type="text" name="bar_id" value="{{bar['bar_id']}}" hidden>
             <div class="btn-container">
-                <button class="btn-primary" onclick="validateForm( updateBar )">Udpate bar</button>
+                <button class="btn-primary" onclick="validateForm( updateItem )" data-path="bars">Udpate bar</button>
                 <button class="btn-secondary" onclick="toggleActionBarSubMenu()">
                     <i class="fa-solid fa-ellipsis"></i>
                 </button>
@@ -81,7 +81,7 @@
                 </div>
             </div>
         % else:
-            <button class="btn-primary" onclick="validateForm( postBar )">Create bar</button>
+            <button class="btn-primary" onclick="validateForm(postItem)" data-path="bars">Create bar</button>
         % end
     </div>
 </form>

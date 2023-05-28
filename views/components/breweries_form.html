@@ -64,9 +64,9 @@
                 pattern="[1-9][0-9]*" 
                 required 
             /> 
-            <button class="btn-primary" onclick="validateForm(updateBrewery)">Update brewery</button>
+            <button class="btn-primary" onclick="validateForm(updateItem)" data-path="breweries">Update brewery</button>
         % else:
-            <button class="btn-primary" onclick="validateForm(postBrewery)">Create brewery</button>
+            <button class="btn-primary" onclick="validateForm(postItem)" data-path="breweries">Create brewery</button>
         % end
     </div>
 </form>

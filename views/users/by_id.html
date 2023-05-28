@@ -80,7 +80,7 @@
                 % if user["user_id"] == session["user_id"] or session["role_id"] != 3:
                 <div class="btn-container">
                 % end
-                    <button class="btn-primary" onclick="validateForm( updateUserInfo )">Update user</button>
+                    <button class="btn-primary" onclick="validateForm( updateItem )" data-path="users">Update user</button>
                 % if user["user_id"] == session["user_id"] or session["role_id"] != 3:
                     <button class="btn-secondary" onclick="toggleActionBarSubMenu()">
                         <i class="fa-solid fa-ellipsis"></i>

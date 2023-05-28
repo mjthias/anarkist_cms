@@ -194,7 +194,7 @@
                 required 
             />
             <div class="btn-container">
-                <button class="btn-primary" onclick="validateForm(updateBeer)">Update beer</button>
+                <button class="btn-primary" onclick="validateForm(updateItem)" data-path="beers">Update beer</button>
                 <button class="btn-secondary" onclick="toggleActionBarSubMenu()">
                     <i class="fa-solid fa-ellipsis"></i>
                 </button>
@@ -207,7 +207,7 @@
                 </div>
             </div>
         % else:
-            <button class="btn-primary" onclick="validateForm(postBeer)">Create beer</button>
+            <button class="btn-primary" onclick="validateForm(postItem)" data-path="beers">Create beer</button>
         % end
     </div>
 </form>
