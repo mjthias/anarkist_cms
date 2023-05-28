@@ -214,23 +214,6 @@ async function postUser(form) {
   spa(`/users/${userId}`)
 }
 
-async function updateUserInfo(form) {
-  const userId = form.user_id.value;
-  const conn = await fetch(`/api/v1/users/${userId}`, {
-    method: "PUT",
-    body: new FormData(form)
-  });
-
-  if (conn.status != 200) {
-    const err = await conn.json()
-    console.log(err)
-    return
-  }
-
-  const res = await conn.json()
-  console.log(res)
-}
-
 async function updateUserPassword(form) {
   const conn = await fetch(`/api/v1/users/reset-password`, {
       method: "PUT",
@@ -345,22 +328,6 @@ async function postSearchItem() {
   selectSearchedItem(id, name, target, entryType);
 }
 
-async function updateBrewery(form) {
-  const breweryId = form.brewery_id.value
-  const conn = await fetch(`/api/v1/breweries/${breweryId}`, {
-    method: "PUT",
-    body: new FormData(form)
-  })
-
-  if (!conn.ok) {
-    const error = await conn.json()
-    console.log(error)
-    // TODO handle error
-  }
-
-  // Success
-}
-
 async function searchBrewery() {
   const form = event.target.form;
   const breweryName = form.brewery_name.value;
@@ -387,22 +354,6 @@ async function searchBrewery() {
 
   const html = await conn.text();
   searchList.innerHTML = html;
-}
-
-async function updateBeerStyle(form) {
-  const beerStyleId = form.beer_style_id.value;
-  const conn = await fetch(`/api/v1/beer-styles/${beerStyleId}`, {
-    method: "PUT",
-    body: new FormData(form)
-  });
-
-  if (!conn.ok) {
-    const error = await conn.json();
-    console.log(error);
-    return;
-  }
-
-  // SUCCESS
 }
 
 async function searchBeerStyle() {
@@ -449,10 +400,32 @@ async function postItem(form, path) {
   spa(`/${path}/${id}`);
 }
 
-async function updateBeer(form) {
-  const beerId = form.beer_id.value;
-
-  const conn = await fetch(`/api/v1/beers/${beerId}`, {
+async function updateItem(form, path) {
+  console.log(form);
+  console.log(path);
+  let id;
+  switch(path) {
+    case "beers":
+      id = form.beer_id.value;
+      break;
+    case "beer-styles":
+      id = form.beer_style_id.value;
+      break;
+    case "breweries":
+      id = form.brewery_id.value;
+      break;
+    case "taps":
+      id = form.tap_id.value;
+      break;
+    case "bars":
+      id = form.bar_id.value;
+      break;
+    case "users":
+      id = form.user_id.value;
+      break; 
+  }
+  
+  const conn = await fetch(`/api/v1/${path}/${id}`, {
     method: "PUT",
     body: new FormData(form)
   });
@@ -531,31 +504,6 @@ async function selectSearchedBeer() {
   document.querySelector(".beer-info").innerHTML = infoHtml
 
   elm.parentElement.parentElement.classList.add("hidden");
-}
-
-async function updateTap(form) {
-  const tapId = form.tap_id.value
-  const conn = await fetch(`/api/v1/taps/${tapId}`, {
-    method: "PUT",
-    body: new FormData(form)
-  })
-
-  if (!conn.ok) return
-
-  const res = await conn.json()
-  console.log(res)
-}
-
-async function updateBar(form) {
-  const barId = form.bar_id.value
-  const conn = await fetch(`/api/v1/bars/${barId}`, {
-    method: "PUT",
-    body: new FormData(form)
-  })
-
-  if (!conn.ok) return
-
-  spa(`/bars/${barId}`)
 }
 
 function selectSearchedItem(id=0, name="", target="", entryType="") {
