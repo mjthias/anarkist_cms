@@ -1,6 +1,7 @@
 <div id="delete_modal" onclick="toggleDeleteModal()" class="hidden w-full h-screen bg-background bg-opacity-50 fixed top-0 left-0 z-10"></div>
 <div class="absolute top-[20%] w-full flex items-center justify-center pointer-events-none z-10">
-    <form  onsubmit="return false" novalidate="true" class="bg-background w-2/3 grid border border-line p-4 gap-4 pointer-events-auto">
+    <form  onsubmit="return false" novalidate="true" class="bg-background w-2/3 grid border border-line p-4 gap-4 pointer-events-auto relative">
+        <i onclick="toggleDeleteModal()" class="fa-solid fa-xmark absolute top-0 right-0 text-xl cursor-pointer mr-2 mt-1 transition-colors text-secondary hover:text-primary"></i>
         <div class="col-span-full">
             <input type="hidden" id="id_delete" name="id" value="{{ id }}" required />
             <label for="confirm_delete">Confirm deletion</label>
@@ -9,6 +10,7 @@
         </div>
         <div class="col-span-full">
             <button
+                class="btn-danger"
                 onclick="{{ callBack }}"
                 data-path="{{ path }}"
             >
