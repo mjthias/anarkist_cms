@@ -201,6 +201,10 @@ textarea:not(:focus):not(:placeholder-shown):invalid {
     @apply rounded-l-none;
 }
 
+.btn-danger {
+    @apply bg-btn-danger bg-opacity-90 px-4 py-1 rounded font-medium hover:bg-opacity-100 transition-colors;
+}
+
 .action-bar-sub-menu {
     @apply absolute top-[calc(-100%-1.3rem)] right-0 py-2 text-right bg-background border border-line;
 }

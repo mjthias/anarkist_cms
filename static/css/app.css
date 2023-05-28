@@ -1375,6 +1375,24 @@ textarea:not(:focus):not(:placeholder-shown):invalid{
   border-bottom-left-radius: 0px;
 }
 
+.btn-danger{
+  border-radius: 0.25rem;
+  background-color: rgba(220,38,37,var(--tw-bg-opacity));
+  --tw-bg-opacity: 0.9;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  font-weight: 500;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+.btn-danger:hover{
+  --tw-bg-opacity: 1;
+}
+
 .action-bar-sub-menu{
   position: absolute;
   top: calc(-100% - 1.3rem);
