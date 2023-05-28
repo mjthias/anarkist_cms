@@ -64,13 +64,24 @@
         >
         <span class="hint">Enter a Danish city.</span>
     </div>
-    <div>
+    <div class="form-action-bar">
         % if defined("bar"):
             <input type="text" name="bar_id" value="{{bar['bar_id']}}" hidden>
-            <button onclick="validateForm( updateBar )">Udpate bar</button>
-            <button onclick="toggleDeleteModal()">Delete</button>
+            <div class="btn-container">
+                <button class="btn-primary" onclick="validateForm( updateBar )">Udpate bar</button>
+                <button class="btn-secondary" onclick="toggleActionBarSubMenu()">
+                    <i class="fa-solid fa-ellipsis"></i>
+                </button>
+                <div class="action-bar-sub-menu hidden">
+                    <button class="px-4 text-sm transition-colors text-secondary hover:text-primary" onclick="toggleDeleteModal()">
+                        <i class="fa-solid fa-trash-can mr-2"></i>
+                        Delete bar
+                    </button>
+                    <div class="caret"></div>
+                </div>
+            </div>
         % else:
-            <button onclick="validateForm( postBar )">Create bar</button>
+            <button class="btn-primary" onclick="validateForm( postBar )">Create bar</button>
         % end
     </div>
 </form>

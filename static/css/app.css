@@ -556,12 +556,16 @@ video {
   top: 0px;
 }
 
-.top-1\/2{
-  top: 50%;
+.top-\[20\%\]{
+  top: 20%;
 }
 
 .top-\[49px\]{
   top: 49px;
+}
+
+.z-10{
+  z-index: 10;
 }
 
 .z-50{
@@ -584,6 +588,11 @@ video {
 .my-2{
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
+}
+
+.my-\[var\(--menu-height\)\]{
+  margin-top: var(--menu-height);
+  margin-bottom: var(--menu-height);
 }
 
 .mb-1{
@@ -610,8 +619,8 @@ video {
   margin-top: 0.25rem;
 }
 
-.mt-\[50px\]{
-  margin-top: 50px;
+.mt-\[var\(--menu-height\)\]{
+  margin-top: var(--menu-height);
 }
 
 .block{
@@ -650,8 +659,8 @@ video {
   height: 40px;
 }
 
-.h-\[50px\]{
-  height: 50px;
+.h-\[var\(--menu-height\)\]{
+  height: var(--menu-height);
 }
 
 .h-full{
@@ -746,6 +755,16 @@ video {
 
 .rounded{
   border-radius: 0.25rem;
+}
+
+.rounded-l-none{
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+}
+
+.rounded-r-none{
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
 }
 
 .border{
@@ -923,6 +942,7 @@ video {
 
 :root {
   --tw-bg-opacity: 1;
+  --menu-height: 3.375rem;
 }
 
 .overflow-y-hidden {
@@ -1249,7 +1269,8 @@ textarea:not(:focus):not(:placeholder-shown):invalid{
 
 .sub-menu{
   position: sticky;
-  top: 50px;
+  top: var(--menu-height);
+  z-index: 10;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1267,6 +1288,129 @@ textarea:not(:focus):not(:placeholder-shown):invalid{
   line-height: 1.75rem;
 }
 
+#delete_modal.hidden ~ div {
+  display: none;
+}
+
+.form-action-bar{
+  position: fixed;
+  bottom: 0px;
+  left: 0px;
+  height: var(--menu-height);
+  width: 100vw;
+  border-top-width: 1px;
+  border-color: rgba(71,71,71,100);
+  background-color: rgba(14,14,14, var(--tw-bg-opacity));
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 768px){
+  .form-action-bar{
+    left: 25%;
+    width: calc(100vw - 25%);
+  }
+}
+
+@media (min-width: 1280px){
+  .form-action-bar{
+    left: 16.65%;
+    width: calc(100vw - 16.65%);
+  }
+}
+
+.form-action-bar{
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.btn-container{
+  position: relative;
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.btn-primary{
+  border-radius: 0.25rem;
+  background-color: rgba(80,170,100,var(--tw-bg-opacity));
+  --tw-bg-opacity: 0.9;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  font-weight: 500;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+.btn-primary:hover{
+  --tw-bg-opacity: 1;
+}
+
+.btn-container .btn-primary{
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+
+.btn-secondary{
+  border-radius: 0.25rem;
+  background-color: rgba(67,146,85,var(--tw-bg-opacity));
+  --tw-bg-opacity: 0.9;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  font-weight: 500;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+.btn-secondary:hover{
+  --tw-bg-opacity: 1;
+}
+
+.btn-container .btn-secondary{
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+}
+
+.action-bar-sub-menu{
+  position: absolute;
+  top: calc(-100% - 1.3rem);
+  right: 0px;
+  border-width: 1px;
+  border-color: rgba(71,71,71,100);
+  background-color: rgba(14,14,14, var(--tw-bg-opacity));
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  text-align: right;
+}
+
+.caret {
+  position: relative;
+}
+
+.caret:before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  right: 5px;
+  border-top: 10px solid rgba(71,71,71,100);
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+}
+
+.caret:after {
+  content: '';
+  position: absolute;
+  right: 6px;
+  top: 8px;
+  border-top: 9px solid rgba(14,14,14, var(--tw-bg-opacity));
+  border-left: 9px solid transparent;
+  border-right: 9px solid transparent;
+}
+
 .hover\:bg-highlight-bg-hover:hover{
   background-color: rgba(45,45,45,0.35);
 }
@@ -1280,8 +1424,8 @@ textarea:not(:focus):not(:placeholder-shown):invalid{
     position: sticky;
   }
 
-  .md\:top-\[50px\]{
-    top: 50px;
+  .md\:top-\[var\(--menu-height\)\]{
+    top: var(--menu-height);
   }
 
   .md\:col-span-3{

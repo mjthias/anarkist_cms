@@ -6,6 +6,7 @@
 
 :root {
     --tw-bg-opacity: 1;
+    --menu-height: 3.375rem;
 }
 
 .overflow-y-hidden {
@@ -165,8 +166,65 @@ textarea:not(:focus):not(:placeholder-shown):invalid {
 }
 
 .sub-menu {
-    @apply flex justify-between px-4 py-3 items-center border-b border-line bg-background sticky top-[50px]
+    @apply flex justify-between px-4 py-3 items-center border-b border-line bg-background sticky top-[var(--menu-height)] z-10
 }
 .sub-menu h1 {
     @apply text-lg
+}
+
+#delete_modal.hidden ~ div {
+    display: none;
+}
+
+.form-action-bar {
+    @apply h-[var(--menu-height)] px-4 fixed bottom-0 left-0 md:left-1/4 xl:left-[16.65%] w-screen md:w-[calc(100vw-25%)] xl:w-[calc(100vw-16.65%)] bg-background border-t border-line;
+    @apply flex items-center justify-end;
+}
+
+.btn-container {
+    @apply flex flex-nowrap relative;
+}
+
+.btn-primary {
+    @apply bg-btn-light bg-opacity-90 px-4 py-1 rounded font-medium hover:bg-opacity-100 transition-colors;
+}
+
+.btn-container .btn-primary {
+    @apply rounded-r-none;
+}
+
+.btn-secondary {
+    @apply bg-btn-dark bg-opacity-90 px-2 rounded font-medium hover:bg-opacity-100 transition-colors;
+}
+
+.btn-container .btn-secondary {
+    @apply rounded-l-none;
+}
+
+.action-bar-sub-menu {
+    @apply absolute top-[calc(-100%-1.3rem)] right-0 py-2 text-right bg-background border border-line;
+}
+
+.caret {
+    position: relative;
+  }
+  
+.caret:before {
+content: '';
+position: absolute;
+top: 8px;
+right: 5px;
+border-top: 10px solid rgba(71,71,71,100);
+border-left: 10px solid transparent;
+border-right: 10px solid transparent;
+}
+
+.caret:after {
+content: '';
+position: absolute;
+right: 6px;
+top: 8px;
+border-top: 9px solid rgba(14,14,14, var(--tw-bg-opacity));
+border-left: 9px solid transparent;
+border-right: 9px solid transparent;
 }
