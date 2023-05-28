@@ -16,9 +16,10 @@ module.exports = {
       'primary': 'rgba(255,255,255,1)',
       'secondary': 'rgba(156,156,156,1)',
       'btn': {
-        'light': 'rgba(80,170,100,1)',
-        'dark': 'rgba(67,146,85,1)',
-        'invalid': 'rgba()'
+        'light': 'rgba(80,170,100,var(--tw-bg-opacity))',
+        'dark': 'rgba(67,146,85,var(--tw-bg-opacity))',
+        'invalid': 'rgba()',
+        'danger': 'rgba(220,38,37,var(--tw-bg-opacity))'
       }
     },
     fontFamily: {
