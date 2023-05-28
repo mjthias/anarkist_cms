@@ -639,7 +639,11 @@ async function postBar(form) {
     body: new FormData(form)
   })
 
-  if (!conn.ok) return
+  if (!conn.ok) {
+    const err = await conn.json();
+    console.log(err);
+    return;
+  } 
 
   const newBarId = await conn.json()
   spa(`/bars/${newBarId}`)
