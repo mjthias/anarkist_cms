@@ -5,8 +5,8 @@
         <h1>{{beer_style["beer_style_name"]}}</h1>
     </header>
 
-    <section>
+    <section class="form-container relative">
         % include("components/beer_style_form")
-        % include("components/deletion_form", id=beer_style['beer_style_id'], callBack='validateForm(deleteBeerStyle)')
+        % include("components/deletion_form", id=beer_style['beer_style_id'], callBack='validateForm(deleteItem)', path="beer-styles")
     </section>
 </div>

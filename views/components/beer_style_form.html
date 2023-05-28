@@ -1,8 +1,8 @@
 <form onsubmit="return false" novalidate="true">
     % if defined('beer_style'):
-        <input type="hidden" value="{{ beer_style['beer_style_id'] }}" name="beer_style_id" pattern="[1-9][0-9]" />
+        
     % end
-    <div>
+    <div class="input-container-full">
         <label for="beer_style_name">Name</label>
         <input 
             type="text"
@@ -13,13 +13,22 @@
             % end
             minlength="2"
             maxlength="50"
+            placeholder=" "
             required
         />
+        <span class="hint">Min. 2 and max. 50 characters.</span>
     </div>
     <div>
         % if defined('beer_style'):
+            <input
+                type="hidden"
+                value="{{ beer_style['beer_style_id'] }}"
+                name="beer_style_id"
+                pattern="[1-9][0-9]" 
+                required
+            />
             <button onclick="validateForm(updateBeerStyle)">Update</button>
-            <!-- TODO: Some modal button -->
+            <button onclick="toggleDeleteModal()">Delete</button>
             % else:
             <button onclick="validateForm(postBeerStyle)">Create</button>
         % end
