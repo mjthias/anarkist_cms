@@ -7,25 +7,9 @@
     </header>
 
     <section class="content-container">
-        % first_char = None
-        % init_loop = True
-
-        % for brewery in breweries:
-            % if brewery["brewery_name"][0].capitalize() != first_char:
-
-                % first_char = brewery["brewery_name"][0].capitalize()
-                % if not init_loop:
-                    </ul>
-                % end
-                % init_loop = False
-                <h2 class="list-topic">{{brewery["brewery_name"][0].capitalize()}}</h2>
-                <ul class="content-list">
-            % end
-
-            <li>
-                % include("components/brewery")
-            </li>
-        % end
+        <ul class="content-grid">
+            % include("components/breweries_list")
+            % include("components/loader")
         </ul>
     </section>
 </div>

@@ -66,6 +66,7 @@ function startInfiniteListener() {
 function determineLoad() {
   if (document.querySelector("#all-loaded")) {
     window.removeEventListener("scroll", determineLoad)
+    return
   }
   const loader = document.querySelector("#loader");
   const loaderY = loader.getBoundingClientRect().y;
