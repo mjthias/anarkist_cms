@@ -544,6 +544,10 @@ video {
   position: relative;
 }
 
+.-top-full{
+  top: -100%;
+}
+
 .left-0{
   left: 0px;
 }
@@ -597,6 +601,10 @@ video {
 
 .mb-1{
   margin-bottom: 0.25rem;
+}
+
+.mb-6{
+  margin-bottom: 1.5rem;
 }
 
 .mr-1{
@@ -755,16 +763,6 @@ video {
 
 .rounded{
   border-radius: 0.25rem;
-}
-
-.rounded-l-none{
-  border-top-left-radius: 0px;
-  border-bottom-left-radius: 0px;
-}
-
-.rounded-r-none{
-  border-top-right-radius: 0px;
-  border-bottom-right-radius: 0px;
 }
 
 .border{
@@ -1033,6 +1031,13 @@ video {
   padding: 1rem;
 }
 
+.form-container-sm{
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 24rem;
+  padding: 1rem;
+}
+
 .form-grid{
   display: grid;
   width: 100%;
@@ -1247,6 +1252,12 @@ textarea:not(:focus):not(:placeholder-shown):invalid{
   color: rgba(156,156,156,1);
 }
 
+.hint-error{
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: rgba(220,38,37,1);
+}
+
 .image-preview{
   position: relative;
   grid-column: span 1 / span 1;
@@ -1340,6 +1351,8 @@ textarea:not(:focus):not(:placeholder-shown):invalid{
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
   font-weight: 500;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
@@ -1361,6 +1374,8 @@ textarea:not(:focus):not(:placeholder-shown):invalid{
   padding-left: 0.5rem;
   padding-right: 0.5rem;
   font-weight: 500;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
@@ -1384,6 +1399,8 @@ textarea:not(:focus):not(:placeholder-shown):invalid{
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
   font-weight: 500;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
@@ -1454,6 +1471,10 @@ textarea:not(:focus):not(:placeholder-shown):invalid{
     grid-column: span 9 / span 9;
   }
 
+  .md\:col-start-3{
+    grid-column-start: 3;
+  }
+
   .md\:hidden{
     display: none;
   }
@@ -1475,5 +1496,9 @@ textarea:not(:focus):not(:placeholder-shown):invalid{
 
   .xl\:col-span-2{
     grid-column: span 2 / span 2;
+  }
+
+  .xl\:col-start-2{
+    grid-column-start: 2;
   }
 }
