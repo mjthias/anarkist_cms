@@ -372,23 +372,6 @@ async function updateBrewery(form) {
   // Success
 }
 
-async function deleteBrewery(form) {
-  const breweryId = form.brewery_id.value
-  const conn = await fetch(`/api/v1/breweries/${breweryId}`, {
-    method: "DELETE",
-    body: new FormData(form)
-  })
-  if (!conn.ok) {
-    // TODO handle error
-    const error = await conn.json()
-    console.log(error)
-    return
-  }
-
-  // SUCCES
-  spa("/breweries")
-}
-
 async function searchBrewery() {
   const form = event.target.form;
   const breweryName = form.brewery_name.value;
@@ -434,8 +417,6 @@ async function postBeerStyle(form) {
 
 }
 
-
-
 async function updateBeerStyle(form) {
   const beerStyleId = form.beer_style_id.value;
   const conn = await fetch(`/api/v1/beer-styles/${beerStyleId}`, {
@@ -450,22 +431,6 @@ async function updateBeerStyle(form) {
   }
 
   // SUCCESS
-}
-
-async function deleteBeerStyle(form) {
-  const beerStyleId = form.id.value;
-  const conn = await fetch(`/api/v1/beer-styles/${beerStyleId}`, {
-    method: "DELETE",
-    body: new FormData(form)
-  });
-
-  if (!conn.ok) {
-    const error = await conn.json();
-    console.log(error);
-    return;
-  }
-
-  spa('/beer-styles')
 }
 
 async function searchBeerStyle() {
@@ -574,22 +539,26 @@ async function searchBeers(){
 }
 
 async function selectSearchedBeer() {
-  const elm = event.target.parentElement
+  const elm = event.target;
   document.querySelector('#beer-name').value = elm.dataset.beer_name
   document.querySelector('#beer-id').value = elm.dataset.beer_id
 
   const infoHtml = `
-  <p class="beer-style">${elm.dataset.beer_style}</p>
-  <p class="brewery-name">${elm.dataset.brewery_name}</p>
-  <p>
-      <span class="alc">ALC.:${elm.dataset.beer_alc}%</span>|
-      <span class="ebc">EBC:${elm.dataset.beer_ebc}</span>|
-      <span class="ibu">IBU:${elm.dataset.beer_ibu}</span>
-  </p>
+  <div class="text-sm leading-none">
+      <p>${elm.dataset.beer_style}</p>
+      <p class="mt-1">${elm.dataset.brewery_name}</p>
+      <div class="self-end text-xs flex justify-between max-w-[12rem] mt-1">
+        <p>ALC.: ${elm.dataset.beer_alc}%</p>
+        <span>|</span>
+        <p>IBU: ${elm.dataset.beer_ibu}</p>
+        <span>|</span>
+        <p>EBC: ${elm.dataset.beer_ebc}</p>
+    </div>
+  </div>
   `
   document.querySelector(".beer-info").innerHTML = infoHtml
 
-  elm.parentElement.remove()
+  elm.parentElement.parentElement.classList.add("hidden");
 }
 
 async function postTap(form) {
@@ -617,19 +586,6 @@ async function updateTap(form) {
   console.log(res)
 }
 
-async function deleteTap(form) {
-  const tapId = form.tap_id.value
-  const conn = await fetch(`/api/v1/taps/${tapId}`, {
-    method: "DELETE",
-    body: new FormData(form)
-  })
-
-  if (!conn.ok) return
-
-  spa("/taps")
-}
-
-
 async function updateBar(form) {
   const barId = form.bar_id.value
   const conn = await fetch(`/api/v1/bars/${barId}`, {
@@ -648,22 +604,14 @@ async function postBar(form) {
     body: new FormData(form)
   })
 
-  if (!conn.ok) return
+  if (!conn.ok) {
+    const err = await conn.json();
+    console.log(err);
+    return;
+  } 
 
   const newBarId = await conn.json()
   spa(`/bars/${newBarId}`)
-}
-
-async function deleteBar(form) {
-  const barId = form.id.value
-  const conn = await fetch(`/api/v1/bars/${barId}`, {
-    method: "DELETE",
-    body: new FormData(form)
-  })
-
-  if (!conn.ok) return
-
-  spa("/bars")
 }
 
 function selectSearchedItem(id=0, name="", target="", entryType="") {

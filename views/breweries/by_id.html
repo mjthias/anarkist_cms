@@ -5,45 +5,10 @@
         <h1>{{brewery["brewery_name"]}}</h1>
     </header>
 
-    <section>
-        <form>
-            <input type="text" name="brewery_id" value="{{brewery['brewery_id']}}" hidden>
-            <div>
-                <label for="brewery_name">Name</label>
-                <input 
-                    type="text" 
-                    name="brewery_name" 
-                    id="brewery_name" 
-                    required
-                    value="{{brewery['brewery_name']}}"
-                    >
-            </div>
-            % if brewery["brewery_name"] == brewery["brewery_menu_name"]:
-                % brewery["brewery_menu_name"] = ""
-            % end
-            <div>
-                <label for="brewery_menu_name">Menu name</label>
-                <input 
-                    type="text" 
-                    name="brewery_menu_name" 
-                    id="brewery_menu_name" 
-                    value="{{brewery['brewery_menu_name']}}"
-                    >
-            </div>
-            <button onclick="validateForm( updateBrewery )">Update brewery</button>
-        </form>
-
+    <section class="form-container relative">
+        % include('components/breweries_form')
         % if not brewery["brewery_on_tap"]:
-
-        <form>
-            <p>No taps with this brewery</p>
-            <input type="text" name="brewery_id" value="{{brewery['brewery_id']}}" hidden>
-            <div>
-                <label for="confirm_deletion">Type 'DELETE'</label>
-                <input type="text" name="confirm_deletion" id="confirm_deletion">
-            </div>
-            <button onclick="validateForm( deleteBrewery )">Delete brewery</button>
-        </form>
+            % include('components/deletion_form', id=brewery['brewery_id'], callBack='validateForm(deleteItem)', path='breweries')
         % end
     </section>
 </div>

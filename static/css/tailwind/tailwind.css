@@ -71,7 +71,7 @@
     @apply col-span-2 w-full relative;
 }
 
-input:not([type="file"]), textarea {
+input:not([type="file"]):not([type="checkbox"]), textarea {
     @apply w-full outline-none bg-input-bg border border-outline h-[2.5rem] px-2 rounded focus:border-outline-focus transition-colors mt-1;
 }
 
@@ -79,6 +79,32 @@ input[type='file'] {
     visibility: hidden;
     position: absolute;
     z-index: -1;
+}
+
+input[type="checkbox"] {
+    -webkit-appearance: none;
+    appearance: none;
+    margin: 0;
+    font: inherit;
+    color: inherit;
+    @apply w-5 h-5 border border-outline rounded grid place-content-center bg-input-bg cursor-pointer hover:border-outline-focus focus:border-outline-focus transition-all;
+}
+
+input[type="checkbox"]::before {
+    content: "";
+    box-shadow: inset 1em 1em #fff;
+    @apply w-2.5 h-2.5 scale-0;
+    transition: transform .15s ease-in-out;
+    transform-origin: bottom left;
+    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+}
+
+input[type="checkbox"]:checked::before {
+    transform: scale(1);
+}
+
+.checkbox {
+    @apply flex flex-nowrap items-center gap-2 cursor-pointer;
 }
 
 select {

@@ -1,75 +1,92 @@
-<form>
-    <input
-        type="text"
-        name="tap_id"
-        % if defined("tap"):
-            value="{{tap['tap_id']}}"
-        % end
-        hidden>
-    <div>
-        <label for="beer-name"></label>
+<form onsubmit="return false" novalidate="true" class="form-grid">
+    <div class="input-container">
+        <label for="beer-name">Beer name</label>
         <input
-        type="text" 
-        name="beer_name"
-        minlength="2"
-        id="beer-name"
-        % if defined("tap"):
-            value="{{tap['beer_name']}}"
-        % end
-        oninput="searchBeers()"
-        >
-        <div class="search-list"></div>
-        <input
+            oninput="searchBeers()"
             type="text" 
+            name="beer_name"
+            minlength="2"
+            maxlength="50"
+            id="beer-name"
+            % if defined("tap"):
+                value="{{tap['beer_name']}}"
+            % end
+            placeholder=" "
+            required
+        >
+        <span class="hint">Min. 2 and max. 50 characters.</span>
+        <input
+            type="hidden" 
             name="beer_id"
             id="beer-id"
             % if defined("tap"):
                 value="{{tap['beer_id']}}"
             % end
-            hidden
-            >
+            pattern="[1-9][0-9]*" 
+            required
+        >
+        <div class="search-list hidden"></div>
     </div>
 
-    <div class="beer-info">
-    % if defined("tap"):
-        <p class="beer-style">{{tap["beer_style_name"]}}</p>
-        <p class="brewery-name">{{tap["brewery_name"]}}</p>
-        <p>
-            <span class="alc">ALC.:{{tap["beer_alc"]}}%</span>|
-            <span class="ebc">EBC:{{tap["beer_ebc"]}}</span>|
-            <span class="ibu">IBU:{{tap["beer_ibu"]}}</span>
-        </p>
-    % end
+    <div class="beer-info grid flex-1 items-center input-container">
+        % if defined('tap'):
+        <div class="text-sm leading-none">
+            <p>{{ tap['beer_style_name'] }}</p>
+            <p class="mt-1">{{ tap['brewery_name'] }}</p>
+            <div class="self-end text-xs flex justify-between max-w-[12rem] mt-1">
+                <p>ALC.: {{ tap['beer_alc'] }}%</p>
+                <span>|</span>
+                <p>IBU: {{ tap['beer_ibu'] or "-" }}</p>
+                <span>|</span>
+                <p>EBC: {{ tap['beer_ebc'] or "-" }}</p>
+            </div>
+        </div>
+
+        
+        % end
     </div>
 
     % if defined("tap"):
-        <div>
-            <label for="tap-unavailable">Tap unavailable</label>
-            <input
-                type="checkbox"
-                name="tap_unavailable"
-                id="tap-unavailable"
-                % if tap["tap_unavailable"]:
-                    checked
-                % end
+        <div class="input-container-full">
+            <label for="tap-unavailable" class="checkbox">
+                <input
+                    type="checkbox"
+                    name="tap_unavailable"
+                    id="tap-unavailable"
+                    % if tap["tap_unavailable"]:
+                        checked
+                    % end
                 >
+                Tap unavailable
+            </label>
         </div>
-
-        <button onclick="validateForm( updateTap )">Update tap</button>
-    % else:
+        <input
+            type="hidden"
+            name="tap_id"
+            % if defined("tap"):
+                value="{{tap['tap_id']}}"
+            % end
+            pattern="[1-9][0-9]*"
+            required
+        />
         <div>
-            <label for="tap-off-the-wall">Off the wall</label>
-            <input type="checkbox" name="tap_off_the_wall" id="tap-off-the-wall">
+            <button onclick="validateForm( updateTap )">Update tap</button>
+            <button onclick="toggleDeleteModal()">Delete</button>
         </div>
-
-        <button onclick="validateForm( postTap )">Create tap</button>
+    % else:
+        <div class="input-container-full">
+            <label for="tap-off-the-wall" class="checkbox">
+                <input
+                    type="checkbox" 
+                    name="tap_off_the_wall" 
+                    id="tap-off-the-wall"
+                />
+                Off the wall
+            </label>
+        </div>
+        <div>
+            <button onclick="validateForm( postTap )">Create tap</button>
+        </div>
     % end
 
 </form>
-
-% if defined("tap"):
-    <form>
-        <input type="text" name="tap_id" value="{{tap['tap_id']}}" hidden>
-        <button onclick="validateForm( deleteTap )">Delete tap</button>
-    </form>
-% end

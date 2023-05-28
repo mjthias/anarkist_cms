@@ -1,5 +1,5 @@
-<form>
-    <div>
+<form onsubmit="return false;" novalidate="true" class="form-grid">
+    <div class="input-container">
         <label for="bar-name">Name</label>
         <input 
             type="text" 
@@ -8,9 +8,14 @@
             % if defined("bar"):
                 value="{{bar['bar_name']}}"
             % end
-            >
+            minlength="2" 
+            maxlength="50"
+            placeholder=" "
+            required 
+        >
+        <span class="hint">Min. 2 and max. 50 characters.</span>
     </div>
-    <div>
+    <div class="input-container">
         <label for="bar-street">Street</label>
         <input 
             type="text" 
@@ -19,20 +24,31 @@
             % if defined("bar"):
                 value="{{bar['bar_street']}}"
             % end
-            >
+            minlength="2" 
+            maxlength="50"
+            placeholder=" "
+            required 
+        >
+        <span class="hint">Street name and number.</span>
     </div>
-    <div>
+    <div class="input-container">
         <label for="bar-zip-code">Zip code</label>
         <input 
-            type="text" 
+            type="number" 
             name="bar_zip_code"
             id="bar-zip-code"
             % if defined("bar"):
                 value="{{bar['bar_zip_code']}}"
             % end
-            >
+            min="1000"
+            max="9990"
+            step="1"
+            placeholder=" "
+            required
+        >
+        <span class="hint">Enter a valid Danish postalcode.</span>
     </div>
-    <div>
+    <div class="input-container">
         <label for="bar-city">City</label>
         <input 
             type="text" 
@@ -41,13 +57,20 @@
             % if defined("bar"):
                 value="{{bar['bar_city']}}"
             % end
-            >
+            minlength="2" 
+            maxlength="50"
+            placeholder=" "
+            required 
+        >
+        <span class="hint">Enter a Danish city.</span>
     </div>
-
-    % if defined("bar"):
-        <input type="text" name="bar_id" value="{{bar['bar_id']}}" hidden>
-        <button onclick="validateForm( updateBar )">Udpate bar</button>
-    % else:
-        <button onclick="validateForm( postBar )">Create bar</button>
-    % end
+    <div>
+        % if defined("bar"):
+            <input type="text" name="bar_id" value="{{bar['bar_id']}}" hidden>
+            <button onclick="validateForm( updateBar )">Udpate bar</button>
+            <button onclick="toggleDeleteModal()">Delete</button>
+        % else:
+            <button onclick="validateForm( postBar )">Create bar</button>
+        % end
+    </div>
 </form>

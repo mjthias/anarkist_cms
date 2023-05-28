@@ -5,8 +5,8 @@
         <h1>{{bar["bar_name"]}}</h1>
     </header>
     
-    <section>
+    <section class="form-container relative">
         % include("components/bar_form")
-        % include("components/deletion_form", id=bar['bar_id'], callBack='validateForm(deleteBar)')
+        % include("components/deletion_form", id=bar['bar_id'], callBack='validateForm(deleteItem)', path='bars')
     </section>
 </div>
