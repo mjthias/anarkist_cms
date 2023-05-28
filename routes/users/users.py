@@ -1,4 +1,4 @@
-from bottle import get, view, redirect
+from bottle import get, view, redirect, request
 import utils.validation as validate
 import utils.g as g
 import utils.vars as var
@@ -18,6 +18,12 @@ def _():
         return g.error_view(401)
     
     user_id=int(session["user_id"])
+
+    limit, error = validate.limit(request.params.get("limit"))
+    if error: return g.error_view(404)
+
+    offset, error = validate.offset(request.params.get("offset"))
+    if error: return g.error_view(404)
     
     # GET USERS FROM DB
     try:
@@ -29,15 +35,22 @@ def _():
                 SELECT * FROM users_list
                 WHERE user_id != %s
                 ORDER BY bar_city
-                """, (user_id))
+                LIMIT %s, %s
+                """, (user_id, offset, limit))
         else:
             cursor.execute("""
                 SELECT * FROM users_list
                 WHERE user_id != %s AND user_role_id != 1
                 ORDER BY bar_city
-                """, (user_id))
+                LIMIT %s, %s
+                """, (user_id, offset, limit))
             
         users = cursor.fetchall()
+
+        # Render beer_list.html only?
+        if request.headers.get("as_chunk"):
+            return as_chunk(users)
+        
         return dict(session = session, users = users)
 
     except Exception as ex:
@@ -47,3 +60,12 @@ def _():
     finally:
         cursor.close()
         db.close()
+
+# Only render user_list.html
+@view("components/user_list")
+def as_chunk(users):
+    current_topic = request.params.get("current-topic")
+    return dict (
+        users = users,
+        current_topic = current_topic,
+        )

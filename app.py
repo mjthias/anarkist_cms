@@ -76,10 +76,12 @@ def _(image):
 # Non-spa error pages
 @error(404)
 def _(error):
+    print(error)
     return g.error_view(404)
 
 @error(500)
 def _(error):
+    print(error)
     return g.error_view(500)
 
 ##############################

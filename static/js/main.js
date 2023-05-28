@@ -2,10 +2,9 @@
 //SPA
 // Init state - the first loaded page
 history.replaceState({ spaUrl: location.pathname }, "", location.pathname);
+
 // Highlight menu-link
 toggleActiveLink(location.pathname)
-// Start infinite loader listener
-startInfiniteListener()
 
 async function spa(spaUrl, doPushState = true) {
   const conn = await fetch(spaUrl, {
@@ -54,6 +53,9 @@ window.addEventListener("popstate", (e) => {
 // Infinite scroll
 let isLoading = false;
 
+// Start infinite loader listener
+startInfiniteListener()
+
 function startInfiniteListener() {
   window.removeEventListener("scroll", determineLoad) // rm old
   if (!document.querySelector("#loader")) return; // set none if no loader
@@ -77,7 +79,12 @@ async function fetchChunck(endpoint, offset) {
   const loader = document.querySelector("#loader")
   loader.classList.remove("hide")
 
-  const conn = await fetch(`${endpoint}?offset=${offset}`, {
+  const lastElm = loader.previousElementSibling
+  const currentTopic = lastElm.dataset.topic
+  let url = `${endpoint}?offset=${offset}`
+  if (currentTopic) url += `&current-topic=${currentTopic}`
+  
+  const conn = await fetch(url, {
     headers: {as_chunk: true}
   })
 
