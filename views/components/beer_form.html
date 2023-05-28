@@ -184,7 +184,7 @@
         % end
         <i onclick="removePreviewImage()" data-input-id="#beer_image" class="fa-solid fa-circle-xmark text-secondary hover:text-primary transition-colors cursor-pointer text-xl absolute top-0 right-0 mr-1"></i>
     </div>
-    <div>
+    <div class="form-action-bar">
         % if defined('beer'):
             <input 
                 type="hidden" 
@@ -193,10 +193,21 @@
                 pattern="[1-9][0-9]*" 
                 required 
             />
-            <button onclick="validateForm(updateBeer)">Update</button>
-            <button onclick="toggleDeleteModal()">Delete</button>
+            <div class="btn-container">
+                <button class="btn-primary" onclick="validateForm(updateBeer)">Update beer</button>
+                <button class="btn-secondary" onclick="toggleActionBarSubMenu()">
+                    <i class="fa-solid fa-ellipsis"></i>
+                </button>
+                <div class="action-bar-sub-menu hidden">
+                    <button class="px-4 text-sm transition-colors text-secondary hover:text-primary" onclick="toggleDeleteModal()">
+                        <i class="fa-solid fa-trash-can mr-2"></i>
+                        Delete beer
+                    </button>
+                    <div class="caret"></div>
+                </div>
+            </div>
         % else:
-            <button onclick="validateForm(postBeer)">Create</button>
+            <button class="btn-primary" onclick="validateForm(postBeer)">Create beer</button>
         % end
     </div>
 </form>
