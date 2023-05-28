@@ -401,8 +401,22 @@ async function postItem(form, path) {
 }
 
 async function updateItem(form, path) {
-  console.log(form);
-  console.log(path);
+  const id = getFormId(form, path);
+  
+  const conn = await fetch(`/api/v1/${path}/${id}`, {
+    method: "PUT",
+    body: new FormData(form)
+  });
+
+  if (!conn.ok) {
+    const error = await conn.json();
+    console.log(error);
+    return;
+  }
+  // SUCCESS
+}
+
+function getFormId(form, path) {
   let id;
   switch(path) {
     case "beers":
@@ -424,18 +438,7 @@ async function updateItem(form, path) {
       id = form.user_id.value;
       break; 
   }
-  
-  const conn = await fetch(`/api/v1/${path}/${id}`, {
-    method: "PUT",
-    body: new FormData(form)
-  });
-
-  if (!conn.ok) {
-    const error = await conn.json();
-    console.log(error);
-    return;
-  }
-  // SUCCESS
+  return id;
 }
 
 async function deleteItem(form, path) {
