@@ -76,12 +76,27 @@
                     <span class="hint">Select a user role.</span>
                 </div>
             % end
-            <div>
-                <button onclick="validateForm( updateUserInfo )">Save changes</button>
+            <div class="form-action-bar">
+                % if user["user_id"] == session["user_id"] or session["role_id"] != 3:
+                <div class="btn-container">
+                % end
+                    <button class="btn-primary" onclick="validateForm( updateUserInfo )">Update user</button>
+                % if user["user_id"] == session["user_id"] or session["role_id"] != 3:
+                    <button class="btn-secondary" onclick="toggleActionBarSubMenu()">
+                        <i class="fa-solid fa-ellipsis"></i>
+                    </button>
+                    <div class="action-bar-sub-menu hidden">
+                        <button class="px-4 text-sm transition-colors text-secondary hover:text-primary" onclick="toggleDeleteModal()">
+                            <i class="fa-solid fa-trash-can mr-2"></i>
+                            Delete user
+                        </button>
+                        <div class="caret"></div>
+                    </div>
+                </div>
+                % end
             </div>
         </form>
         % if user["user_id"] == session["user_id"] or session["role_id"] != 3:
-            <button onclick="toggleDeleteModal()">Delete</button>
             % include("components/deletion_form", id=user['user_id'], callBack='validateForm(deleteItem)', path='users')
         % end
     </section>

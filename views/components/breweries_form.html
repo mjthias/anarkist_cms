@@ -34,8 +34,8 @@
         >
         <span class="hint">Min. 2 and max. 50 characters.</span>
     </div>
-    <div>
-        % if defined('brewery'):
+    <div class="form-action-bar">
+        % if defined('brewery') and not brewery['brewery_on_tap']:
             <input 
                 type="hidden" 
                 value="{{ brewery['brewery_id'] }}"
@@ -43,12 +43,30 @@
                 pattern="[1-9][0-9]*" 
                 required 
             />
-            <button onclick="validateForm(updateBrewery)">Update</button>
-            % if not brewery['brewery_on_tap']:
-                <button onclick="toggleDeleteModal()">Delete</button>
-            % end
+            <div class="btn-container">
+                <button class="btn-primary" onclick="validateForm(updateBrewery)">Update brewery</button>
+                <button class="btn-secondary" onclick="toggleActionBarSubMenu()">
+                    <i class="fa-solid fa-ellipsis"></i>
+                </button>
+                <div class="action-bar-sub-menu hidden">
+                    <button class="px-4 text-sm transition-colors text-secondary hover:text-primary" onclick="toggleDeleteModal()">
+                        <i class="fa-solid fa-trash-can mr-2"></i>
+                        Delete brewery
+                    </button>
+                    <div class="caret"></div>
+                </div>
+            </div>
+        % elif defined('brewery'):
+            <input 
+                type="hidden" 
+                value="{{ brewery['brewery_id'] }}"
+                name="brewery_id" 
+                pattern="[1-9][0-9]*" 
+                required 
+            /> 
+            <button class="btn-primary" onclick="validateForm(updateBrewery)">Update brewery</button>
         % else:
-            <button onclick="validateForm(postBrewery)">Create</button>
+            <button class="btn-primary" onclick="validateForm(postBrewery)">Create brewery</button>
         % end
     </div>
 </form>

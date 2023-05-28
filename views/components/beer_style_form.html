@@ -18,7 +18,7 @@
         />
         <span class="hint">Min. 2 and max. 50 characters.</span>
     </div>
-    <div>
+    <div class="form-action-bar">
         % if defined('beer_style'):
             <input
                 type="hidden"
@@ -27,10 +27,21 @@
                 pattern="[1-9][0-9]" 
                 required
             />
-            <button onclick="validateForm(updateBeerStyle)">Update</button>
-            <button onclick="toggleDeleteModal()">Delete</button>
+            <div class="btn-container">
+                <button class="btn-primary" onclick="validateForm(updateBeerStyle)">Update beer style</button>
+                <button class="btn-secondary" onclick="toggleActionBarSubMenu()">
+                    <i class="fa-solid fa-ellipsis"></i>
+                </button>
+                <div class="action-bar-sub-menu hidden">
+                    <button class="px-4 text-sm transition-colors text-secondary hover:text-primary" onclick="toggleDeleteModal()">
+                        <i class="fa-solid fa-trash-can mr-2"></i>
+                        Delete beer style
+                    </button>
+                    <div class="caret"></div>
+                </div>
+            </div>
             % else:
-            <button onclick="validateForm(postBeerStyle)">Create</button>
+            <button class="btn-primary" onclick="validateForm(postBeerStyle)">Create beer style</button>
         % end
     </div>
 </form>
