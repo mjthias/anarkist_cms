@@ -11,23 +11,9 @@
     </header>
 
     <section class="content-container">
-        % first_char = None
-        % init_loop = True
-
-        % for beer_style in beer_styles:
-            % if beer_style['beer_style_name'][0].capitalize() !=  first_char:
-                % first_char = beer_style['beer_style_name'][0].capitalize()
-                % if not init_loop:
-                    </ul>
-                % end
-                % init_loop = False
-                <h2 class="list-topic">{{ beer_style['beer_style_name'][0].capitalize() }}</h2>
-                <ul>
-            % end
-            <li>
-                % include("components/beer_style")
-            </li>
-        % end
+        <ul class="content-grid">
+            % include("components/beer_styles_list")
+            % include("components/loader")
         </ul>
     </section>
 </div>

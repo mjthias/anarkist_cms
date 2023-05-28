@@ -15,11 +15,9 @@ def _():
         return redirect("/sign-in")
     
     limit, error = validate.limit(request.params.get("limit"))
-    print(limit)
     if error: return g.error_view(404)
 
     offset, error = validate.offset(request.params.get("offset"))
-    print(offset)
     if error: return g.error_view(404)
 
     # Get beers from DB

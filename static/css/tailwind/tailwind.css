@@ -44,15 +44,11 @@
 }
 
 .list-topic {
-    @apply text-3xl border-b border-outline mb-4 pb-1 font-medium
+    @apply text-3xl border-b border-outline -mb-4 pb-1 font-medium col-span-3
 }
 
 .list-topic:not(:first-child) {
     @apply mt-14
-}
-
-.list-topic + ul {
-    @apply content-grid
 }
 
 .form-container {

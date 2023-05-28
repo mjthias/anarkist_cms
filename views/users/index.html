@@ -7,28 +7,9 @@
     </header>
     
     <section class="content-container">
-        % current_bar_id = None
-        % init_loop = True
-
-        % for user in users:
-            % if not user["bar_id"] == current_bar_id:
-
-                % current_bar_id = user["bar_id"]
-                % if not init_loop:
-                    </ul>
-                % end
-                % init_loop = False
-                <div class="list-topic">
-                    <h2>{{user["bar_name"]}}</h2>
-                    <p class="text-lg font-normal">{{user["bar_street"]}}, {{user["bar_city"]}}</p>
-                </div>
-                <ul>
-            % end
-
-            <li>
-                % include("components/user")
-            </li>
-        % end
+        <ul class="content-grid">
+            % include("components/user_list")
+            % include("components/loader")
         </ul>
     </section>
 </div>
