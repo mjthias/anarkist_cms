@@ -318,22 +318,6 @@ async function selectLocation() {
   }
 }
 
-async function postBrewery(form) {
-  const conn = await fetch("/api/v1/breweries", {
-    method: "POST",
-    body: new FormData(form)
-  })
-
-  if (!conn.ok) {
-    const err = await conn.json()
-    console.log(err)
-    return
-  }
-
-  const breweryId = await conn.json()
-  spa(`/breweries/${breweryId}`)
-}
-
 async function postSearchItem() {
   const name = event.target.dataset.name;
   const key = event.target.dataset.key;
@@ -405,23 +389,6 @@ async function searchBrewery() {
   searchList.innerHTML = html;
 }
 
-async function postBeerStyle(form) {
-  const conn = await fetch('/api/v1/beer-styles', {
-    method: "POST",
-    body: new FormData(form)
-  });
-
-  if (!conn.ok) {
-    const error = await conn.json();
-    console.log(error);
-    return;
-  }
-
-  const beerStyleId = await conn.json();
-  spa(`/beer-styles/${beerStyleId}`);
-
-}
-
 async function updateBeerStyle(form) {
   const beerStyleId = form.beer_style_id.value;
   const conn = await fetch(`/api/v1/beer-styles/${beerStyleId}`, {
@@ -466,8 +433,8 @@ async function searchBeerStyle() {
   searchList.innerHTML = html;
 }
 
-async function postBeer(form) {
-  const conn = await fetch("/api/v1/beers", {
+async function postItem(form, path) {
+  const conn = await fetch(`/api/v1/${path}`, {
     method: "POST",
     body: new FormData(form)
   });
@@ -478,8 +445,8 @@ async function postBeer(form) {
     return;
   }
 
-  const beerId = await conn.json();
-  spa(`/beers/${beerId}`);
+  const id = await conn.json();
+  spa(`/${path}/${id}`);
 }
 
 async function updateBeer(form) {
@@ -566,18 +533,6 @@ async function selectSearchedBeer() {
   elm.parentElement.parentElement.classList.add("hidden");
 }
 
-async function postTap(form) {
-  const conn = await fetch("/api/v1/taps", {
-    method: "POST",
-    body: new FormData(form)
-  })
-
-  if (!conn.ok) return
-
-  const newTapId = await conn.json()
-  spa(`/taps/${newTapId}`)
-}
-
 async function updateTap(form) {
   const tapId = form.tap_id.value
   const conn = await fetch(`/api/v1/taps/${tapId}`, {
@@ -601,22 +556,6 @@ async function updateBar(form) {
   if (!conn.ok) return
 
   spa(`/bars/${barId}`)
-}
-
-async function postBar(form) {
-  const conn = await fetch("/api/v1/bars", {
-    method: "POST",
-    body: new FormData(form)
-  })
-
-  if (!conn.ok) {
-    const err = await conn.json();
-    console.log(err);
-    return;
-  } 
-
-  const newBarId = await conn.json()
-  spa(`/bars/${newBarId}`)
 }
 
 function selectSearchedItem(id=0, name="", target="", entryType="") {
