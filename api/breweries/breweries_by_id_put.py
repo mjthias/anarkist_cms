@@ -46,7 +46,10 @@ def _(brewery_id):
         counter = cursor.rowcount
         if not counter: return g.respond(204)
         db.commit()
-        return g.respond(200, "Brewery updated")
+
+        response_dict = {"name": brewery_name, "info": "Brewery was successfully updated."}
+
+        return g.respond(200, response_dict)
 
     except Exception as ex:
         print(ex)

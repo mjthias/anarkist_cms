@@ -51,7 +51,9 @@ def _(bar_id):
         if not counter: return g.respond(204)
         db.commit()
 
-        return g.respond(200, "Bar updated")
+        response_dict = {"name": bar_name, "info": "Bar was successfully updated."}
+
+        return g.respond(200, response_dict)
 
     except Exception as ex:
         print(str(ex))

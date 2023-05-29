@@ -46,10 +46,9 @@ def _(beer_style_id=""):
         print(f"Rows updated: {counter}")
         db_connect.commit()
 
-        cursor.execute("SELECT * FROM beer_styles WHERE beer_style_id = %s LIMIT 1", (beer_style_id,))
-        beer_style = cursor.fetchone()
+        response_dict = {"name": beer_style_name, "info": "Beer style was successfully updated."}
 
-        return g.respond(200, beer_style)
+        return g.respond(200, response_dict)
     except Exception as ex:
         print(str(ex))
         if "beer_style_name" in str(ex): return g.respond(400, "Beer style already exists.")
