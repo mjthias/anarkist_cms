@@ -64,6 +64,7 @@ def _():
 # Only render user_list.html
 @view("components/user_list")
 def as_chunk(users):
+    if not users: return g.respond(204)
     current_topic = request.params.get("current-topic")
     return dict (
         users = users,
