@@ -7,8 +7,17 @@
 >   
     <header class="sub-menu">
         <h1>Beer styles</h1>
-        % include("components/href_plus", href="/beer-styles/create")
+        <div class="flex gap-8 items-center">
+            <form class="flex items-center" onsubmit="return false;">
+                <input oninput="searchContentList()" type="text" class="sub-menu-search mr-2">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </form>
+            % include("components/href_plus", href="/beer-styles/create")
+        </div>
     </header>
+
+    <ul class="content-grid content-search-container !hidden">
+    </ul>
 
     <section class="content-container">
         <ul class="content-grid">
