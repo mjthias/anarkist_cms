@@ -6,11 +6,11 @@
     onclick="spa('{{ href }}')"
     class="flex gap-2 cursor-pointer hover:bg-highlight-bg-hover p-2 rounded transition-colors"
     >
-    <div class="w-20 h-20 bg-danger rounded overflow-hidden">
+    <div class="w-20 h-20 rounded overflow-hidden">
         % if beer['beer_image']:
         <img src="/static/images/{{ beer['beer_image']}}" />
         % else:
-        <i class="fa-solid fa-beer-mug-empty"></i>
+        <img src="/static/images/placeholder.jpg" />
         % end
     </div>
     <div class="grid flex-1">
