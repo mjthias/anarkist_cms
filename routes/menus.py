@@ -10,6 +10,7 @@ import math
 @get("/menu/<bar_id>/screen/<page_nr>")
 @view("menu")
 def _(bar_id, page_nr):
+    # VALIDATE
     session = validate.session()
     if not session: return redirect("/sign-in")
 
@@ -35,7 +36,7 @@ def _(bar_id, page_nr):
         numbered_taps_pages, numbered_taps_left = divmod(counters["numbered_taps"], 14)
         off_wall_pages = math.ceil((counters["off_wall_taps"] / 2 + numbered_taps_left) / 14)
 
-        # Calc the limit depending on page_nr
+        # Calc the limits depending on page_nr + amount of numbered & non-numbered taps
         if  page_nr <= numbered_taps_pages: 
             # Numbered taps only
             limit = 14
@@ -50,7 +51,6 @@ def _(bar_id, page_nr):
             offset = numbered_taps_pages * 14 + 28 - numbered_taps_left
         else: return g.error_view(404)
         
-        print(off_wall_pages)
         cursor.execute("""
         SELECT * FROM taps_list
         WHERE fk_bar_id = %s
@@ -58,7 +58,7 @@ def _(bar_id, page_nr):
         """, (bar_id, offset, limit))
         taps = cursor.fetchall()
 
-
+        # Return menu_content only
         if request.headers.get("as_chunk"):
             return as_chunk(taps)
         
