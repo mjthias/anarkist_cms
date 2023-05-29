@@ -64,6 +64,22 @@
         >
         <span class="hint">Enter a Danish city.</span>
     </div>
+
+    % if defined("screens_nr"):
+        <div>
+            <h2 class="text-lg">Moniter menus</h2>
+            <ul>
+            % count = 1
+            % while count <= screens_nr:
+                <li>
+                    <a target="_blank" href="/menu/{{bar['bar_id']}}/screen/{{count}}">Monitor {{count}}</a>
+                </li>
+                % count += 1
+            % end
+            </ul>
+        </div>
+    % end
+
     <div class="form-action-bar">
         % if defined("bar"):
             <input type="text" name="bar_id" value="{{bar['bar_id']}}" hidden>

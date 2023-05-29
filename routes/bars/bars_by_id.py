@@ -3,6 +3,7 @@ import utils.validation as validate
 import utils.vars as var
 import utils.g as g
 import pymysql
+import math
 
 ##############################
 
@@ -26,16 +27,23 @@ def _(bar_id):
         db = pymysql.connect(**var.DB_CONFIG)
         cursor = db.cursor()
         cursor.execute("""
-        SELECT * FROM bars
+        SELECT bars.*, 
+        (SELECT COUNT(*) FROM taps WHERE fk_bar_id = bars.bar_id AND tap_number IS NOT NULL) AS numbered_taps,
+        (SELECT COUNT(*) FROM taps WHERE fk_bar_id = bars.bar_id AND tap_number IS NULL) AS off_wall_taps
+        FROM bars
         WHERE bar_id = %s
-        LIMIT 1
+        LIMIT 1;
         """, (bar_id))
         bar = cursor.fetchone()
         if not bar: return g.error_view(404)
+
+        # Calc generated screens
+        screens_nr = math.ceil((bar["numbered_taps"] + bar["off_wall_taps"] / 2) / 14)
         
         return dict(
             session = session,
-            bar = bar
+            bar = bar,
+            screens_nr = screens_nr
             )
 
     except Exception as ex:
