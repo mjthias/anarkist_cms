@@ -8,9 +8,12 @@
     >
     <div class="w-20 h-20 rounded overflow-hidden">
         % if beer['beer_image']:
-        <img src="/static/images/{{ beer['beer_image']}}" />
+        <img 
+            class="w-full h-full object-cover"
+            src="/static/images/{{ beer['beer_image']}}" 
+            />
         % else:
-        <img src="/static/images/placeholder.jpg" />
+        <img src="/static/images/placeholder.jpg"/>
         % end
     </div>
     <div class="grid flex-1">
