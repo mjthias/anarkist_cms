@@ -40,7 +40,8 @@
     @apply grid gap-4 md:gap-6 xl:gap-8 md:grid-cols-2 xl:grid-cols-3
 }
 
-.content-container {
+.content-container,
+.content-search-container {
     @apply p-3 md:p-6 xl:p-12 max-w-7xl mx-auto
 }
 
@@ -76,8 +77,11 @@
     @apply col-span-2 w-full relative;
 }
 
-input:not([type="file"]):not([type="checkbox"]), textarea {
+input:not([type="file"]):not([type="checkbox"]):not(.sub-menu-search), textarea {
     @apply w-full outline-none bg-input-bg border border-outline h-[2.5rem] px-2 rounded focus:border-outline-focus transition-colors mt-1;
+}
+.sub-menu-search {
+    @apply w-full outline-none bg-input-bg border border-outline px-2 h-8 rounded focus:border-outline-focus transition-colors;
 }
 
 input[type='file'] {
@@ -174,7 +178,7 @@ textarea:not(:focus):not(:placeholder-shown):invalid {
 }
 
 .sub-menu {
-    @apply flex justify-between px-4 py-3 items-center border-b border-line bg-background sticky top-[var(--menu-height)] z-10
+    @apply flex justify-between px-4 h-[54px] items-center border-b border-line bg-background sticky top-[var(--menu-height)] z-10
 }
 .sub-menu h1 {
     @apply text-lg
