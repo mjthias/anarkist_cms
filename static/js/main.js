@@ -221,12 +221,9 @@ async function updateItem(form, path) {
     body: new FormData(form)
   });
 
-  if (!conn.ok) {
-    const error = await conn.json();
-    console.log(error);
-    return;
-  }
-  // SUCCESS
+  if (conn.status === 204) return;
+  const resp = await conn.json();
+  handleResponseMessage(conn, resp);
 }
 
 async function deleteItem(form, path) {
@@ -497,4 +494,20 @@ function getFormId(form, path) {
       break; 
   }
   return id;
+}
+
+function handleResponseMessage(conn, resp) {
+  const messElm = document.querySelector(".message");
+  messElm.textContent = resp.info;
+
+  if (!conn.ok) {
+    messElm.classList.remove("success");
+    messElm.classList.add("error");
+  } else {
+    if (resp.name) document.querySelector("h1").textContent = resp.name;
+    messElm.classList.remove("error");
+    messElm.classList.add("success");
+  }
+  messElm.classList.remove("hidden");
+  window.scrollTo(0,0);
 }

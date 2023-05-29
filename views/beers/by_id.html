@@ -11,6 +11,7 @@
     </header>
 
     <section class="form-container relative">
+        <div class="message hidden"></div>
         % include("components/beer_form")
         % include("components/deletion_form", id=beer['beer_id'], callBack='validateForm(deleteItem)', path='beers')
     </section>

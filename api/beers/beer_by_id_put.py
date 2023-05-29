@@ -110,11 +110,10 @@ def _(beer_id=""):
         if not beer_image_old == "" and not beer_image_old == beer_image:
             os.remove(f"{var.IMAGE_PATH}{beer_image_old}")
 
-        # FETCH UPDATED BEER FROM BEERS_LIST VIEW
-        cursor.execute("SELECT * FROM beers_list WHERE beer_id = %s LIMIT 1", (beer_id,))
-        beer = cursor.fetchone()
+        response_dict = {"name": beer_name, "info": "Beer was successfully updated."}
 
-        return g.respond(200, beer)
+        return g.respond(200, response_dict)
+
     except Exception as ex:
         print(str(ex))
         return g.respond(500)

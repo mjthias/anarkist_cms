@@ -6,6 +6,7 @@
     </header>
 
     <section class="form-container relative">
+        <div class="message hidden"></div>
         % include('components/breweries_form')
         % if not brewery["brewery_on_tap"]:
             % include('components/deletion_form', id=brewery['brewery_id'], callBack='validateForm(deleteItem)', path='breweries')

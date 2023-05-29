@@ -37,7 +37,8 @@ def _(tap_id):
         counter = cursor.rowcount
         if not counter: return g.respond(204)
         db.commit()
-        return g.respond(200, "Tap updated")
+        
+        return g.respond(200, "Tap was successfully updated.")
     
     except Exception as ex:
         print(ex)

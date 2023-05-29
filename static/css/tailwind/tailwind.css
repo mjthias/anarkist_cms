@@ -240,3 +240,15 @@ border-top: 9px solid rgba(14,14,14, var(--tw-bg-opacity));
 border-left: 9px solid transparent;
 border-right: 9px solid transparent;
 }
+
+.message {
+    @apply bg-opacity-70 border rounded text-center mb-4
+}
+
+.success {
+    @apply bg-btn-light border-btn-light ;
+}
+
+.error {
+    @apply bg-danger border-danger;
+}

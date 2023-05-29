@@ -93,8 +93,10 @@ def _(user_id):
         if not counter: return g.respond(204)
         print(f"Rows updated: {counter}")
         db_connect.commit()
+        
+        response_dict = {"name": user_name, "info": "User was successfully updated."}
 
-        return g.respond(200)
+        return g.respond(200, response_dict)
     
     except Exception as ex:
         print(str(ex))

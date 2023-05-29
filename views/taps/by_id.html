@@ -6,6 +6,7 @@
     </header>
     
     <section class="form-container relative">
+        <div class="message hidden"></div>
         % include("components/tap_form")
         % include("components/deletion_form", id=tap['tap_id'], callBack='validateForm(deleteItem)', path='taps')
     </section>

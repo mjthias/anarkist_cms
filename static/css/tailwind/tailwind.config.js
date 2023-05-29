@@ -4,7 +4,7 @@ module.exports = {
   content: ["../../../views/*.html", "../../../views/*/*.html"],
   theme: {
     colors: {
-      'danger': "rgba(220,38,37,1)",
+      'danger': "rgba(220,38,37,var(--tw-bg-opacity))",
       'success': 'rgba(23,163,74,1)',
       'background': 'rgba(14,14,14, var(--tw-bg-opacity))',
       'outline': 'rgba(82,82,82,1)',
