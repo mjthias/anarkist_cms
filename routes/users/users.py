@@ -24,28 +24,30 @@ def _():
 
     offset, error = validate.offset(request.params.get("offset"))
     if error: return g.error_view(404)
+
+    # Search_term can be both be user_name and a partial email.
+    if request.params.get("name"): search_term = request.params.get("name")
+    else: search_term = None
     
     # GET USERS FROM DB
     try:
         db = pymysql.connect(**var.DB_CONFIG)
         cursor = db.cursor()
-        # include super_users if super_user
-        if role_id == 1:
+        if not search_term:
             cursor.execute("""
                 SELECT * FROM users_list
                 WHERE user_id != %s
+                AND user_role_id >= %s
                 ORDER BY bar_city
                 LIMIT %s, %s
-                """, (user_id, offset, limit))
+                """, (user_id, session["role_id"], offset, limit))
         else:
             cursor.execute("""
-                SELECT * FROM users_list
-                WHERE user_id != %s AND user_role_id != 1
-                ORDER BY bar_city
-                LIMIT %s, %s
-                """, (user_id, offset, limit))
-            
+            CALL get_users_by_fuzzy_name(%s,%s,%s,%s,%s)
+            """, (search_term, offset, limit, session["user_id"], session["role_id"]))
+
         users = cursor.fetchall()
+
 
         # Render beer_list.html only?
         if request.headers.get("as_chunk"):
