@@ -49,4 +49,5 @@ def _():
 # Only render breweries_list.html
 @view("components/breweries_list")
 def as_chunk(breweries):
+    if not breweries: return g.respond(204)
     return dict (breweries = breweries)

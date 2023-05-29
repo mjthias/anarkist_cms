@@ -11,8 +11,7 @@ import pymysql
 def _():
     # VALIDATE
     session = validate.session()
-    if not session: 
-        return redirect("/sign-in")
+    if not session: return redirect("/sign-in")
     
     limit, error = validate.limit(request.params.get("limit"))
     if error: return g.error_view(404)
@@ -54,5 +53,6 @@ def _():
 # Only render beer_list.html
 @view("components/beer_list")
 def as_chunk(beers):
+    if not beers: return g.respond(204)
     return dict (beers = beers)
     

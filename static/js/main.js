@@ -65,11 +65,11 @@ function startInfiniteListener() {
 }
 
 function determineLoad() {
-  if (document.querySelector(".content-container #all-loaded")) {
+  const loader = document.querySelector("#loader");
+  if (loader.dataset.all_loaded) {
     window.removeEventListener("scroll", determineLoad)
     return
   }
-  const loader = document.querySelector("#loader");
   const loaderY = loader.getBoundingClientRect().y;
   if (loaderY < window.innerHeight && !isLoading) {
     isLoading = true
@@ -95,19 +95,20 @@ async function fetchChunck(endpoint, offset) {
     return
   }
 
-  const html = await conn.text()
-
-  loader.dataset.offset = Number(offset) + 50
-  loader.insertAdjacentHTML("beforebegin", html)
-
-  const elms = document.querySelectorAll("section article")
-  console.log(elms.length)
-
-  if (document.querySelector(".content-container #all-loaded")) {
+  // No content = all is loaded
+  if (conn.status == 204) {
     window.removeEventListener("scroll", determineLoad)
+    loader.dataset.all_loaded = true
+    isLoading = false
+    return
   }
 
+  const html = await conn.text()
+  loader.dataset.offset = Number(offset) + 50
+  loader.insertAdjacentHTML("beforebegin", html)
   loader.classList.add("hide")
+
+
   isLoading = false
 }
 
@@ -475,10 +476,13 @@ async function searchContentList() {
   const conn = await fetch(`${location.pathname}?name=${searchQuery}&limit=25`, {
     headers: {as_chunk: true}
   })
-
   if (!conn.ok) {
     hideSearchContent()
     return
+  }
+
+  if (conn.status == 204) {
+    return showSearchContent("No results..")
   }
 
   const html = await conn.text()
