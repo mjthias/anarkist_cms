@@ -19,7 +19,10 @@ def _():
     offset, error = validate.offset(request.params.get("offset"))
     if error: return g.error_view(404)
 
-    beer_name, error = validate.name(request.params.get("name"))
+    if request.params.get("name"):
+        beer_name, error = validate.name(request.params.get("name"))
+        if error: return g.error_view(204)
+    else: beer_name = None
 
     # Get beers from DB
     try:
@@ -53,6 +56,6 @@ def _():
 # Only render beer_list.html
 @view("components/beer_list")
 def as_chunk(beers):
-    if not beers: return g.respond(204)
+    if not beers: return g.error_view(204)
     return dict (beers = beers)
     

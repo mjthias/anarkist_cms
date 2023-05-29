@@ -18,14 +18,25 @@ def _():
     offset, error = validate.offset(request.params.get("offset"))
     if error: return g.error_view(404)
 
+    if request.params.get("name"):
+        brewery_name, error = validate.brewery_menu_name(request.params.get("name"))
+        if error: return g.error_view(204)
+    else: brewery_name = None
+
     try:
         db = pymysql.connect(**var.DB_CONFIG)
         cursor = db.cursor()
-        cursor.execute("""
+        if not brewery_name:
+            cursor.execute("""
             SELECT * FROM breweries
             ORDER BY brewery_name
             LIMIT %s, %s
             """, (offset, limit))
+        else:
+            cursor.execute("""
+            CALL get_brewery_by_fuzzy_name(%s, %s, %s)
+            """, (brewery_name, offset, limit))
+
         breweries = cursor.fetchall()
 
         # Render beer_list.html only?
@@ -49,5 +60,9 @@ def _():
 # Only render breweries_list.html
 @view("components/breweries_list")
 def as_chunk(breweries):
-    if not breweries: return g.respond(204)
-    return dict (breweries = breweries)
+    if not breweries: return g.error_view(204)
+    current_topic = request.params.get("current-topic")
+    return dict (
+        breweries = breweries,
+        current_topic = current_topic,
+        )
