@@ -849,6 +849,11 @@ video {
   --tw-bg-opacity: 0.5;
 }
 
+.object-cover{
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
 .p-2{
   padding: 0.5rem;
 }
