@@ -44,7 +44,7 @@ def _():
 # Only render beer_styles_list.html
 @view("components/beer_styles_list")
 def as_chunk(beer_styles):
-    if not beer_styles: return g.respond(204)
+    if not beer_styles: return g.error_view(204)
     current_topic = request.params.get("current-topic")
     return dict(
         beer_styles=beer_styles,
