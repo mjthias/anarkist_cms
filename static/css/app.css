@@ -800,7 +800,7 @@ video {
 }
 
 .bg-danger{
-  background-color: rgba(220,38,37,1);
+  background-color: rgba(220,38,37,var(--tw-bg-opacity));
 }
 
 .bg-line{
@@ -905,7 +905,7 @@ video {
 }
 
 .text-danger{
-  color: rgba(220,38,37,1);
+  color: rgba(220,38,37,var(--tw-bg-opacity));
 }
 
 .text-primary{
@@ -1238,12 +1238,12 @@ textarea{
 }
 
 input:not(:focus):not(:-moz-placeholder-shown):invalid, textarea:not(:focus):not(:-moz-placeholder-shown):invalid{
-  border-color: rgba(220,38,37,1);
+  border-color: rgba(220,38,37,var(--tw-bg-opacity));
 }
 
 input:not(:focus):not(:placeholder-shown):invalid,
 textarea:not(:focus):not(:placeholder-shown):invalid{
-  border-color: rgba(220,38,37,1);
+  border-color: rgba(220,38,37,var(--tw-bg-opacity));
 }
 
 .hint{
@@ -1255,7 +1255,7 @@ textarea:not(:focus):not(:placeholder-shown):invalid{
 .hint-error{
   font-size: 0.875rem;
   line-height: 1.25rem;
-  color: rgba(220,38,37,1);
+  color: rgba(220,38,37,var(--tw-bg-opacity));
 }
 
 .image-preview{
@@ -1444,6 +1444,24 @@ textarea:not(:focus):not(:placeholder-shown):invalid{
   border-top: 9px solid rgba(14,14,14, var(--tw-bg-opacity));
   border-left: 9px solid transparent;
   border-right: 9px solid transparent;
+}
+
+.message{
+  margin-bottom: 1rem;
+  border-radius: 0.25rem;
+  border-width: 1px;
+  --tw-bg-opacity: 0.7;
+  text-align: center;
+}
+
+.success{
+  border-color: rgba(80,170,100,var(--tw-bg-opacity));
+  background-color: rgba(80,170,100,var(--tw-bg-opacity));
+}
+
+.error{
+  border-color: rgba(220,38,37,var(--tw-bg-opacity));
+  background-color: rgba(220,38,37,var(--tw-bg-opacity));
 }
 
 .hover\:bg-highlight-bg-hover:hover{
