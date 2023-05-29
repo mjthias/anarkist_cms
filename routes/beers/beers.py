@@ -20,14 +20,21 @@ def _():
     offset, error = validate.offset(request.params.get("offset"))
     if error: return g.error_view(404)
 
+    beer_name, error = validate.name(request.params.get("name"))
+
     # Get beers from DB
     try:
         db = pymysql.connect(**var.DB_CONFIG)
         cursor = db.cursor()
-        cursor.execute("""
-        SELECT * FROM beers_list
-        LIMIT %s, %s
-        """, (offset, limit))
+        if not beer_name:
+            cursor.execute("""
+            SELECT * FROM beers_list
+            LIMIT %s, %s
+            """, (offset, limit))
+        else:
+            cursor.execute("""
+            CALL get_beers_by_fuzzy_name(%s, %s, %s)
+            """, (beer_name, limit, offset))
         beers = cursor.fetchall()
 
         # Render beer_list.html only?

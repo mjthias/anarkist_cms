@@ -8,14 +8,18 @@
 
     <header class="sub-menu">
         <h1>Beers</h1>
-        <div class="flex gap-8">
-            <form>
-                <input type="text" name="search_param" class="mr-1">
-                <button><i class="fa-solid fa-magnifying-glass"></i></button>
+        <div class="flex gap-8 items-center">
+            <form class="flex items-center">
+                <input oninput="searchContentList()" type="text" name="search_param" class="sub-menu-search mr-2">
+                <i class="fa-solid fa-magnifying-glass"></i>
             </form>
             % include("components/href_plus", href="/beers/create")
         </div>
     </header>
+
+    <section class="content-grid content-search-container !hidden">
+        asdjkk
+    </section>
 
     <section class="content-grid content-container">
         % include("components/beer_list")

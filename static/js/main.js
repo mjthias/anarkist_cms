@@ -65,7 +65,7 @@ function startInfiniteListener() {
 }
 
 function determineLoad() {
-  if (document.querySelector("#all-loaded")) {
+  if (document.querySelector(".content-container #all-loaded")) {
     window.removeEventListener("scroll", determineLoad)
     return
   }
@@ -103,7 +103,7 @@ async function fetchChunck(endpoint, offset) {
   const elms = document.querySelectorAll("section article")
   console.log(elms.length)
 
-  if (document.querySelector("#all-loaded")) {
+  if (document.querySelector(".content-container #all-loaded")) {
     window.removeEventListener("scroll", determineLoad)
   }
 
@@ -417,13 +417,11 @@ async function searchBeers(){
 
   searchList.classList.remove("hidden")
 
-
   const conn = await fetch(`/api/v1/beers?name=${beerName}`, {
     headers: {as_html : true}
   })
 
   if (conn.status != 200) return
-
 
   const html = await conn.text()
   console.log("html")
@@ -463,6 +461,43 @@ function selectSearchedItem(id=0, name="", target="", entryType="") {
   document.querySelector(`#${entryType}_id`).value = id;
   document.querySelector(`#${entryType}_name`).value = name;
   document.querySelector(target).classList.add("hidden");
+}
+
+
+// ##############################
+
+async function searchContentList() {
+  const searchQuery = event.target.value
+  if (searchQuery.length < 2) {
+    hideSearchContent()
+    return
+  }
+  const conn = await fetch(`${location.pathname}?name=${searchQuery}&limit=25`, {
+    headers: {as_chunk: true}
+  })
+
+  if (!conn.ok) {
+    hideSearchContent()
+    return
+  }
+
+  const html = await conn.text()
+  showSearchContent(html)
+}
+
+function hideSearchContent() {
+  const searchContainer = document.querySelector(".content-search-container")
+  searchContainer.classList.add("!hidden")
+  searchContainer.innerHTML = ""
+  document.querySelector(".content-container").classList.remove("!hidden")
+  window.scrollTo(0,0)
+}
+function showSearchContent(html) {
+  const searchContainer = document.querySelector(".content-search-container")
+  searchContainer.classList.remove("!hidden")
+  searchContainer.innerHTML = html
+  document.querySelector(".content-container").classList.add("!hidden")
+  window.scrollTo(0,0)
 }
 
 // ##############################
