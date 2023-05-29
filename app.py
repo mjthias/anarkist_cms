@@ -59,6 +59,7 @@ import routes.taps.taps_by_id
 import routes.users.users
 import routes.users.users_create
 import routes.users.users_by_id
+import routes.menus
 
 ##############################
 
