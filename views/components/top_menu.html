@@ -39,9 +39,12 @@
         % for bar in session["bar_access"]:
             % if not session["bar_id"] == bar["bar_id"]:
                 <li class="h-[40px] flex items-center">
-                    <a class="px-4 py-2 text-sm transition-colors text-secondary cursor-pointer hover:text-primary">
+                    <button
+                        onclick="changeLocation()"
+                        data-bar_id="{{bar['bar_id']}}"
+                        class="px-4 py-2 text-sm transition-colors text-secondary cursor-pointer hover:text-primary">
                         {{ bar["bar_name"] }}
-                    </a>
+                    </button>
                 </li>
             % end
         % end
