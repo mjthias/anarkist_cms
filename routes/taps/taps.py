@@ -1,8 +1,6 @@
 from bottle import get, view, redirect
-import utils.validation as validate
-import utils.vars as var
-import utils.g as g
 import pymysql
+from utils import g, vars as var, validation as validate
 
 ##############################
 
@@ -11,7 +9,8 @@ import pymysql
 def _():
     # VALIDATE SESSION
     session = validate.session()
-    if not session: return redirect("/sign-in")
+    if not session:
+        return redirect("/sign-in")
 
     # GET TAPS FROM DB
     try:
@@ -22,7 +21,7 @@ def _():
             WHERE fk_bar_id = %s
             """, (session["bar_id"]))
         taps = cursor.fetchall()
-        
+
         return dict(
             session = session,
             taps = taps,
@@ -31,7 +30,7 @@ def _():
     except Exception as ex:
         print(ex)
         return g.respond(500)
-    
+
     finally:
         cursor.close()
         db.close()

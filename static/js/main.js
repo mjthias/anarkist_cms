@@ -460,7 +460,6 @@ async function searchBeers(){
   if (conn.status != 200) return
 
   const html = await conn.text()
-  console.log("html")
   searchList.innerHTML = html
 }
 
@@ -497,6 +496,20 @@ function selectSearchedItem(id=0, name="", target="", entryType="") {
   document.querySelector(`#${entryType}_id`).value = id;
   document.querySelector(`#${entryType}_name`).value = name;
   document.querySelector(target).classList.add("hidden");
+}
+
+async function changeLocation() {
+  const barId = event.target.dataset.bar_id
+  const form = new FormData()
+  form.append("bars", barId)
+
+  const conn = await fetch("/select-location", {
+    method: "POST",
+    body: form,
+  })
+  
+  if (!conn.ok) return
+  location.reload()
 }
 
 

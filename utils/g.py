@@ -1,7 +1,8 @@
+# pylint: disable=R1710,C0123
+import json
 from bottle import response, view, request
 import pymysql
-import utils.vars as var
-import json
+from utils import vars as var
 
 ##############################
 def respond(status = 400, data = None):
@@ -27,14 +28,21 @@ def error_view(status=404, info = None):
 
 ##############################
 def set_response_message(status):
-    if status == 404: return "Page not found"
-    if status == 400: return "Client error"
-    if status == 401: return "Access denied"
-    if status == 500: return "Server error"
-    if status == 204: return ""
-    if status == 201: return "Row created"
-    if status == 200: return "Success"
-    else: return "No message"
+    if status == 404:
+        return "Page not found"
+    if status == 400:
+        return "Client error"
+    if status == 401:
+        return "Access denied"
+    if status == 500:
+        return "Server error"
+    if status == 204:
+        return ""
+    if status == 201:
+        return "Row created"
+    if status == 200:
+        return "Success"
+    return "No message"
 
 ##############################
 def delete_session(session=None):
@@ -42,18 +50,21 @@ def delete_session(session=None):
         db_connect = pymysql.connect(**var.DB_CONFIG)
         cursor = db_connect.cursor()
 
-        cursor.execute("DELETE FROM sessions WHERE session_id =%s", (session["session_id"],))
-        
+        cursor.execute("""
+        DELETE FROM sessions WHERE session_id =%s
+        """, (session["session_id"],))
+
         counter = cursor.rowcount
-        if not counter: 
-            print("No sessions to delete.")
+        if not counter:
             response.set_cookie("anarkist", "", expires=0)
-        
+
         db_connect.commit()
-        print(f"Rows deleted: {counter}")
+        return
+
     except Exception as ex:
         print(str(ex))
         return respond(500, "Server error.")
+
     finally:
         cursor.close()
         db_connect.close()
@@ -71,9 +82,9 @@ def update_session(now=0, session=None):
         """, (now, session["session_id"]))
 
         counter = cursor.rowcount
-        if not counter: 
+        if not counter:
             print("No sessions to update.")
-        
+
         db_connect.commit()
         print(f"Sessions updated: {counter}")
     except Exception as ex:
@@ -88,6 +99,5 @@ def format_price(value):
     seperator_index = str(value).index(".")
     if str(value)[seperator_index+1:] == "0":
         return format(value, ".0f")
-    else:
-        return format(value, ".2f")
+    return format(value, ".2f")
     

@@ -23,7 +23,7 @@ def _(beer_id):
         if error:
             return g.respond(400, f"Beer {error}")
 
-        if not form_beer_id == beer_id:
+        if form_beer_id != beer_id:
             return g.respond(400, "Beer ID's does not match.")
         beer_id = form_beer_id
 

@@ -1,9 +1,10 @@
+# pylint: disable=C0415,W0611
 import requests
-import utils.vars as vars
+from utils import vars as var
 
 def _DEPLOY_VERCEL():
     try:
         import production
-        requests.get(vars.VERCEL_DEPLOY_HOOK)
+        requests.get(var.VERCEL_DEPLOY_HOOK, timeout=5)
     except:
         pass
