@@ -1,5 +1,6 @@
-from bottle import put, request
+from bottle import put, request, response
 import pymysql
+import jwt
 from utils import g, vars as var, validation as validate
 
 ##############################
@@ -22,15 +23,9 @@ def _(user_id):
 
         is_own_user = session["user_id"] == user_id
 
-        # VALIDATE ALLOWED KEYS
-        allowed_keys = ["user_id", "user_name", "user_email", "user_role_id"]
-        for key in request.forms.keys():
-            if not key in allowed_keys:
-                return g.respond(403, f"Forbidden key: {key}")
-
         # Staffs can only update themselves
         if session["role_id"] == 3 and not is_own_user:
-            return g.respond(401, "Unauthorized attempt  test.")
+            return g.respond(401)
 
         user_email, error = validate.email(request.forms.get("user_email"))
         if error:
@@ -63,21 +58,11 @@ def _(user_id):
         cursor = db_connect.cursor()
 
         # SELECT USER DB
-        # Super users can acces super users
-        if session["role_id"] == 1:
-            cursor.execute("""
-            SELECT * FROM users_list
-            WHERE user_id = %s AND bar_id = %s
-            OR user_id = %s AND user_role_id = 3
-            LIMIT 1 
-            """, (user_id, session["bar_id"], user_id))
-        else:
-            # Other roles can't
-            cursor.execute("""
-                SELECT * FROM users_list
-                WHERE user_id = %s AND bar_id = %s
-                LIMIT 1 
-            """, (user_id, session["bar_id"]))
+        cursor.execute("""
+        SELECT * FROM users_list
+        WHERE user_id = %s AND user_role_id >= %s
+        LIMIT 1 
+        """, (user_id, session["role_id"]))
         user = cursor.fetchone()
         if not user:
             return g.respond(204)
@@ -88,19 +73,35 @@ def _(user_id):
         if user_name != user["user_name"]:
             user["user_name"] = user_name
         if user_role_id and user_role_id != user["user_role_id"]:
+            # can't update own role, admins cant make super user
+            if is_own_user == 3 or user_role_id == 1 and session["role_id"] == 2:
+                return g.respond(401)
             user["user_role_id"] = user_role_id
 
         cursor.execute("""
-            UPDATE users
-            SET user_email = %s,
-            user_name = %s,
-            fk_user_role_id = %s
-            WHERE user_id = %s
+        UPDATE users
+        SET user_email = %s,
+        user_name = %s,
+        fk_user_role_id = %s
+        WHERE user_id = %s
         """, (user["user_email"], user["user_name"], user["user_role_id"], user["user_id"]))
-
         counter = cursor.rowcount
         if not counter:
             return g.respond(204)
+        
+        # Rm session if other user
+        if not is_own_user:
+            cursor.execute("""
+            DELETE FROM sessions
+            WHERE fk_user_id = %s
+            """, (user["user_id"]))
+        else:
+            session["user_email"] = user["user_email"]
+            session["user_name"] = user["user_name"]
+            print(session)
+            encoded_jwt = jwt.encode(session, var.JWT_SECRET, algorithm="HS256")
+            response.set_cookie("anarkist", encoded_jwt, path="/")
+
         db_connect.commit()
 
         response_dict = {"name": user_name, "info": "User was successfully updated."}

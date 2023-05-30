@@ -13,13 +13,20 @@
                     <i class="fa-solid fa-xmark text-xl -translate-y-1"></i>
                 </span>
             </div>
-            <a onclick="toggleTopSubMenu()" data-target="#location_sub_menu" class="py-3  flex flex-nowrap items-center transition-colors text-secondary cursor-pointer hover:text-primary">
+            <a
+                onclick="toggleTopSubMenu()" 
+                data-target="#location_sub_menu" 
+                class="py-3  flex flex-nowrap items-center transition-colors text-secondary cursor-pointer hover:text-primary"
+                >
                 <span class="pointer-events-none">{{ session["bar_name"] }}</span>
+                % if len(session["bar_access"]) > 1:
                 <div class="pointer-events-none w-6 h-6 inline-flex items-center justify-center pt-1">
                     <i class="fa-solid fa-caret-down text-xs transition-transform"></i>    
                 </div>
+                % end
             </a>
         </div>
+
     
         <div class="relative">
             <a onclick="toggleTopSubMenu()" data-target="#user_sub_menu" class="py-3  flex flex-nowrap items-center transition-colors text-secondary cursor-pointer hover:text-primary">
@@ -49,6 +56,7 @@
             % end
         % end
     </ul>
+
     <ul id="user_sub_menu" class="bg-background top-sub-menu border-r-0 border border-line border-t-0 transition-colors fixed top-[49px] right-0">
         <li>
             <a class="px-4 py-2 flex flex-nowrap items-center transition-colors text-secondary cursor-pointer hover:text-primary" href="/users/{{ session['user_id'] }}" onclick="{{ spaHref }}; return false">

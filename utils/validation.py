@@ -30,8 +30,9 @@ def session():
         cookie = request.get_cookie("anarkist")
         decoded_jwt = jwt.decode(cookie, var.JWT_SECRET, algorithms=["HS256"])
 
-        if list(decoded_jwt.keys()) != valid_session_keys:
-            return False
+        for key in valid_session_keys:
+            if key not in decoded_jwt:
+                return False
 
         try:
             db_connect = pymysql.connect(**var.DB_CONFIG)
@@ -42,9 +43,11 @@ def session():
             if not session:
                 response.set_cookie("anarkist", cookie, expires=0)
                 return False
+
         except Exception as ex:
             print(str(ex))
             return False
+
         finally:
             cursor.close()
             db_connect.close()
