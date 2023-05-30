@@ -48,16 +48,14 @@ def _():
         }
 
         # Insert to DB
-        query = """
-        INSERT INTO sessions (fk_user_id, session_iat)
-        VALUES(%s, %s)
-        """
-        cursor.execute(query, (session["user_id"], session["session_iat"]))
+        cursor.execute("""
+        CALL insert_session(%s,%s)
+        """, (session["user_id"], session["session_iat"]))
+        session["session_id"] = cursor.fetchone()["session_id"]
         db_connect.commit()
 
         # Append the remaininig values to session-dict
         session["user_name"] = user["user_name"]
-        session["session_id"] = cursor.lastrowid
         session["role_id"] = user["fk_user_role_id"]
 
         encoded_jwt = jwt.encode(session, var.JWT_SECRET, algorithm="HS256")
