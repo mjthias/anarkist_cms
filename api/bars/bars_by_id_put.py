@@ -23,19 +23,19 @@ def _(bar_id):
         # Input values
         bar_name, error = validate.name(request.forms.get("bar_name"))
         if error:
-            return g.respond(400, error)
+            return g.respond(400, {"info": error, "key": "bar_name"})
 
         bar_street, error = validate.name(request.forms.get("bar_street"))
         if error:
-            return g.respond(400, error)
+            return g.respond(400, {"info": error, "key": "bar_street"})
 
         bar_city, error = validate.name(request.forms.get("bar_city"))
         if error:
-            return g.respond(400, error)
+            return g.respond(400, {"info": error, "key": "bar_city"})
 
         bar_zip_code, error = validate.zip_code(request.forms.get("bar_zip_code"))
         if error:
-            return g.respond(400, error)
+            return g.respond(400, {"info": error, "key": "bar_zip_code"})
 
     except Exception as ex:
         print(str(ex))
@@ -63,6 +63,8 @@ def _(bar_id):
 
     except Exception as ex:
         print(str(ex))
+        if "bar_name" in str(ex):
+            return g.respond(400, {"info": "Bar already exists.", "key": "bar_name"})
         return g.respond(500)
 
     finally:

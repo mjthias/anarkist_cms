@@ -14,7 +14,7 @@ def _():
         # Input values
         beer_style_name, error = validate.name(request.forms.get("beer_style_name"))
         if error:
-            return g.respond(400, error)
+            return g.respond(400, {"info": error, "key": "beer_style_name"})
 
     except Exception as ex:
         print(str(ex))
@@ -38,6 +38,8 @@ def _():
 
     except Exception as ex:
         print(str(ex))
+        if "beer_style_name" in str(ex):
+            return g.respond(400, {"info": "Beer style already exists.", "key": "beer_style_name"})
         return g.respond(500)
 
     finally:

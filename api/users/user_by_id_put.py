@@ -34,17 +34,17 @@ def _(user_id):
 
         user_email, error = validate.email(request.forms.get("user_email"))
         if error:
-            return g.respond(400, error)
+            return g.respond(400, {"info": error, "key": "user_email"})
 
         user_name, error = validate.user_name(request.forms.get("user_name"))
         if error:
-            return g.respond(400, error)
+            return g.respond(400, {"info": error, "key": "user_name"})
 
         # Admins and Supers can change user_role for other users
         if session["role_id"] != 3 and not is_own_user:
             user_role_id, error = validate.role_id(request.forms.get("user_role_id"))
             if error:
-                return g.respond(400, f"User role {error}")
+                return g.respond(400, {"info": error, "key": "user_role_id"})
 
             # Admins cant update role to super users
             if session["role_id"] == 2 and user_role_id == 1:
@@ -110,6 +110,12 @@ def _(user_id):
     except Exception as ex:
         print(str(ex))
         db_connect.rollback()
+        if "user_email" in str(ex):
+            return g.respond(400, {"info": "Email already exists.", "key": "user_email"})
+        if "user_role_id" in str(ex):
+            return g.respond(400, {"info": "User role does not exist.", "key": "user_role_id"})
+        if "bar_id" in str(ex):
+            return g.respond(400, {"info": "Bar does not exist"})
         return g.respond(500)
 
     finally:
