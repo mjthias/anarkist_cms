@@ -216,7 +216,6 @@ async function postItem(form, path) {
     return;
   }
 
-  // TODO: Make this a global solution...
   const resp = await conn.json();
   form.reset();
 
