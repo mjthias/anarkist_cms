@@ -1,8 +1,6 @@
 from bottle import delete, request
-import utils.vars as var
-import utils.validation as validate
-import utils.g as g
 import pymysql
+from utils import g, validation as validate, vars as var
 
 ##############################
 
@@ -11,22 +9,25 @@ def _():
     try:
         # VALIDATE
         session = validate.session()
-        if not session: return g.respond(401)
-        
+        if not session:
+            return g.respond(401)
+
         # Staffs are 401
-        if session["role_id"] == 3: return g.respond(401)
+        if session["role_id"] == 3:
+            return g.respond(401)
 
         bar_id = session["bar_id"]
 
         user_id, error = validate.id(request.forms.get("user_id"))
-        if error: return g.respond(400, f"User {error}")
-
+        if error:
+            return g.respond(400, f"User {error}")
 
     except Exception as ex:
         print(ex)
         return g.respond(500)
-
+        
     try:
+        # DELETE FROM DB
         db = pymysql.connect(**var.DB_CONFIG)
         cursor = db.cursor()
         cursor.execute("""
@@ -35,7 +36,8 @@ def _():
         AND fk_bar_id = %s
         """, (user_id, bar_id))
         counter = cursor.rowcount
-        if not counter: return g.respond(204)
+        if not counter:
+            return g.respond(204)
         db.commit()
 
         return g.respond(200, "Access deleted")
@@ -43,7 +45,7 @@ def _():
     except Exception as ex:
         print(ex)
         return g.respond(500)
-    
+
     finally:
         cursor.close()
         db.close()

@@ -1,13 +1,12 @@
 from bottle import get
-import utils.vars as var
-import utils.g as g
 import pymysql
+from utils import g, vars as var
 
 ##############################
 
 @get(f"{var.API_PATH}/bars")
 def _():
-    # USED BY VERCEL - NO SESSION
+    # USED BY VERCEL - NO SESSION NEEDED
     try:
         db = pymysql.connect(**var.DB_CONFIG)
         cursor = db.cursor()
@@ -24,4 +23,3 @@ def _():
     finally:
         cursor.close()
         db.close()
-    
