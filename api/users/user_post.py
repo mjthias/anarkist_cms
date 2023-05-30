@@ -90,7 +90,9 @@ def _():
 
         db.commit()
 
-        return g.respond(201, user_id)
+        response_dict = {"id": user_id, "info": "User was successfully created", "entry_type": "user"}
+
+        return g.respond(201, response_dict)
 
     except Exception as ex:
         print(str(ex))

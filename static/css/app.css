@@ -1532,6 +1532,14 @@ textarea:not(:focus):not(:placeholder-shown):invalid{
   text-align: center;
 }
 
+.message a{
+  font-weight: 500;
+}
+
+.message a:hover{
+  text-decoration-line: underline;
+}
+
 .success{
   border-color: rgba(80,170,100,var(--tw-bg-opacity));
   background-color: rgba(80,170,100,var(--tw-bg-opacity));
