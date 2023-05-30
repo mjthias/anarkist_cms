@@ -44,7 +44,7 @@ def _():
         else:
             cursor.execute("""
             CALL get_users_by_fuzzy_name(%s,%s,%s,%s,%s)
-            """, (search_term, offset, limit, session["user_id"], session["role_id"]))
+            """, (search_term, offset, limit, session["role_id"], session["user_id"]))
 
         users = cursor.fetchall()
 
