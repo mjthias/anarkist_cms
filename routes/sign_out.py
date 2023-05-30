@@ -1,9 +1,10 @@
+# pylint: disable=W0150
 from bottle import get, redirect, request, response
-import utils.g as g
-import utils.vars as var
 import jwt
+from utils import g, vars as var
 
 ##############################
+
 @get("/sign-out")
 def _():
     try:
@@ -14,6 +15,6 @@ def _():
 
     except Exception as ex:
         print(str(ex))
-        
+
     finally:
         return redirect("/sign-in")

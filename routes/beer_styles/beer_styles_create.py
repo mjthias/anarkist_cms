@@ -7,6 +7,7 @@ import utils.validation as validate
 def _():
     # VALIDATE SESSION
     session = validate.session()
-    if not session: return redirect("/sign-in")
+    if not session:
+        return redirect("/sign-in")
 
     return dict(session=session)

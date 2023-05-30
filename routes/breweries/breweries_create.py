@@ -1,5 +1,5 @@
 from bottle import get, view, redirect
-import utils.validation as validate
+from utils import validation as validate
 
 ########################################
 
@@ -7,6 +7,7 @@ import utils.validation as validate
 @view("breweries/create")
 def _():
     session = validate.session()
-    if not session: return redirect("/sign-in")
+    if not session:
+        return redirect("/sign-in")
 
     return dict(session = session)

@@ -1,9 +1,7 @@
-from bottle import get, view, redirect, request, response
-import utils.g as g
-import utils.vars as var
-import utils.validation as validate
+from bottle import get, view, redirect, response
 import pymysql
 import jwt
+from utils import g, vars as var, validation as validate
 
 ##############################
 @get("/select-location")
@@ -13,10 +11,10 @@ def _():
     session = validate.partial_session()
     if not session:
         return redirect("/sign-in")
-    
+
     user_id = session["user_id"]
     role_id = session["role_id"]
-    
+
     #CONNECT TO DB
     try:
         db_connect = pymysql.connect(**var.DB_CONFIG)
@@ -33,7 +31,7 @@ def _():
     except Exception as ex:
         print(str(ex))
         return g.error_view(500)
-    
+
     finally:
         cursor.close()
         db_connect.close()
@@ -45,12 +43,9 @@ def _():
         encoded_jwt = jwt.encode(session, var.JWT_SECRET, algorithm="HS256")
         response.set_cookie("anarkist", encoded_jwt, path="/")
         return redirect("/")
-    
+
     session["bar_access"] = bars
     encoded_jwt = jwt.encode(session, var.JWT_SECRET, algorithm="HS256")
     response.set_cookie("anarkist", encoded_jwt, path="/")
-    
+
     return dict(bars=bars)
-
-
-

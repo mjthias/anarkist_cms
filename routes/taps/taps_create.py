@@ -1,7 +1,5 @@
 from bottle import get, view, redirect
-import utils.validation as validate
-import utils.g as g
-
+from utils import g, validation as validate
 
 ##############################
 
@@ -10,11 +8,11 @@ import utils.g as g
 def _():
     # VALIATE SESSION
     session = validate.session()
-    if not session: return redirect("/sign-in")
+    if not session:
+        return redirect("/sign-in")
 
     # VALIDATE ROLE
     if session["role_id"] == 3:
         return g.error_view(401)
-    
-    return dict(session=session)
 
+    return dict(session=session)

@@ -1,27 +1,35 @@
 from bottle import get, view, redirect, request
-import utils.validation as validate
-import utils.vars as var
-import utils.g as g
 import pymysql
+from utils import g, vars as var, validation as validate
 
 ########################################
 
 @get("/breweries")
 @view("breweries/index")
 def _():
+    # VALIDATE
     session = validate.session()
-    if not session: return redirect("/sign-in")
+    if not session:
+        return redirect("/sign-in")
 
-    limit, error = validate.limit(request.params.get("limit"))
-    if error: return g.error_view(404)
+    try:
+        limit, error = validate.limit(request.params.get("limit"))
+        if error:
+            return g.error_view(404)
 
-    offset, error = validate.offset(request.params.get("offset"))
-    if error: return g.error_view(404)
+        offset, error = validate.offset(request.params.get("offset"))
+        if error:
+            return g.error_view(404)
 
-    if request.params.get("name"):
-        brewery_name, error = validate.brewery_menu_name(request.params.get("name"))
-        if error: return g.error_view(204)
-    else: brewery_name = None
+        if request.params.get("name"):
+            brewery_name, error = validate.brewery_menu_name(request.params.get("name"))
+            if error:
+                return g.error_view(204)
+        else: brewery_name = None
+
+    except Exception as ex:
+        print(ex)
+        return g.error_view(500)
 
     try:
         db = pymysql.connect(**var.DB_CONFIG)
@@ -47,11 +55,11 @@ def _():
             session = session,
             breweries = breweries
             )
-    
+
     except Exception as ex:
         print(ex)
         return g.error_view(500)
-    
+
     finally:
         cursor.close()
         db.close()
@@ -60,7 +68,8 @@ def _():
 # Only render breweries_list.html
 @view("components/breweries_list")
 def as_chunk(breweries):
-    if not breweries: return g.error_view(204)
+    if not breweries:
+        return g.error_view(204)
     current_topic = request.params.get("current-topic")
     return dict (
         breweries = breweries,

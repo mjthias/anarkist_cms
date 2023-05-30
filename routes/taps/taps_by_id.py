@@ -1,8 +1,6 @@
 from bottle import get, view, redirect
-import utils.validation as validate
-import utils.vars as var
-import utils.g as g
 import pymysql
+from utils import g, vars as var, validation as validate
 
 ##############################
 
@@ -11,11 +9,18 @@ import pymysql
 def _(tap_id):
     # VALIDATE SESSION
     session = validate.session()
-    if not session: return redirect("/sign-in")
+    if not session:
+        return redirect("/sign-in")
 
-    # VALIDATE ID PARAM
-    tap_id, error = validate.id(tap_id)
-    if error: g.error_view(404)
+    try:
+        # VALIDATE ID PARAM
+        tap_id, error = validate.id(tap_id)
+        if error:
+            return g.error_view(404)
+
+    except Exception as ex:
+        print(ex)
+        return g.error_view(500)
 
     # GET TAP FROM DB
     try:
@@ -28,8 +33,9 @@ def _(tap_id):
             LIMIT 1
             """, (tap_id, session["bar_id"]))
         tap = cursor.fetchone()
-        if not tap: return g.error_view(404)
-        
+        if not tap:
+            return g.error_view(404)
+
         return dict(
             session = session,
             tap = tap,
@@ -38,7 +44,7 @@ def _(tap_id):
     except Exception as ex:
         print(ex)
         return g.error_view(500)
-    
+
     finally:
         cursor.close()
         db.close()

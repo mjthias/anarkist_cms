@@ -1,8 +1,6 @@
-from bottle import get, view, redirect, response
-import utils.validation as validate
-import utils.g as g
-import utils.vars as var
+from bottle import get, view, redirect
 import pymysql
+from utils import g, vars as var, validation as validate
 
 @get("/users/<search_user_id>")
 @view("users/by_id")
@@ -11,19 +9,23 @@ def _(search_user_id):
     session = validate.session()
     if not session:
         return redirect("/sign-in")
-    
-    search_user_id, error = validate.id(search_user_id)
-    if error:
-        return g.error_view(404)
-    
-    # Extract needed values from session
-    role_id=int(session["role_id"])
-    bar_id=int(session["bar_id"])
-    user_id=int(session["user_id"])
 
-    # role = staffs can only access their own user
-    if role_id == 3 and user_id != search_user_id:
-        return redirect("/")
+    try:
+        search_user_id, error = validate.id(search_user_id)
+        if error:
+            return g.error_view(404)
+
+        # Extract needed values from session
+        role_id=int(session["role_id"])
+        user_id=int(session["user_id"])
+
+        # role = staffs can only access their own user
+        if role_id == 3 and user_id != search_user_id:
+            return redirect("/")
+
+    except Exception as ex:
+        print(str(ex))
+        return g.error_view(500)
 
     # SELECT USER FROM DB
     try:
@@ -48,9 +50,10 @@ def _(search_user_id):
                 AND user_role_id != 1
                 LIMIT 1;
                 """, (search_user_id))
-        
+
         user = cursor.fetchone()
-        if not user: return g.error_view(404)
+        if not user:
+            return g.error_view(404)
 
         # Select users bar_access
         if user and user["user_role_id"] != "1":
