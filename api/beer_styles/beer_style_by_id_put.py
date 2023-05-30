@@ -20,7 +20,7 @@ def _(beer_style_id=""):
         if error:
             return g.respond(400, f"Beer style {error}")
 
-        if not form_beer_style_id == beer_style_id:
+        if form_beer_style_id != beer_style_id:
             return g.respond(400, "Beer style ID's does not match.")
 
         beer_style_name, error = validate.name(request.forms.get("beer_style_name"))

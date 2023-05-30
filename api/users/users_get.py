@@ -12,7 +12,7 @@ def _():
         if not session:
             return g.respond(401, "Unauthorized attempt.")
 
-        if not int(session["role_id"]) in var.AUTH_USER_ROLES:
+        if int(session["role_id"]) not in var.AUTH_USER_ROLES:
             return g.respond(401, "Unauthorized attempt.")
 
         # VALIDATE INPUT/QUERYSTRING VALUES
