@@ -189,7 +189,7 @@ textarea:not(:focus):not(:placeholder-shown):invalid {
 }
 
 .form-action-bar {
-    @apply h-[var(--menu-height)] px-4 fixed bottom-0 left-0 md:left-1/4 xl:left-[16.65%] w-screen md:w-[calc(100vw-25%)] xl:w-[calc(100vw-16.65%)] bg-background border-t border-line;
+    @apply h-[var(--menu-height)] px-4 fixed bottom-0 left-0 md:left-1/4 xl:left-[16.65%] w-screen md:w-[calc(100vw-25%)] xl:w-[calc(100vw-16.65%)] bg-background border-t border-line z-10;
     @apply flex items-center justify-end;
 }
 

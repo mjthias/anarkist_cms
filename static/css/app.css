@@ -1372,6 +1372,7 @@ textarea:not(:focus):not(:placeholder-shown):invalid{
   position: fixed;
   bottom: 0px;
   left: 0px;
+  z-index: 10;
   height: var(--menu-height);
   width: 100vw;
   border-top-width: 1px;

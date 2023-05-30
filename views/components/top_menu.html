@@ -1,3 +1,5 @@
+% spaHref = f"spa('/users/{session['user_id']}')"
+
 <nav class="col-span-12 fixed w-full z-50">
     
     <div class="flex justify-between items-center h-[var(--menu-height)] px-4 bg-background border border-line border-t-0 border-x-0 relative z-50">
@@ -46,7 +48,7 @@
     </ul>
     <ul id="user_sub_menu" class="bg-background top-sub-menu border-r-0 border border-line border-t-0 transition-colors fixed top-[49px] right-0">
         <li>
-            <a class="px-4 py-2 flex flex-nowrap items-center transition-colors text-secondary cursor-pointer hover:text-primary" href="#">
+            <a class="px-4 py-2 flex flex-nowrap items-center transition-colors text-secondary cursor-pointer hover:text-primary" href="/users/{{ session['user_id'] }}" onclick="{{ spaHref }}; return false">
                 <div class="w-6 h-6 inline-flex items-center justify-center mr-2">
                     <i class="fa-solid fa-gear"></i>
                 </div>
