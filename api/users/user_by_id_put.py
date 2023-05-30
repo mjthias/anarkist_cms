@@ -88,7 +88,7 @@ def _(user_id):
         counter = cursor.rowcount
         if not counter:
             return g.respond(204)
-        
+
         # Rm session if other user
         if not is_own_user:
             cursor.execute("""
