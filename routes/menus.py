@@ -1,9 +1,7 @@
-from bottle import get, view, redirect, request
-import utils.validation as validate
-import utils.vars as var
-import utils.g as g
-import pymysql
 import math
+from bottle import get, view, redirect, request
+import pymysql
+from utils import g, vars as var, validation as validate
 
 ##############################
 
@@ -12,13 +10,16 @@ import math
 def _(bar_id, page_nr):
     # VALIDATE
     session = validate.session()
-    if not session: return redirect("/sign-in")
+    if not session:
+        return redirect("/sign-in")
 
     bar_id, error = validate.id(bar_id)
-    if error: return g.error_view(404)
+    if error:
+        return g.error_view(404)
 
     page_nr, error = validate.offset(page_nr)
-    if error: return g.error_view(404)
+    if error:
+        return g.error_view(404)
 
     try:
         db=pymysql.connect(**var.DB_CONFIG)
@@ -37,7 +38,7 @@ def _(bar_id, page_nr):
         off_wall_pages = math.ceil((counters["off_wall_taps"] / 2 + numbered_taps_left) / 14)
 
         # Calc the limits depending on page_nr + amount of numbered & non-numbered taps
-        if  page_nr <= numbered_taps_pages: 
+        if  page_nr <= numbered_taps_pages:
             # Numbered taps only
             limit = 14
             offset = (page_nr -1) * 14
@@ -50,7 +51,7 @@ def _(bar_id, page_nr):
             limit = 28
             offset = numbered_taps_pages * 14 + 28 - numbered_taps_left
         else: return g.error_view(404)
-        
+
         cursor.execute("""
         SELECT * FROM taps_list
         WHERE fk_bar_id = %s
@@ -61,7 +62,7 @@ def _(bar_id, page_nr):
         # Return menu_content only
         if request.headers.get("as_chunk"):
             return as_chunk(taps)
-        
+
         return dict(taps = taps)
 
     except Exception as ex:

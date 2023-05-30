@@ -1,8 +1,6 @@
 from bottle import get, view, redirect, request
-import utils.vars as var
-import utils.validation as validate
-import utils.g as g
 import pymysql
+from utils import g, vars as var, validation as validate
 
 ##############################
 
@@ -11,18 +9,27 @@ import pymysql
 def _():
     # VALIDATE
     session = validate.session()
-    if not session: return redirect("/sign-in")
-    
-    limit, error = validate.limit(request.params.get("limit"))
-    if error: return g.error_view(404)
+    if not session:
+        return redirect("/sign-in")
 
-    offset, error = validate.offset(request.params.get("offset"))
-    if error: return g.error_view(404)
+    try:
+        limit, error = validate.limit(request.params.get("limit"))
+        if error:
+            return g.error_view(404)
 
-    if request.params.get("name"):
-        beer_name, error = validate.name(request.params.get("name"))
-        if error: return g.error_view(204)
-    else: beer_name = None
+        offset, error = validate.offset(request.params.get("offset"))
+        if error:
+            return g.error_view(404)
+
+        if request.params.get("name"):
+            beer_name, error = validate.name(request.params.get("name"))
+            if error:
+                return g.error_view(204)
+        else: beer_name = None
+
+    except Exception as ex:
+        print(str(ex))
+        return g.error_view(500)
 
     # Get beers from DB
     try:
@@ -56,6 +63,6 @@ def _():
 # Only render beer_list.html
 @view("components/beer_list")
 def as_chunk(beers):
-    if not beers: return g.error_view(204)
+    if not beers:
+        return g.error_view(204)
     return dict (beers = beers)
-    

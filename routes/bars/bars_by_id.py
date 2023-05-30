@@ -1,9 +1,7 @@
-from bottle import get, view, redirect
-import utils.validation as validate
-import utils.vars as var
-import utils.g as g
-import pymysql
 import math
+from bottle import get, view, redirect
+import pymysql
+from utils import g, vars as var, validation as validate
 
 ##############################
 
@@ -12,16 +10,18 @@ import math
 def _(bar_id):
     # VALIDATE SESSION
     session = validate.session()
-    if not session: return redirect("/sign-in")
+    if not session:
+        return redirect("/sign-in")
 
     # VALIDATE ROLE
     if not session["role_id"] == 1:
         return g.error_view(401)
-    
+
     # VALIDATE BAR ID
     bar_id, error = validate.id(bar_id)
-    if error: return g.error_view(404)
-    
+    if error:
+        return g.error_view(404)
+
     # GET BAR FROM DB
     try:
         db = pymysql.connect(**var.DB_CONFIG)
@@ -35,11 +35,12 @@ def _(bar_id):
         LIMIT 1;
         """, (bar_id))
         bar = cursor.fetchone()
-        if not bar: return g.error_view(404)
+        if not bar:
+            return g.error_view(404)
 
         # Calc generated screens
         screens_nr = math.ceil((bar["numbered_taps"] + bar["off_wall_taps"] / 2) / 14)
-        
+
         return dict(
             session = session,
             bar = bar,
@@ -53,6 +54,3 @@ def _(bar_id):
     finally:
         cursor.close()
         db.close()
-
-    
-

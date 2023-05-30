@@ -1,6 +1,6 @@
-from bottle import get, view, redirect, request
-import utils.g as g
-import utils.validation as validate
+# pylint: disable=R1710
+from bottle import get, view, redirect
+from utils import validation as validate
 
 ##############################
 @get("/sign-in")
@@ -8,7 +8,7 @@ import utils.validation as validate
 def _():
     session = validate.session()
 
-    if session: 
+    if session:
         return redirect("/")
 
     return
