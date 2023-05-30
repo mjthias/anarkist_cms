@@ -637,6 +637,10 @@ video {
   margin-bottom: 0.25rem;
 }
 
+.mb-2{
+  margin-bottom: 0.5rem;
+}
+
 .mb-6{
   margin-bottom: 1.5rem;
 }
@@ -801,6 +805,10 @@ video {
 
 .overflow-x-hidden{
   overflow-x: hidden;
+}
+
+.whitespace-nowrap{
+  white-space: nowrap;
 }
 
 .rounded{
@@ -984,6 +992,11 @@ video {
 :root {
   --tw-bg-opacity: 1;
   --menu-height: 3.375rem;
+}
+
+h2{
+  font-size: 1.125rem;
+  line-height: 1.75rem;
 }
 
 .overflow-y-hidden {
@@ -1403,7 +1416,6 @@ textarea:not(:focus):not(:placeholder-shown):invalid{
 }
 
 .btn-container{
-  position: relative;
   display: flex;
   flex-wrap: nowrap;
 }
@@ -1478,8 +1490,8 @@ textarea:not(:focus):not(:placeholder-shown):invalid{
 
 .action-bar-sub-menu{
   position: absolute;
-  top: calc(-100% - 1.3rem);
-  right: 0px;
+  bottom: 100%;
+  right: 1rem;
   border-width: 1px;
   border-color: rgba(71,71,71,100);
   background-color: rgba(14,14,14, var(--tw-bg-opacity));
@@ -1496,7 +1508,7 @@ textarea:not(:focus):not(:placeholder-shown):invalid{
   content: '';
   position: absolute;
   top: 8px;
-  right: 5px;
+  right: 4px;
   border-top: 10px solid rgba(71,71,71,100);
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;
@@ -1507,9 +1519,9 @@ textarea:not(:focus):not(:placeholder-shown):invalid{
   position: absolute;
   right: 6px;
   top: 8px;
-  border-top: 9px solid rgba(14,14,14, var(--tw-bg-opacity));
-  border-left: 9px solid transparent;
-  border-right: 9px solid transparent;
+  border-top: 8px solid rgba(14,14,14, var(--tw-bg-opacity));
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
 }
 
 .message{

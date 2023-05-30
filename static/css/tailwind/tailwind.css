@@ -9,6 +9,10 @@
     --menu-height: 3.375rem;
 }
 
+h2 {
+    @apply text-lg;
+}
+
 .overflow-y-hidden {
     overflow-y: hidden;
 }
@@ -194,7 +198,7 @@ textarea:not(:focus):not(:placeholder-shown):invalid {
 }
 
 .btn-container {
-    @apply flex flex-nowrap relative;
+    @apply flex flex-nowrap;
 }
 
 .btn-primary {
@@ -218,7 +222,7 @@ textarea:not(:focus):not(:placeholder-shown):invalid {
 }
 
 .action-bar-sub-menu {
-    @apply absolute top-[calc(-100%-1.3rem)] right-0 py-2 text-right bg-background border border-line;
+    @apply absolute bottom-full right-4 py-2 text-right bg-background border border-line;
 }
 
 .caret {
@@ -229,7 +233,7 @@ textarea:not(:focus):not(:placeholder-shown):invalid {
 content: '';
 position: absolute;
 top: 8px;
-right: 5px;
+right: 4px;
 border-top: 10px solid rgba(71,71,71,100);
 border-left: 10px solid transparent;
 border-right: 10px solid transparent;
@@ -240,9 +244,9 @@ content: '';
 position: absolute;
 right: 6px;
 top: 8px;
-border-top: 9px solid rgba(14,14,14, var(--tw-bg-opacity));
-border-left: 9px solid transparent;
-border-right: 9px solid transparent;
+border-top: 8px solid rgba(14,14,14, var(--tw-bg-opacity));
+border-left: 8px solid transparent;
+border-right: 8px solid transparent;
 }
 
 .message {

@@ -2,6 +2,12 @@
 % page_title = user["user_name"]
 % rebase("base", page_title=page_title)
 
+% bar_ids = []
+% for i, bar in enumerate(user['bar_access']):
+    % bar_ids.append(bar['bar_id'])
+% end
+
+
 <div id="spa" data-page_title={{page_title}} data-page_url="/users/{{search_user_id}}">
     <header class="sub-menu">
         <h1>{{user["user_name"]}}</h1>
@@ -87,6 +93,19 @@
                         <i class="fa-solid fa-ellipsis"></i>
                     </button>
                     <div class="action-bar-sub-menu hidden">
+                        % if not session['user_id'] == user['user_id']:
+                            % if session['bar_id'] in bar_ids:
+                                <button data-user_id="{{ user['user_id'] }}" class="block px-4 mb-2 text-sm transition-colors text-secondary hover:text-primary whitespace-nowrap">
+                                    <i class="fa-solid fa-circle-exclamation mr-2 pointer-events-none"></i>
+                                    Remove bar access
+                                </button>
+                            % else:
+                                <button data-user_id="{{ user['user_id'] }}" class="block px-4 mb-2 text-sm transition-colors text-secondary hover:text-primary whitespace-nowrap">
+                                    <i class="fa-solid fa-share-from-square mr-1 pointer-events-none"></i>
+                                    Give bar access
+                                </button>
+                            % end
+                        % end
                         <button class="px-4 text-sm transition-colors text-secondary hover:text-primary" onclick="toggleDeleteModal()">
                             <i class="fa-solid fa-trash-can mr-2"></i>
                             Delete user
@@ -151,29 +170,16 @@
     % end
 
     % if user["bar_access"] and session["user_id"] != user['user_id']:
-    <section class="form-container">
-        <h2>Bar access</h2>
-        % this_bar_access = False
-        % for bar in user["bar_access"]:
-            % if bar["bar_id"] == session["bar_id"]:
-                % this_bar_access = True
-                <form>
-                    <input type="text" hidden name="user_id" value="{{user['user_id']}}">
-                    <button onclick="deleteBarAccess()">Remove acces</button>
-                </form>
-            % end
-            <p>{{bar["bar_name"]}}</p>
-            <p>{{bar["bar_street"]}}, {{bar["bar_city"]}}</p>
-        % end
+    <section class="form-container form-grid">
+        <h2 class="col-span-full">Bar access</h2>
+            % for bar in user["bar_access"]:
+            <article class="input-container">
+                <p>{{bar["bar_name"]}}</p>
+                <p class="text-sm text-secondary">{{bar["bar_street"]}}, {{bar["bar_city"]}}</p>
 
-        % if len(user["bar_access"]) > 1:
-            % if not this_bar_access:
-                <form>
-                    <input type="text" hidden name="user_id" value="{{user['user_id']}}">
-                    <span><button onclick="postBarAccess()">Give acces</button> to {{session["bar_name"]}}</span>
-                </form>
-            % end
+            </article>
         % end
+        
     </section>
     % end
 </div>
