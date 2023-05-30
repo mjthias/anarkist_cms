@@ -210,8 +210,17 @@ async function postItem(form, path) {
     return;
   }
 
+  // TODO: Make this a global solution...
   const id = await conn.json();
-  spa(`/${path}/${id}`);
+  form.reset();
+  const messElm = document.querySelector(".message");
+  messElm.classList.remove("hidden");
+  messElm.classList.add("success");
+  messElm.innerHTML = `
+    <p>Beer created!</p>
+    <a href="/beers/${id}" onclick="spa('/beers/${id}'); return false;">Go to beer</a>
+  `;
+  window.scrollTo(0,0);
 }
 
 async function updateItem(form, path) {
