@@ -8,7 +8,8 @@
         <div class="message hidden"></div>
         <form onsubmit="return false" novalidate="true" class="form-grid">
             <div class="input-container-full">
-                <label for="name">Name</label>
+                <label for="user_name">Name</label>
+                <span class="hint-error block hidden"></span>
                 <input
                     type="text"
                     name="user_name"
@@ -21,7 +22,8 @@
                 <span class="hint">Min. 2 and max. 50 characters.</span>
             </div>
             <div class="input-container-full">
-                <label for="email">Email</label>
+                <label for="user_email">Email</label>
+                <span class="hint-error block hidden"></span>
                 <input
                     type="email"
                     name="user_email" 
@@ -33,10 +35,11 @@
                 <span class="hint">Enter a valid e-mail.</span>
             </div>
             <div class="input-container-full">
-                <label for="user-role">User role</label>
+                <label for="user_role_id">User role</label>
+                <span class="hint-error block hidden"></span>
                 <select
                     name="user_role_id" 
-                    id="user-role"
+                    id="user_role_id"
                     required
                 >
                     <option value="" selected disabled>Select user role</option>
@@ -50,11 +53,11 @@
             </div>
             <div class="input-container-full">
                 <label for="user_password">Password</label>
+                <span class="hint-error block hidden"></span>
                 <input 
                     type="password" 
                     id="user_password" 
                     name="user_password" 
-                    pattern="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$" 
                     placeholder=" "
                     required
                 />
@@ -62,6 +65,7 @@
             </div>
             <div class="input-container-full">
                 <label for="user_confirm_password">Repeat password</label>
+                <span class="hint-error block hidden"></span>
                 <input 
                     type="password"
                     id="user_confirm_password"

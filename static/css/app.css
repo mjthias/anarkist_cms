@@ -1321,41 +1321,14 @@ textarea{
   resize: none;
 }
 
-input:not(:focus):not(:-moz-placeholder-shown):invalid, textarea:not(:focus):not(:-moz-placeholder-shown):invalid{
-  border-color: rgba(220,38,37,var(--tw-bg-opacity));
-  -moz-transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
+input:not(:focus):not(:-moz-placeholder-shown):invalid, textarea:not(:focus):not(:-moz-placeholder-shown):invalid {
+  border-color: rgba(220,38,37,var(--tw-bg-opacity)) !important;
 }
 
 input:not(:focus):not(:placeholder-shown):invalid,
 textarea:not(:focus):not(:placeholder-shown):invalid,
-input.invalid{
-  border-color: rgba(220,38,37,var(--tw-bg-opacity));
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
-}
-
-input:not(:focus):not(:-moz-placeholder-shown):invalid:hover, textarea:not(:focus):not(:-moz-placeholder-shown):invalid:hover{
-  border-color: rgba(220,38,37,var(--tw-bg-opacity));
-}
-
-input:not(:focus):not(:placeholder-shown):invalid:hover,
-textarea:not(:focus):not(:placeholder-shown):invalid:hover,
-input.invalid:hover{
-  border-color: rgba(220,38,37,var(--tw-bg-opacity));
-}
-
-input:not(:focus):not(:-moz-placeholder-shown):invalid:focus, textarea:not(:focus):not(:-moz-placeholder-shown):invalid:focus{
-  border-color: rgba(138,138,138,1);
-}
-
-input:not(:focus):not(:placeholder-shown):invalid:focus,
-textarea:not(:focus):not(:placeholder-shown):invalid:focus,
-input.invalid:focus{
-  border-color: rgba(138,138,138,1);
+input.invalid {
+  border-color: rgba(220,38,37,var(--tw-bg-opacity)) !important;
 }
 
 .hint{

@@ -19,11 +19,12 @@
             <h2>User info</h2>
             <input type="text" hidden name="user_id" value="{{user['user_id']}}">
             <div class="input-container-full">
-                <label for="name">Name</label>
+                <label for="user_name">Name</label>
+                <span class="hint-error block hidden"></span>
                 <input
                     type="text" 
                     name="user_name"
-                    id="name" 
+                    id="user_name" 
                     value="{{user['user_name']}}"
                     minlength="2"
                     maxlength="50"
@@ -33,11 +34,12 @@
                 <span class="hint">Min. 2 and max. 50 characters.</span>    
             </div>
             <div class="input-container-full">
-                <label for="email">Email</label>
+                <label for="user_email">Email</label>
+                <span class="hint-error block hidden"></span>
                 <input
                     type="text"
                     name="user_email"
-                    id="email"
+                    id="user_email"
                     value="{{user['user_email']}}"
                     pattern='^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,3}))$'
                     placeholder=" "
@@ -47,10 +49,11 @@
             </div>
             % if not session["role_id"] == 3:
                 <div class="input-container-full">
-                    <label for="user_role">User role</label>
+                    <label for="user_role_id">User role</label>
+                    <span class="hint-error block hidden"></span>
                     <select 
                         name="user_role_id"
-                        id="user_role"
+                        id="user_role_id"
                         required
                     >
                         <option
@@ -98,6 +101,7 @@
                                 <button 
                                     onclick="deleteBarAccess()"
                                     data-user_id="{{ user['user_id'] }}" 
+                                    data-bar_id="{{ session['bar_id']}}"
                                     class="block px-4 mb-2 text-sm transition-colors text-secondary hover:text-primary whitespace-nowrap"
                                 >
                                     <i class="fa-solid fa-circle-exclamation mr-2 pointer-events-none"></i>
@@ -107,6 +111,7 @@
                                 <button
                                     onclick="postBarAccess()"
                                     data-user_id="{{ user['user_id'] }}"
+                                    data-bar_id="{{ session['bar_id']}}"
                                     class="block px-4 mb-2 text-sm transition-colors text-secondary hover:text-primary whitespace-nowrap"
                                 >
                                     <i class="fa-solid fa-share-from-square mr-1 pointer-events-none"></i>
@@ -136,6 +141,7 @@
             <input type="text" hidden name="user_id" value="{{user['user_id']}}">
             <div class="input-container-full">
                 <label for="user_password">Old password</label>
+                <span class="hint-error block hidden"></span>
                 <input
                     type="password"
                     id="user_password"
@@ -148,6 +154,7 @@
             </div>
             <div class="input-container-full">
                 <label for="user_new_password">New password</label>
+                <span class="hint-error block hidden"></span>
                 <input
                     type="password"
                     id="user_new_password"
@@ -160,6 +167,7 @@
             </div>
             <div class="input-container-full">
                 <label for="user_confirm_new_password">Repeat password</label>
+                <span class="hint-error block hidden"></span>
                 <input
                     type="password"
                     id="user_confirm_new_password"
@@ -181,7 +189,7 @@
     <section class="form-container form-grid">
         <h2 class="col-span-full">Bar access</h2>
             % for bar in user["bar_access"]:
-            <article class="input-container">
+            <article id="bar_access_{{ bar['bar_id'] }}" class="input-container">
                 <p>{{bar["bar_name"]}}</p>
                 <p class="text-sm text-secondary">{{bar["bar_street"]}}, {{bar["bar_city"]}}</p>
 
