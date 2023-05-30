@@ -1,26 +1,28 @@
 from bottle import post, request
-import utils.validation as validate
-import utils.vars as var
-import utils.g as g
 import pymysql
-
+from utils import g, vars as var, validation as validate
 
 ##############################
 
 @post(f"{var.API_PATH}/taps")
 def _():
-    # VALIDATE SESSION AND ROLE - staff not allowed
-    session = validate.session()
-    if not session or session["role_id"] == 3:
-        return g.respond(401)
-    
-    bar_id = session["bar_id"]
+    try:
+        # VALIDATE SESSION AND ROLE - staff not allowed
+        session = validate.session()
+        if not session or session["role_id"] == 3:
+            return g.respond(401)
+        bar_id = session["bar_id"]
 
-    # VALIDATE BEER ID
-    beer_id, error =  validate.id(request.forms.get("beer_id"))
-    if error: return g.respond(400, error)
+        # VALIDATE BEER ID
+        beer_id, error =  validate.id(request.forms.get("beer_id"))
+        if error:
+            return g.respond(400, error)
 
-    is_off_wall = bool(request.forms.get("tap_off_the_wall"))
+        is_off_wall = bool(request.forms.get("tap_off_the_wall"))
+
+    except Exception as ex:
+        print(ex)
+        return g.respond(500)
 
     try:
         db = pymysql.connect(**var.DB_CONFIG)
@@ -29,7 +31,7 @@ def _():
         new_tap_id = cursor.fetchone()["tap_id"]
         db.commit()
         return g.respond(200, new_tap_id)
-    
+
     except Exception as ex:
         print(ex)
         return g.respond(500)

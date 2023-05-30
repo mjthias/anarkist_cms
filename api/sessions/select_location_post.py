@@ -1,24 +1,24 @@
-from bottle import post, redirect, request, response
-import utils.g as g
-import utils.vars as var
-import utils.validation as validate
+from bottle import post, request, response
 import jwt
+from utils import g, vars as var, validation as validate
 
 ##############################
 @post("/select-location")
 def _():
-    # VALIDATE
-    session = validate.partial_session()
-    if not session: return g.respond(401)
-
     try:
+        # VALIDATE
+        session = validate.partial_session()
+        if not session:
+            return g.respond(401)
+
         bar_id, error = validate.id(request.forms.get("bars"))
-        if error: return g.respond(400, error)
+        if error:
+            return g.respond(400, error)
 
         # Append bar id to session dict
         session["bar_id"] = bar_id
         for bar in session["bar_access"]:
-            if bar["bar_id"] == bar_id: 
+            if bar["bar_id"] == bar_id:
                 session["bar_name"] = bar["bar_name"]
 
         session = {
@@ -36,6 +36,7 @@ def _():
         response.set_cookie("anarkist", encoded_jwt, path="/")
 
         return g.respond(200, "Location successfully selected.")
+
     except Exception as ex:
         print(str(ex))
         return g.respond(500)

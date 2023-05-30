@@ -1,11 +1,9 @@
-from bottle import post, redirect, request, response
-import utils.g as g
-import utils.vars as var
-import utils.validation as validate
-import pymysql
 import time
+from bottle import post, request, response
+import pymysql
 import jwt
 import bcrypt
+from utils import g, vars as var, validation as validate
 
 ##############################
 @post("/sign-in")
@@ -13,27 +11,29 @@ def _():
     # VALIDATE INPUT VALUES
     try:
         user_email, error = validate.email(request.forms.get("user_email"))
-        if error: return g.respond(400, error)
-        
+        if error:
+            return g.respond(400, error)
+
         user_password, error = validate.password(request.forms.get("user_password"))
-        if error: return g.respond(400, error)
+        if error:
+            return g.respond(400, error)
         user_password_bytes = user_password.encode('utf-8')
 
     except Exception as ex:
         print(str(ex))
         return g.respond(500)
 
-    # CONNTECT TO DB
     try:
+        # POST TO DB
         db_connect = pymysql.connect(**var.DB_CONFIG)
         db_connect.begin()
         cursor = db_connect.cursor()
 
         # Get users from db
         cursor.execute("""
-            SELECT * FROM users 
-            WHERE user_email = %s
-            LIMIT 1
+        SELECT * FROM users 
+        WHERE user_email = %s
+        LIMIT 1
         """, (user_email))
         user = cursor.fetchone()
 
@@ -49,8 +49,8 @@ def _():
 
         # Insert to DB
         query = """
-            INSERT INTO sessions (fk_user_id, session_iat)
-            VALUES(%s, %s)
+        INSERT INTO sessions (fk_user_id, session_iat)
+        VALUES(%s, %s)
         """
         cursor.execute(query, (session["user_id"], session["session_iat"]))
         db_connect.commit()
@@ -59,7 +59,7 @@ def _():
         session["user_name"] = user["user_name"]
         session["session_id"] = cursor.lastrowid
         session["role_id"] = user["fk_user_role_id"]
-        
+
         encoded_jwt = jwt.encode(session, var.JWT_SECRET, algorithm="HS256")
         response.set_cookie("anarkist", encoded_jwt, path="/")
         return g.respond(201, "Successfully signed in.")
@@ -68,7 +68,7 @@ def _():
         print(ex)
         db_connect.rollback()
         return g.respond(500)
-    
+
     finally:
         cursor.close()
         db_connect.close()

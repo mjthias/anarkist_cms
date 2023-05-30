@@ -1,5 +1,7 @@
+# pylint: disable=W0611,
+
 from bottle import get, static_file, run, default_app, error
-import utils.g as g
+from utils import g
 
 ##############################
 
@@ -91,6 +93,7 @@ try:
     # Prod
     import production
     application = default_app()
+
 except:
     # Dev
     run( host="127.0.0.1", port=5555, debug=True, reloader=True )
