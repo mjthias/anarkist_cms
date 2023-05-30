@@ -3,6 +3,7 @@
 <form id="beer_form" onsubmit="return false" novalidate="true" class="form-grid">
     <div class="input-container-full">
         <label for="beer_name">Name <span class="text-danger">*</span></label>
+        <span class="hint-error block hidden"></span>
         <input 
             class=""
             type="text" 
@@ -20,6 +21,7 @@
     </div>
     <div class="input-container">
         <label for="brewery_name">Brewery <span class="text-danger">*</span></label>
+        <span class="hint-error block hidden"></span>
         <input 
             oninput="searchBrewery()" 
             type="text" 
@@ -49,6 +51,7 @@
     </div>
     <div class="input-container">
         <label for="beer_style_name">Style <span class="text-danger">*</span></label>
+        <span class="hint-error block hidden"></span>
         <input 
             oninput="searchBeerStyle()" 
             type="text" id="beer_style_name" 
@@ -77,6 +80,7 @@
     </div>
     <div class="input-container">
         <label for="beer_alc">Alc. <span class="text-danger">*</span></label>
+        <span class="hint-error block hidden"></span>
         <input 
             type="number" 
             id="beer_alc" 
@@ -94,6 +98,7 @@
     </div>
     <div class="input-container">
         <label for="beer_price">Price <span class="text-danger">*</span></label>
+        <span class="hint-error block hidden"></span>
         <input 
             type="number" 
             id="beer_price" 
@@ -110,6 +115,7 @@
     </div>
     <div class="input-container">
         <label for="beer_ibu">IBU</label>
+        <span class="hint-error block hidden"></span>
         <input 
             type="number" 
             id="beer_ibu" 
@@ -125,6 +131,7 @@
     </div>
     <div class="input-container">
         <label for="beer_ebc">EBC</label>
+        <span class="hint-error block hidden"></span>
         <input 
             type="number" 
             id="beer_ebc" 
@@ -140,6 +147,7 @@
     </div>
     <div class="input-container-full">
         <label for="beer_description_en">Description (English)</label>
+        <span class="hint-error block hidden"></span>
         % if defined('beer'):
         % desc_en = beer['beer_description_en']
         % end
@@ -151,13 +159,15 @@
         % desc_dk = beer['beer_description_dk']
         % end
         <label for="beer_description_dk">Description (Danish)</label>
+        <span class="hint-error block hidden"></span>
         <textarea id="beer_description_dk" name="beer_description_dk" minlength="0" maxlength="500" placeholder=" ">{{ desc_dk }}</textarea>
         <span class="hint">Min. 2 and max. 500 characters.</span>
     </div>
-    <div class="input-container-half">
+    <div class="input-container-full">
         <label for="beer_image" class="cursor-pointer inline-flex items-center text-secondary hover:text-primary transition-colors">
             <span><i class="fa-solid fa-image mr-2 text-lg text-primary"></i></span>Upload image
         </label>
+        <span class="hint-error block hidden"></span>
         <span class="hint block">Only .png and .jpeg allowed.</span>
         <input onchange="displayPreviewImage()" type="file" id="beer_image" name="beer_image" accept="image/png, image/jpg, image/jpeg" />
         % if defined('beer'):

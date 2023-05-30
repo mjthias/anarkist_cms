@@ -70,11 +70,11 @@ h2 {
 }
 
 .input-container-half {
-    @apply col-span-1 w-full relative
+    @apply col-span-1 w-full relative self-end;
 }
 
 .input-container {
-    @apply col-span-2 md:col-span-1 w-full relative;
+    @apply col-span-2 md:col-span-1 w-full relative self-end;
 }
 
 .input-container-full {
@@ -82,8 +82,13 @@ h2 {
 }
 
 input:not([type="file"]):not([type="checkbox"]):not(.sub-menu-search), textarea {
-    @apply w-full outline-none bg-input-bg border border-outline h-[2.5rem] px-2 rounded focus:border-outline-focus transition-colors mt-1;
+    @apply w-full outline-none bg-input-bg border h-[2.5rem] px-2 rounded transition-colors mt-1;
 }
+
+input:not([type="file"]):not([type="checkbox"]):not(.sub-menu-search):not(.invalid), textarea:not(.invalid) {
+    @apply border-outline focus:border-outline-focus;
+}
+
 .sub-menu-search {
     @apply w-full outline-none bg-input-bg border border-outline px-2 h-8 rounded focus:border-outline-focus transition-colors;
 }
@@ -160,8 +165,9 @@ textarea {
 }
 
 input:not(:focus):not(:placeholder-shown):invalid,
-textarea:not(:focus):not(:placeholder-shown):invalid {
-    @apply border-danger;
+textarea:not(:focus):not(:placeholder-shown):invalid,
+input.invalid {
+    @apply border-danger hover:border-danger focus:border-outline-focus transition-colors;
 }
 
 .hint {
