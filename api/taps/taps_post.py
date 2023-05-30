@@ -30,7 +30,9 @@ def _():
         cursor.execute("CALL insert_tap(%s, %s, %s)", (is_off_wall, beer_id, bar_id))
         new_tap_id = cursor.fetchone()["tap_id"]
         db.commit()
-        return g.respond(200, new_tap_id)
+        response_dict = {"id": new_tap_id, "info": "Tap was successfully created", "entry_type": "tap"}
+
+        return g.respond(201, response_dict)
 
     except Exception as ex:
         print(ex)

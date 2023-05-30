@@ -253,6 +253,10 @@ border-right: 8px solid transparent;
     @apply bg-opacity-70 border rounded text-center mb-4
 }
 
+.message a {
+    @apply hover:underline font-medium
+}
+
 .success {
     @apply bg-btn-light border-btn-light ;
 }

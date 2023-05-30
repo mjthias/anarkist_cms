@@ -47,7 +47,9 @@ def _():
         brewery_id = cursor.lastrowid
         db.commit()
 
-        return g.respond(201, brewery_id)
+        response_dict = {"id": brewery_id, "info": "Brewery was successfully created", "entry_type": "brewery"}
+
+        return g.respond(201, response_dict)
 
     except Exception as ex:
         print(ex)

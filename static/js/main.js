@@ -199,6 +199,12 @@ function validateForm(callback) {
 }
 
 async function postItem(form, path) {
+  const messElm = document.querySelector(".message");
+  messElm.classList.add("hidden");
+  messElm.classList.remove("success");
+  messElm.classList.remove("error");
+  messElm.innerHTML = "";
+
   const conn = await fetch(`/api/v1/${path}`, {
     method: "POST",
     body: new FormData(form)
@@ -211,14 +217,20 @@ async function postItem(form, path) {
   }
 
   // TODO: Make this a global solution...
-  const id = await conn.json();
+  const resp = await conn.json();
   form.reset();
-  const messElm = document.querySelector(".message");
+
+  if (path === "taps") {
+    document.querySelector(".beer-info").innerHTML = "";
+  }
+
   messElm.classList.remove("hidden");
   messElm.classList.add("success");
   messElm.innerHTML = `
-    <p>Beer created!</p>
-    <a href="/beers/${id}" onclick="spa('/beers/${id}'); return false;">Go to beer</a>
+    <span>
+      ${resp.info} - 
+      <a href="/${path}/${resp.id}" onclick="spa('/${path}/${resp.id}'); return false;">Go to ${resp.entry_type}</a>
+    </span>
   `;
   window.scrollTo(0,0);
 }
