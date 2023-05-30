@@ -212,7 +212,22 @@ async function postItem(form, path) {
 
   if (!conn.ok) {
     const error = await conn.json();
-    console.log(error);
+    try {
+      const errElm = document.querySelector(`[name='${error.key}']`);
+      const errHint = document.querySelector(`[for='${error.key}'] ~ .hint-error`);
+      console.log(errHint);
+      errHint.textContent = error.info;
+      errHint.classList.remove("hidden");
+      errElm.classList.add("invalid");
+      errElm.addEventListener("change", () => {
+        errElm.classList.remove("invalid");
+        errHint.classList.add("hidden");
+        errHint.textContent = "";
+      });
+    } catch {
+      handleResponseMessage(conn, error);
+    }
+    
     return;
   }
 
