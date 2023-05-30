@@ -1,7 +1,6 @@
 from bottle import get
-import utils.vars as var
-import utils.g as g
 import pymysql
+from utils import g, vars as var
 
 ##############################
 
@@ -14,7 +13,7 @@ def _():
         breweries = cursor.fetchall()
         if not breweries:
             return g.respond(204)
-        g.respond(200, breweries)
+        return g.respond(200, breweries)
 
     except Exception as ex:
         print(str(ex))
@@ -23,4 +22,3 @@ def _():
     finally:
         cursor.close()
         db.close()
-    
