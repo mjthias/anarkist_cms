@@ -95,12 +95,20 @@
                     <div class="action-bar-sub-menu hidden">
                         % if not session['user_id'] == user['user_id']:
                             % if session['bar_id'] in bar_ids:
-                                <button data-user_id="{{ user['user_id'] }}" class="block px-4 mb-2 text-sm transition-colors text-secondary hover:text-primary whitespace-nowrap">
+                                <button 
+                                    onclick="deleteBarAccess()"
+                                    data-user_id="{{ user['user_id'] }}" 
+                                    class="block px-4 mb-2 text-sm transition-colors text-secondary hover:text-primary whitespace-nowrap"
+                                >
                                     <i class="fa-solid fa-circle-exclamation mr-2 pointer-events-none"></i>
                                     Remove bar access
                                 </button>
                             % else:
-                                <button data-user_id="{{ user['user_id'] }}" class="block px-4 mb-2 text-sm transition-colors text-secondary hover:text-primary whitespace-nowrap">
+                                <button
+                                    onclick="postBarAccess()"
+                                    data-user_id="{{ user['user_id'] }}"
+                                    class="block px-4 mb-2 text-sm transition-colors text-secondary hover:text-primary whitespace-nowrap"
+                                >
                                     <i class="fa-solid fa-share-from-square mr-1 pointer-events-none"></i>
                                     Give bar access
                                 </button>

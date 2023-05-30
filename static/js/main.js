@@ -291,41 +291,41 @@ async function updateUserPassword(form) {
 }
 
 async function deleteBarAccess() {
-  event.preventDefault();
-  const form = event.target.form
-  const userId = form.user_id.value
+  const userId = event.target.dataset.user_id;
+  const form = new FormData();
+  form.append("user_id", userId);
 
   const conn = await fetch('/api/v1/bar-access', {
     method: "DELETE",
-    body: new FormData(form)
-  })
+    body: form
+  });
 
   if (!conn.ok) {
-    return
+    const err = await conn.json();
+    console.log(err);
+    return;
   }
 
-  const res = await conn.json();
-  console.log(res)
-  spa(`/users/${userId}`)
+  spa(`/users/${userId}`);
 }
 
 async function postBarAccess() {
-  event.preventDefault();
-  const form = event.target.form
-  const userId = form.user_id.value
+  const userId = event.target.dataset.user_id;
+  const form = new FormData();
+  form.append("user_id", userId);
 
   const conn = await fetch('/api/v1/bar-access', {
-    method: 'POST',
-    body: new FormData(form)
-  })
+    method: "POST",
+    body: form
+  });
 
   if (!conn.ok) {
-    return
+    const err = await conn.json();
+    console.log(err);
+    return;
   }
 
-  const res = await conn.json()
-  console.log(res)
-  spa(`/users/${userId}`)
+  spa(`/users/${userId}`);
 }
 
 async function signIn(form) {
