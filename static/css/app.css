@@ -845,10 +845,6 @@ video {
   background-color: rgba(71,71,71,100);
 }
 
-.bg-danger{
-  background-color: rgba(220,38,37,var(--tw-bg-opacity));
-}
-
 .bg-opacity-50{
   --tw-bg-opacity: 0.5;
 }
