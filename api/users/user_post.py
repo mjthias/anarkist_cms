@@ -79,7 +79,7 @@ def _():
         user_id = cursor.lastrowid
 
         # IF NEW USER IS NOT A SUPERUSER, INSERT BAR ACCESS AS WELL
-        if not user_role_id == 1:
+        if user_role_id != 1:
             query = """
             INSERT INTO bar_access
             (fk_bar_id,
