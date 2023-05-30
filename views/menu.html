@@ -4,37 +4,34 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/app.css" />
     <title>Menu</title>
 </head>
-<body>
-    <section>
-        <header>
-            <h1>LOGO</h1>
-        </header>
-        <main>
+<body class="bg-[rgb(0,0,0)] text-primary font-pixel h-[177.78vw] pt-[3vw] px-[3vw] mb-[2vw]">
+    <header class="h-[17.5vw] flex border-[1.3vw] border-[rgba(255,255,255,1)]">
+        <div class="w-[64vw] flex items-center justify-center">
+            <h1 class="text-[7vw]">ANARKIST</h1>
+        </div>
+        <div class="bg-[rgba(255,255,255,1)] flex-1 flex items-center justify-center">
+            <p class="text-[rgba(0,0,0,1)] text-[6.5vw]">BAR</p>
+        </div>
+    </header>
+    <main class="mt-[1.85vw]">
         % include("components/menu_content")
-        </main>
-    </section>
-    
-    <script>
+    </main>
 
+    <script>
         setInterval(getTaps, 30000)
-    
         async function getTaps() {
             const conn = await fetch(location.pathname, {
                 headers: {as_chunk: true}
             })
-
             if (!conn.ok) return
-
             const html = await conn.text()
-
             const container = document.querySelector("main")
             container.innerHTML = html
         }
-    
     </script>
-    
 </body>
 </html>
 

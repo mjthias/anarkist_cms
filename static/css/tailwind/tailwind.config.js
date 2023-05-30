@@ -23,7 +23,8 @@ module.exports = {
       }
     },
     fontFamily: {
-      sans: ['Barlow Semi Condensed', 'sans-serif']
+      sans: ['Barlow Semi Condensed', 'sans-serif'],
+      pixel: ['pixel', 'sans-serif']
     },
     extend: {},
   },
