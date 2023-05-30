@@ -307,15 +307,15 @@ def price(value):
 
 ##############################
 def description(value):
-    if not value: 
+    if not value:
         return "", None
     min_len = 2
     max_len = 500
     invalid_min_message = f"Description must be more than {min_len} characters."
     invalid_max_message = f"Description must be less than {max_len} characters."
-    if len(value) < min_len: 
+    if len(value) < min_len:
         return None, invalid_min_message
-    if len(value) > max_len: 
+    if len(value) > max_len:
         return None, invalid_max_message
     return value, None
 
