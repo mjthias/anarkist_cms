@@ -36,11 +36,11 @@ def _(bar_id):
         bar_zip_code, error = validate.zip_code(request.forms.get("bar_zip_code"))
         if error:
             return g.respond(400, error)
-        
+
     except Exception as ex:
         print(str(ex))
         return g.respond(500)
-    
+
     # UPDATE IN DB
     try:
         db = pymysql.connect(**var.DB_CONFIG)

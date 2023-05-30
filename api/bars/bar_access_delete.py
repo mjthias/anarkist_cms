@@ -25,7 +25,7 @@ def _():
     except Exception as ex:
         print(ex)
         return g.respond(500)
-        
+
     try:
         # DELETE FROM DB
         db = pymysql.connect(**var.DB_CONFIG)
