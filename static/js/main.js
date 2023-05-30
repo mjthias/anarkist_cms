@@ -212,22 +212,7 @@ async function postItem(form, path) {
 
   if (!conn.ok) {
     const error = await conn.json();
-    try {
-      const errElm = document.querySelector(`[name='${error.key}']`);
-      const errHint = document.querySelector(`[for='${error.key}'] ~ .hint-error`);
-      console.log(errHint);
-      errHint.textContent = error.info;
-      errHint.classList.remove("hidden");
-      errElm.classList.add("invalid");
-      errElm.addEventListener("change", () => {
-        errElm.classList.remove("invalid");
-        errHint.classList.add("hidden");
-        errHint.textContent = "";
-      });
-    } catch {
-      handleResponseMessage(conn, error);
-    }
-    
+    handleResponse(conn, error);
     return;
   }
 
@@ -259,7 +244,7 @@ async function updateItem(form, path) {
 
   if (conn.status === 204) return;
   const resp = await conn.json();
-  handleResponseMessage(conn, resp);
+  handleResponse(conn, resp);
 }
 
 async function deleteItem(form, path) {
@@ -583,18 +568,33 @@ function getFormId(form, path) {
   return id;
 }
 
-function handleResponseMessage(conn, resp) {
+function handleResponse(conn, resp) {
   const messElm = document.querySelector(".message");
+  messElm.classList.add("hidden");
   messElm.textContent = resp.info;
 
   if (!conn.ok) {
-    messElm.classList.remove("success");
-    messElm.classList.add("error");
+    try {
+      const errElm = document.querySelector(`[name='${resp.key}']`);
+      const errHint = document.querySelector(`[for='${resp.key}'] ~ .hint-error`);
+      errHint.textContent = resp.info;
+      errHint.classList.remove("hidden");
+      errElm.classList.add("invalid");
+      errElm.addEventListener("change", () => {
+        errElm.classList.remove("invalid");
+        errHint.classList.add("hidden");
+        errHint.textContent = "";
+      });
+    } catch {
+      messElm.classList.remove("success");
+      messElm.classList.add("error");
+      messElm.classList.remove("hidden");
+    }
   } else {
     if (resp.name) document.querySelector("h1").textContent = resp.name;
     messElm.classList.remove("error");
     messElm.classList.add("success");
+    messElm.classList.remove("hidden");
   }
-  messElm.classList.remove("hidden");
   window.scrollTo(0,0);
 }
