@@ -22,23 +22,23 @@ def _():
         # VALIDATE INPUT VALUES
         user_name, error = validate.user_name(request.forms.get("user_name"))
         if error:
-            return g.respond(400, error)
+            return g.respond(400, {"info": error, "key": "user_name"})
 
         user_email, error = validate.email(request.forms.get("user_email"))
         if error:
-            return g.respond(400, error)
+            return g.respond(400, {"info": error, "key": "user_email"})
 
         user_password, error = validate.password(request.forms.get("user_password"))
         if error:
-            return g.respond(400, error)
+            return g.respond(400, {"info:": error, "key": "user_password"})
 
         user_confirm_password, error = validate.confirm_password(user_password, request.forms.get("user_confirm_password"))
         if error:
-            return g.respond(400, error)
+            return g.respond(400, {"info": error, "key": "user_confirm_password"})
 
         user_role_id, error = validate.role_id(request.forms.get("user_role_id"))
         if error:
-            return g.respond(400, f"User Role {error}")
+            return g.respond(400,  {"info": error, "key": "user_role_id"})
 
         # Admins cant create super users
         if session["role_id"] == 2 and user_role_id == 1:
@@ -98,9 +98,9 @@ def _():
         print(str(ex))
         db.rollback()
         if "user_email" in str(ex):
-            return g.respond(400, "Email already exists.")
+            return g.respond(400, {"info": "Email already exists.", "key": "user_email"})
         if "user_role_id" in str(ex):
-            return g.respond(400, "User role does not exist.")
+            return g.respond(400, {"info": "User role does not exist.", "key": "user_role_id"})
         if "bar_id" in str(ex):
             return g.respond(400, "Bar does not exist.")
         return g.respond(500)

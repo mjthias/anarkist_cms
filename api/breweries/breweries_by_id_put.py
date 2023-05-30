@@ -20,21 +20,21 @@ def _(brewery_id):
         # VALIDATE INPUT VALUES
         brewery_name, error = validate.brewery_name(request.forms.get("brewery_name"))
         if error:
-            return g.respond(400, error)
+            return g.respond(400, {"info": error, "key": "brewery_name"})
 
         # Menu_name only required if len(name) > 50
         if not request.forms.get("brewery_menu_name"):
             if len(brewery_name) > 50:
-                return g.respond(400, "Brewery name is too long for menu. Please provide a short menu name")
+                return g.respond(400, {"info": "Brewery name is too long for menu. Please provide a short menu name", "key": "brewery_menu_name"})
             brewery_menu_name = brewery_name
 
         else:
             brewery_menu_name, error = validate.brewery_menu_name(request.forms.get("brewery_menu_name"))
             if error:
-                return g.respond(400, error)
+                return g.respond(400, {"info": error, "key": "brewery_menu_name"})
 
             if len(brewery_menu_name) > len(brewery_name):
-                return g.respond(400, "Menu name can't be longer than the actual name")
+                return g.respond(400, {"info": "Menu name can't be longer than the actual name", "key": "brewery_menu_name"})
 
     except Exception as ex:
         print(ex)
@@ -60,9 +60,9 @@ def _(brewery_id):
     except Exception as ex:
         print(ex)
         if "brewery_name" in str(ex):
-            return g.respond(400, "Brewery name already registered")
+            return g.respond(400, {"info": "Brewery name already registered", "key": "brewery_name"})
         if "brewery_menu_name" in str(ex):
-            return g.respond(400, "Brewery menu name already registered")
+            return g.respond(400, {"info": "Brewery menu name already registered", "key": "brewery_menu_name"})
         return g.respond(500)
 
     finally:

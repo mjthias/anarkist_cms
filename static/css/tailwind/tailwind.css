@@ -167,7 +167,7 @@ textarea {
 input:not(:focus):not(:placeholder-shown):invalid,
 textarea:not(:focus):not(:placeholder-shown):invalid,
 input.invalid {
-    @apply border-danger hover:border-danger focus:border-outline-focus transition-colors;
+    border-color: rgba(220,38,37,var(--tw-bg-opacity)) !important;
 }
 
 .hint {

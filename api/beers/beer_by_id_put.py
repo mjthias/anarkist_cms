@@ -17,11 +17,11 @@ def _(beer_id):
         # Input values
         beer_id, error = validate.id(beer_id)
         if error:
-            return g.respond(400, f"Beer {error}")
+            return g.respond(400, {"info": f"Beer {error}", "key": "beer_style_id"})
 
         form_beer_id, error = validate.id(request.forms.get("beer_id"))
         if error:
-            return g.respond(400, f"Beer {error}")
+            return g.respond(400, {"info": f"Beer {error}", "key": "beer_style_id"})
 
         if form_beer_id != beer_id:
             return g.respond(400, "Beer ID's does not match.")
@@ -29,47 +29,47 @@ def _(beer_id):
 
         beer_name, error = validate.name(request.forms.get("beer_name"))
         if error:
-            return g.respond(400, error)
+            return g.respond(400, {"info": error, "key": "beer_name"})
 
         beer_ebc, error = validate.ebc(request.forms.get("beer_ebc"))
         if error:
-            return g.respond(400, error)
+            return g.respond(400, {"info": error, "key": "beer_ebc"})
 
         beer_ibu, error = validate.ibu(request.forms.get("beer_ibu"))
         if error:
-            return g.respond(400, error)
+            return g.respond(400, {"info": error, "key": "beer_ibu"})
 
         beer_alc, error = validate.alc(request.forms.get("beer_alc"))
         if error:
-            return g.respond(400, error)
+            return g.respond(400, {"info": error, "key": "beer_alc"})
 
         beer_price, error = validate.price(request.forms.get("beer_price"))
         if error:
-            return g.respond(400, error)
+            return g.respond(400, {"info": error, "key": "beer_price"})
 
         beer_description_en, error = validate.description(request.forms.get("beer_description_en"))
         if error:
-            return g.respond(400, error)
+            return g.respond(400, {"info": error, "key": "beer_description_en"})
 
         beer_description_dk, error = validate.description(request.forms.get("beer_description_dk"))
         if error:
-            return g.respond(400, error)
+            return g.respond(400, {"info": error, "key": "beer_description_dk"})
 
         # IF A IMAGE HAS BEEN UPLOADED, VALIDATE IT. ELSE SET THE VALUE TO OLD FILE NAME
         if request.files.get("beer_image") and not request.files.get("beer_image").filename == "empty":
             beer_image, error = validate.image(request.files.get("beer_image"))
             if error:
-                return g.respond(400, error)
+                return g.respond(400, {"info": error, "key": "beer_image"})
         else:
             beer_image = request.forms.get("beer_image_name")
 
         brewery_id, error = validate.id(request.forms.get("brewery_id"))
         if error:
-            return g.respond(400, f"Brewery {error}")
+            return g.respond(400, {"info": f"Brewery {error}", "key": "brewer_id"})
 
         beer_style_id, error = validate.id(request.forms.get("beer_style_id"))
         if error:
-            return g.respond(400, f"Beer style {error}")
+            return g.respond(400, {"info": f"Beer style {error}", "key": "beer_style_id"})
 
     except Exception as ex:
         print(str(ex))
@@ -152,6 +152,12 @@ def _(beer_id):
 
     except Exception as ex:
         print(str(ex))
+        if "beer_name" in str(ex):
+            return g.respond(400, {"info": "Beer already exists", "key": "beer_name"})
+        if "fk_brewery_id" in str(ex):
+            return g.respond(400, {"info": "Brewery does not exist", "key": "brewery_name"})
+        if "fk_beer_style_id" in str(ex):
+            return g.respond(400, {"info": "Beer style does not exist", "key": "beer_style_name"})
         return g.respond(500)
 
     finally:
