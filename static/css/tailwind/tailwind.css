@@ -4,6 +4,11 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+    font-family: pixel;
+    src: url(/static/fonts/freecam2.ttf);
+}
+
 :root {
     --tw-bg-opacity: 1;
     --menu-height: 3.375rem;

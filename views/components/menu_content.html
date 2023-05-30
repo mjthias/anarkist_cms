@@ -1,30 +1,39 @@
-<table>
-    <thead>
-        <tr>
-            <th>TAP</th>
-            <th>BEER</th>
-            <th>IBU</th>
-            <th>EBC</th>
-            <th>VOL.</th>
-            <th>DKK</th>
+<table class="w-full">
+    <thead class="text-left">
+        <tr class="text-[1.5vw] text-[rgba(0,247,247)]">
+            <th class="text-center pb-[1vw]">TAP</th>
+            <th class="pl-[1vw] w-[60vw] pb-[1vw]">BEER</th>
+            <th class="pb-[1vw] w-[7vw]">IBU</th>
+            <th class="pb-[1vw] w-[7vw]">EBC</th>
+            <th class="pb-[1vw] w-[12vw]">VOL.</th>
+            <th class="pb-[1vw] w-[5vw]">DKK</th>
         </tr>
     </thead>
     <tbody>
         % off_the_walls = []
         % for tap in taps:
             % if tap["tap_number"]:
-                <tr>
-                    <td>{{tap["tap_number"]}}</td>
-                    <td>
-                        <div>{{tap["beer_name"]}}</div>
-                        <div>{{tap["beer_style_name"]}}</div>
-                        <div>{{tap["brewery_name"]}}</div>
-                    </td>
-                    <td>{{tap["beer_ebc"]}}</td>
-                    <td>{{tap["beer_ibu"]}}</td>
-                    <td>{{tap["beer_alc"]}}</td>
-                    <td>{{int(tap["beer_price"])}}</td>
+                % if tap["tap_unavailable"]:
+
+                <tr class="text-[rgba(0,247,247)] border-t-[0.25vw] border-[rgba(255,255,255,0.3)] border-dashed h-[10.6vw]">
+                    <td class="text-[4.6vw] text-center">{{tap["tap_number"]}}</td>
+                    <td class="text-[2.3vw] pl-[1vw]">Unavailable</td>
                 </tr>
+
+                % else:
+                <tr class="border-t-[0.25vw] border-[rgba(255,255,255,0.3)] border-dashed h-[11vw]">
+                    <td class="text-[rgb(255,255,0)] text-[4.6vw] text-center">{{tap["tap_number"]}}</td>
+                    <td class="pl-[1vw]">
+                        <div class="text-[2.3vw] overflow-visible whitespace-nowrap w-[42vw]">{{tap["beer_name"]}}</div>
+                        <div class="text-[1.66vw]">{{tap["beer_style_name"]}}</div>
+                        <div class="text-[1.66vw]">{{tap["brewery_name"]}}</div>
+                    </td>
+                    <td class="text-[1.66vw] align-bottom pb-[1.2vw]">{{tap["beer_ebc"] or "-"}}</td>
+                    <td class="text-[1.66vw] align-bottom pb-[1.3vw]">{{tap["beer_ibu"] or "-"}}</td>
+                    <td class="text-[1.66vw] align-bottom pb-[1.3vw]">{{tap["beer_alc"]}}%</td>
+                    <td class="text-[3.7vw] align-bottom pb-[0.6vw]">{{int(tap["beer_price"])}}</td>
+                </tr>
+                % end
 
             % else:
                 % off_the_walls.append(tap)
