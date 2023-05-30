@@ -1,9 +1,8 @@
+# pylint: disable=W0612
 from bottle import put, request
-import utils.g as g
-import utils.vars as var
-import utils.validation as validate
 import pymysql
 import bcrypt
+from utils import g, vars as var, validation as validate
 
 ##############################
 
@@ -13,31 +12,29 @@ def _():
         # VALIDATE
         # Session
         session = validate.session()
-        if not session: return g.respond(401)
-
+        if not session:
+            return g.respond(401)
         user_id = session["user_id"]
 
-        # Keys allowed
-        allowed_keys = ["user_password", "user_new_password", "user_confirm_new_password"]
-        for key in request.forms.keys():
-            if not key in allowed_keys: return g.respond(403, f"Forbidden key: {key}")
-        
         # Current password
         user_password, error = validate.password(request.forms.get("user_password"))
-        if error: return g.respond(400, error)
+        if error:
+            return g.respond(400, error)
 
         # New password
         user_new_password, error = validate.password(request.forms.get("user_new_password"))
-        if error: return g.respond(400, error)
+        if error:
+            return g.respond(400, error)
 
         # Password to confirm
         user_confirm_new_password, error = validate.confirm_password(user_new_password, request.forms.get("user_confirm_new_password"))
-        if error: return g.respond(400, error)
-        
+        if error:
+            return g.respond(400, error)
+
     except Exception as ex:
         print(str(ex))
         return g.respond(500)
-    
+
     # CONNECT TO DB
     try:
         db_connect = pymysql.connect(**var.DB_CONFIG)
@@ -47,7 +44,8 @@ def _():
         # Select the user
         cursor.execute("SELECT * FROM users WHERE user_id = %s LIMIT 1", (user_id,))
         user = cursor.fetchone()
-        if not user: return g.respond(204)
+        if not user:
+            return g.respond(204)
 
         # VALIDATE PASSWORD
         user_password_bytes = user_password.encode("utf-8")
@@ -62,23 +60,24 @@ def _():
 
         # UPDATE USER IN DB
         cursor.execute("""
-            UPDATE users
-            SET user_password = %s
-            WHERE user_id = %s
+        UPDATE users
+        SET user_password = %s
+        WHERE user_id = %s
         """, (user_new_password, user_id))
 
         # No user affected
         counter = cursor.rowcount
-        if not counter: return g.respond(204)
-        
+        if not counter:
+            return g.respond(204)
+
         db_connect.commit()
         return g.respond(200, "Password was successfully updated.")
-    
+
     except Exception as ex:
         print(str(ex))
         db_connect.rollback()
         return g.respond(500)
-    
+
     finally:
         cursor.close()
         db_connect.close()
