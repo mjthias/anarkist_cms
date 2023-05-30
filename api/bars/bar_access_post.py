@@ -1,8 +1,6 @@
 from bottle import post, request
-import utils.vars as var
-import utils.validation as validate
-import utils.g as g
 import pymysql
+from utils import g, validation as validate, vars as var
 
 ##############################
 
@@ -11,21 +9,25 @@ def _():
     try:
         # VALIDATE
         session = validate.session()
-        if not session: return g.respond(401)
+        if not session:
+            return g.respond(401)
 
         # Staffs are 401
-        if session["role_id"] == 3: return g.respond(401)
+        if session["role_id"] == 3:
+            return g.respond(401)
 
         bar_id = session["bar_id"]
 
         user_id, error = validate.id(request.forms.get("user_id"))
-        if error: return g.respond(400, f"User {error}")
+        if error:
+            return g.respond(400, f"User {error}")
 
     except Exception as ex:
         print(ex)
-        g.respond(500)
+        return g.respond(500)
 
     try:
+        # POST TO DB
         db = pymysql.connect(**var.DB_CONFIG)
         cursor = db.cursor()
         cursor.execute("""
@@ -37,8 +39,8 @@ def _():
 
     except Exception as ex:
         print(ex)
-        g.respond(500)
-    
+        return g.respond(500)
+
     finally:
         cursor.close()
         db.close()
