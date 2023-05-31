@@ -71,7 +71,7 @@ def session():
 ##############################
 
 def limit(value):
-    if not value:
+    if value is None:
         return 50, None
     pattern = '^[1-9][0-9]*|(-1$)'
     invalid_message = "Limit must be a positive integer or '-1'."
