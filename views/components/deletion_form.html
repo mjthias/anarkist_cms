@@ -4,8 +4,9 @@
         <i onclick="toggleDeleteModal()" class="fa-solid fa-xmark absolute top-0 right-0 text-xl cursor-pointer mr-2 mt-1 transition-colors text-secondary hover:text-primary"></i>
         <div class="col-span-full">
             <input type="hidden" id="id_delete" name="id" value="{{ id }}" required />
-            <label for="confirm_delete">Confirm deletion</label>
-            <input type="text" id="confirm_deletion" name="confirm_deletion" pattern="DELETE" placeholder=" " required />
+            <label for="confirm_deletion">Confirm deletion</label>
+            <span class="hint-error block hidden"></span>
+            <input type="text" id="confirm_deletion" name="confirm_deletion" pattern="DELETE" placeholder=" " autocomplete="off" required />
             <span class="hint">Enter 'DELETE' to confirm deletion.</span>
         </div>
         <div class="col-span-full">
