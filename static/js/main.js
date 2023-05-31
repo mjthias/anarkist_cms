@@ -257,7 +257,7 @@ async function deleteItem(form, path) {
 
   if (!conn.ok) {
     const err = await conn.json();
-    console.log(err);
+    handleResponse(conn, err);
     return;
   }
 

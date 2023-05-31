@@ -1,4 +1,5 @@
-from bottle import delete
+# pylint: disable=W0612
+from bottle import delete, request
 import pymysql
 from utils import g, vars as var, validation as validate
 
@@ -16,6 +17,11 @@ def _(tap_id):
         tap_id, error = validate.id(tap_id)
         if error:
             return g.respond(400, error)
+
+        # Input values
+        x, error = validate.confirm_deletion(request.forms.get("confirm_deletion"))
+        if error:
+            return g.respond(400, {"info": error, "key": "confirm_deletion"})
 
     except Exception as ex:
         print(ex)

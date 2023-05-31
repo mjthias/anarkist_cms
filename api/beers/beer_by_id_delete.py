@@ -19,7 +19,7 @@ def _(beer_id=""):
 
         confirm_delete, error = validate.confirm_deletion(request.forms.get("confirm_deletion"))
         if error:
-            return g.respond(400, error)
+            return g.respond(400, {"info": error, "key": "confirm_deletion"})
 
     except Exception as ex:
         print(str(ex))
@@ -43,6 +43,8 @@ def _(beer_id=""):
 
     except Exception as ex:
         print(str(ex))
+        if "taps" in str(ex):
+            return g.respond(403, {"info": "One or more taps references this beer.", "key": "confirm_deletion"})
         return g.respond(500)
 
     finally:
