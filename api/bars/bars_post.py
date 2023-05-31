@@ -20,11 +20,11 @@ def _():
         if error:
             return g.respond(400, {"info": error, "key": "bar_name"})
 
-        bar_street, error = validate.name(request.forms.get("bar_street"))
+        bar_street, error = validate.street(request.forms.get("bar_street"))
         if error:
             return g.respond(400, {"info": error, "key": "bar_street"})
 
-        bar_city, error = validate.name(request.forms.get("bar_city"))
+        bar_city, error = validate.city(request.forms.get("bar_city"))
         if error:
             return g.respond(400, {"info": error, "key": "bar_city"})
 
