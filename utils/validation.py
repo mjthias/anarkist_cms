@@ -83,7 +83,7 @@ def limit(value):
 ##############################
 
 def offset(value):
-    if not value:
+    if value is None:
         return 0, None
     pattern = '^[0-9]*$'
     invalid_message = "Offset must be a positive integer."
