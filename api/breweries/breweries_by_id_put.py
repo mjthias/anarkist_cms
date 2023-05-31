@@ -1,6 +1,6 @@
 from bottle import put, request
 import pymysql
-from utils import g, vars as var, validation as validate
+from utils import g, vars as var, validation as validate, vercel
 
 ##############################
 
@@ -42,6 +42,16 @@ def _(brewery_id):
         if not counter:
             return g.respond(204)
         db.commit()
+
+        # IF ON TAP, DEPLOY VERCEL
+        cursor.execute("""
+        SELECT tap_id FROM taps_list
+        WHERE fk_brewery_id = %s
+        LIMIT 1
+        """, (brewery_id))
+        tap = cursor.fetchone()
+        if tap:
+            vercel.deploy()
 
         response_dict = {"name": brewery_name, "info": "Brewery was successfully updated."}
 

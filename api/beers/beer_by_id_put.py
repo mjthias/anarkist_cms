@@ -2,7 +2,7 @@ import time
 import os
 from bottle import put, request
 import pymysql
-from utils import g, vars as var, validation as validate
+from utils import g, vars as var, validation as validate, vercel
 
 ##############################
 
@@ -127,6 +127,16 @@ def _(beer_id):
         if not counter:
             return g.respond(204)
         db_connect.commit()
+
+        # CALL ASTRO HOOK IF BEER ON TAP
+        cursor.execute("""
+        SELECT tap_id FROM taps
+        WHERE fk_beer_id = %s
+        LIMIT 1
+        """, (beer_id))
+        tap = cursor.fetchone()
+        if tap:
+            vercel.deploy()
 
         # REMOVE OLD BEER IMAGE FROM SYSTEM
         if not beer_image_old == "" and not beer_image_old == beer_image:

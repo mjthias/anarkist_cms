@@ -1,6 +1,6 @@
 from bottle import put, request
 import pymysql
-from utils import g, validation as validate, vars as var
+from utils import g, validation as validate, vars as var, vercel
 
 ##############################
 
@@ -57,6 +57,9 @@ def _(bar_id):
         if not counter:
             return g.respond(204)
         db.commit()
+
+        # DEPLOY VERCEL
+        vercel.deploy()
 
         response_dict = {"name": bar_name, "info": "Bar was successfully updated."}
         return g.respond(200, response_dict)

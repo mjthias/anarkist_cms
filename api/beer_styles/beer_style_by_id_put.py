@@ -1,6 +1,6 @@
 from bottle import put, request
 import pymysql
-from utils import g, vars as var, validation as validate
+from utils import g, vars as var, validation as validate, vercel
 
 ##############################
 @put(f"{var.API_PATH}/beer-styles/<beer_style_id>")
@@ -44,6 +44,16 @@ def _(beer_style_id=""):
         if not counter:
             return g.respond(204)
         db_connect.commit()
+
+        # IF STYLE ON TAP, DEPLOY VERCEL
+        cursor.execute("""
+        SELECT tap_id FROM taps_list
+        WHERE fk_beer_style_id = %s
+        LIMIT 1
+        """, (beer_style_id))
+        tap = cursor.fetchone()
+        if tap:
+            vercel.deploy()
 
         response_dict = {"name": beer_style_name, "info": "Beer style was successfully updated."}
         return g.respond(200, response_dict)
