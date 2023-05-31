@@ -242,7 +242,7 @@ def name(value):
 
 ##############################
 def street(value):
-    pattern = '^[A-Za-z]{0,}[\s]{1}[0-9]+[0-9a-zA-Z\,\.\s]{0,}$'
+    pattern = '^[A-Za-zÆØÅæøå]{0,}[ ]{1}[1-9]{1}[0-9A-Za-z \,\.]{0,}$'
     missing_message = "Street is missing."
     invalid_min_message = f"Street must be at least {var.NAME_MIN_LEN} characters."
     invalid_max_message = f"Street must be less than {var.NAME_MAX_LEN} characters."
