@@ -205,7 +205,7 @@ def brewery_menu_name(value1, value2):
         if len(value1) > 50:
             return None, name_too_long_message
         return value1, None
-    
+
     menu_name_too_long_message = "Menu name can't be longer than the actual name."
     invalid_min_message = f"Brewery menu name must be at least {var.NAME_MIN_LEN} characters."
     invalid_max_message = "Brewery menu name must be less than 50 characters."
