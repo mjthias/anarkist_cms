@@ -19,7 +19,7 @@ def _(beer_id=""):
 
         confirm_delete, error = validate.confirm_deletion(request.forms.get("confirm_deletion"))
         if error:
-            return g.respond(400, error)
+            return g.respond(400, {"info": error, "key": "confirm_deletion"})
 
     except Exception as ex:
         print(str(ex))
