@@ -241,6 +241,42 @@ def name(value):
     return str(value), None
 
 ##############################
+def street(value):
+    pattern = '^[A-Za-zÆØÅæøå]{0,}[ ]{1}[1-9]{1}[0-9A-Za-z \,\.]{0,}$'
+    missing_message = "Street is missing."
+    invalid_min_message = f"Street must be at least {var.NAME_MIN_LEN} characters."
+    invalid_max_message = f"Street must be less than {var.NAME_MAX_LEN} characters."
+    invalid_message = "Street must contain at least 1 character and 1 digit."
+    if not value:
+        return None, missing_message
+    value = value.strip()
+    if len(value) < var.NAME_MIN_LEN:
+        return None, invalid_min_message
+    if len(value) > var.NAME_MAX_LEN:
+        return None, invalid_max_message
+    if not re.match(pattern, value):
+        return None, invalid_message
+    return str(value), None
+
+##############################
+def city(value):
+    pattern = '^[A-Za-zÆØÅæøå]{0,}[\s]?[A-Za-zÆØÅæøå]{0,}$'
+    missing_message = "City is missing."
+    invalid_min_message = f"City must be at least {var.NAME_MIN_LEN} characters."
+    invalid_max_message = f"City must be less than {var.NAME_MAX_LEN} characters."
+    invalid_message = "City can only contain alphabetical characters."
+    if not value:
+        return None, missing_message
+    value = value.strip()
+    if len(value) < var.NAME_MIN_LEN:
+        return None, invalid_min_message
+    if len(value) > var.NAME_MAX_LEN:
+        return None, invalid_max_message
+    if not re.match(pattern, value):
+        return None, invalid_message
+    return str(value), None
+
+##############################
 def zip_code(value):
     if not value:
         return None, "Zip code missing"
