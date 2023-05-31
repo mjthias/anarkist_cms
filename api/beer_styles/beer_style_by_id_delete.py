@@ -42,6 +42,8 @@ def _(beer_style_id=""):
 
     except Exception as ex:
         print(str(ex))
+        if "beers" in str(ex):
+            return g.respond(403, {"info": "One or more beers references this beer style.", "key": "confirm_deletion"})
         return g.respond(500)
 
     finally:
