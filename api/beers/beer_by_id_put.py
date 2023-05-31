@@ -81,31 +81,29 @@ def _(beer_id):
         db_connect.begin()
         cursor = db_connect.cursor()
 
-        # SELECT DB BEER
+        # SELECT DB BEER_IMAGE
         cursor.execute("""
-        SELECT * FROM beers 
+        SELECT beer_image FROM beers 
         WHERE beer_id = %s LIMIT 1
         """, (beer_id,))
-        beer = cursor.fetchone()
-        if not beer:
-            return g.respond(204)
-
-        # SAVE OLD IMAGE PATH
-        beer_image_old = beer["beer_image"]
+        beer_image_old = cursor.fetchone()['beer_image']
 
         # APPEND NEW VALUES TO BEER
-        beer['beer_name'] = beer_name
-        beer['fk_brewery_id'] = brewery_id
-        beer['beer_ebc'] = beer_ebc
-        beer['beer_ibu'] = beer_ibu
-        beer['beer_alc'] = beer_alc
-        beer['fk_beer_style_id'] = beer_style_id
-        beer['beer_price'] = beer_price
-        beer['beer_image'] = beer_image
-        beer['beer_description_en'] = beer_description_en
-        beer['beer_description_dk'] = beer_description_dk
-        beer['beer_updated_at'] = int(time.time())
-        beer['fk_beer_updated_by'] = session['user_id']
+        beer = (
+            beer_name,
+            brewery_id,
+            beer_ebc,
+            beer_ibu,
+            beer_alc,
+            beer_style_id,
+            beer_price,
+            beer_image,
+            beer_description_en,
+            beer_description_dk,
+            int(time.time()),
+            session['user_id'],
+            beer_id
+        )
 
         # UPDATE BEER
         cursor.execute("""
@@ -123,19 +121,7 @@ def _(beer_id):
         beer_updated_at = %s,
         fk_beer_updated_by = %s
         WHERE beer_id = %s
-        """, (beer['beer_name'],
-              beer['fk_brewery_id'],
-              beer['beer_ebc'],
-              beer['beer_ibu'],
-              beer['beer_alc'],
-              beer['fk_beer_style_id'],
-              beer['beer_price'],
-              beer['beer_image'],
-              beer['beer_description_en'],
-              beer['beer_description_dk'],
-              beer['beer_updated_at'],
-              beer['fk_beer_updated_by'],
-              beer['beer_id']))
+        """, beer)
 
         counter = cursor.rowcount
         if not counter:
