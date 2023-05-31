@@ -5,12 +5,12 @@
     % if not user["bar_id"] == current_topic:
         % current_topic = user["bar_id"]
         <li class="list-topic">
-            <h2>{{user["bar_name"]}}</h2>
-            <p class="text-lg font-normal">{{user["bar_street"]}}, {{user["bar_city"]}}</p>
+            <h2 class="text-2xl font-medium">{{user["bar_name"]}}</h2>
+            <p class="text-base font-normal text-secondary">{{user["bar_street"]}}, {{user["bar_city"]}}</p>
         </li>
     % end
 
-    <li data-topic="{{current_topic}}">
+    <li class="col-span-1" data-topic="{{current_topic}}">
         % include("components/user")
     </li>
 % end
