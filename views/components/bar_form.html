@@ -26,6 +26,7 @@
             % if defined("bar"):
                 value="{{bar['bar_street']}}"
             % end
+            pattern="^^[A-Za-zÆØÅæøå]{0,}[ ]{1}[1-9]{1}[0-9A-Za-z \\,\\.]{0,}$"
             minlength="2" 
             maxlength="50"
             placeholder=" "
@@ -61,6 +62,7 @@
             % if defined("bar"):
                 value="{{bar['bar_city']}}"
             % end
+            pattern="^[A-Za-zÆØÅæøå]{0,}[\s]?[A-Za-zÆØÅæøå]{0,}"
             minlength="2" 
             maxlength="50"
             placeholder=" "
