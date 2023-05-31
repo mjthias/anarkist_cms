@@ -289,6 +289,51 @@ class UnitTest(unittest.TestCase):
 
     ##############################
 
+    # Street
+    def test_valid_street(self):
+        cases = [
+            ("Bernstorffgade 7", "Bernstorffgade 7"),
+            ("Østerbrogade 12", "Østerbrogade 12"),
+            ("Åboulevard 47, 7.", "Åboulevard 47, 7."),
+            ("Nærumsgade 101, 3. tv", "Nærumsgade 101, 3. tv")
+        ]
+        for input, expected_result in cases:
+            result, error = validate.street(input)
+            self.assertEqual(result, expected_result)
+            self.assertEqual(error, None)
+
+    def test_invalid_street(self):
+        cases = ["", "a", "7", "Bernstorffgade", "78", "Bernstorffgade 0", "7 bernstorffsgade", "Bernstorffsgade7"]
+        for input in cases:
+            result, error = validate.street(input)
+            self.assertEqual(result, None)
+            self.assertEqual(type(error), str)
+
+    ##############################
+
+    # City
+    def test_valid_city(self):
+        cases = [
+            ("Brøndby Øster", "Brøndby Øster"),
+            ("Ålborg", "Ålborg"),
+            ("Nærum", "Nærum"),
+            ("Odense Ø", "Odense Ø"),
+            ("København V", "København V")
+        ]
+        for input, expected_result in cases:
+            result, error = validate.city(input)
+            self.assertEqual(result, expected_result)
+            self.assertEqual(error, None)
+
+    def test_invalid_city(self):
+        cases = ["a", "København4", "33", "Amagerbro 4", "asd asd asd"]
+        for input in cases:
+            result, error = validate.city(input)
+            self.assertEqual(result, None)
+            self.assertEqual(type(error), str)
+
+    ##############################
+
     # EBC
     def test_valid_ebc(self):
         cases = [
