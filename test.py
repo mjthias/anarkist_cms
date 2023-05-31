@@ -78,7 +78,7 @@ class UnitTest(unittest.TestCase):
             self.assertEqual(error, None)
 
     def test_invalid_offsets(self):
-        cases = [-1, "-1"]
+        cases = [-1, "-1", -100, "-100"]
         for input in cases:
             value, error = validate.offset(input)
             self.assertEqual(value, None)
