@@ -72,7 +72,7 @@ def session():
 
 def limit(value):
     invalid_message = "Limit must be a positive integer or '-1'."
-    if value == 0 or value == "0":
+    if value in (0, '0'):
         return None, invalid_message
     if not value:
         return 50, None
