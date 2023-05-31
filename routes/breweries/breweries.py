@@ -22,7 +22,7 @@ def _():
             return g.error_view(404)
 
         if request.params.get("name"):
-            brewery_name, error = validate.brewery_menu_name(request.params.get("name"))
+            brewery_name, error = validate.brewery_name(request.params.get("name"))
             if error:
                 return g.error_view(204)
         else: brewery_name = None
