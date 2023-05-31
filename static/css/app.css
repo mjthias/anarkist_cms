@@ -614,6 +614,10 @@ video {
   z-index: 50;
 }
 
+.col-span-1{
+  grid-column: span 1 / span 1;
+}
+
 .col-span-12{
   grid-column: span 12 / span 12;
 }
@@ -843,10 +847,6 @@ video {
   gap: 1rem;
 }
 
-.gap-8{
-  gap: 2rem;
-}
-
 .self-end{
   align-self: flex-end;
 }
@@ -995,10 +995,6 @@ video {
   padding-left: 1vw;
 }
 
-.pr-8{
-  padding-right: 2rem;
-}
-
 .pt-1{
   padding-top: 0.25rem;
 }
@@ -1067,6 +1063,11 @@ video {
 
 .text-\[7vw\]{
   font-size: 7vw;
+}
+
+.text-base{
+  font-size: 1rem;
+  line-height: 1.5rem;
 }
 
 .text-lg{
@@ -1741,6 +1742,10 @@ input.invalid {
 
 .hover\:text-primary:hover{
   color: rgba(255,255,255,1);
+}
+
+.hover\:underline:hover{
+  text-decoration-line: underline;
 }
 
 @media (min-width: 768px){
