@@ -1,6 +1,9 @@
 # pylint: disable=W0611
 import pymysql
-import hidden
+try:
+    import hidden
+except:
+    import hidden_expample as hidden
 
 # DB CONFIGURATION
 try:
