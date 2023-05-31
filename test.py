@@ -200,23 +200,28 @@ class UnitTest(unittest.TestCase):
     # BREWERY MENU NAME
     def test_valid_brewery_menu_names(self):
         cases = [
-            ("Anarkist", "Anarkist"),
-            (" Anarkist ", "Anarkist"),
-            ("123-Brewery", "123-Brewery"),
-            ("ÅBEN", "ÅBEN"),
-            ("anarkist", "anarkist"),
-            ("TOO OLD TO DIE YOUNG", "TOO OLD TO DIE YOUNG"),
+            ("Anarkist", "", "Anarkist"),
+            ("Anarkist", " Anarkist " ,"Anarkist"),
+            ("123-Brewery", "", "123-Brewery"),
+            ("ÅBEN", "ÅBEN" ,"ÅBEN"),
+            ("anarkist", "anarkist","anarkist"),
+            ("TOO OLD TO DIE YOUNG", "", "TOO OLD TO DIE YOUNG"),
+            ("Too Old To Die Young", "TOTDY", "TOTDY")
         ]
-        for input, expected_value in cases:
-            value, error = validate.brewery_menu_name(input)
+        for input1, input2, expected_value in cases:
+            value, error = validate.brewery_menu_name(input1, input2)
             self.assertEqual(value, expected_value)
             self.assertEqual(error, None)
 
     def test_invalid_brewery_menu_names(self):
-        cases = ["", "A", "#%!"]
-        for input in cases:
-            value, error = validate.brewery_menu_name(input)
-            self.assertEqual(value, None)
+        cases = [
+            ("a"*101, "", None),
+            ("A"*101, "A"*51, None),
+            ("#%!", "#%!", None)
+        ]
+        for input1, input2, expected_result in cases:
+            value, error = validate.brewery_menu_name(input1, input2)
+            self.assertEqual(value, expected_result)
             self.assertEqual(type(error), str)
 
     ##############################
