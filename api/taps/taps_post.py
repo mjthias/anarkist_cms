@@ -1,6 +1,6 @@
 from bottle import post, request
 import pymysql
-from utils import g, vars as var, validation as validate
+from utils import g, vars as var, validation as validate, vercel
 
 ##############################
 
@@ -27,11 +27,16 @@ def _():
     try:
         db = pymysql.connect(**var.DB_CONFIG)
         cursor = db.cursor()
-        cursor.execute("CALL insert_tap(%s, %s, %s)", (is_off_wall, beer_id, bar_id))
+        cursor.execute("""
+        CALL insert_tap(%s, %s, %s)
+        """, (is_off_wall, beer_id, bar_id))
         new_tap_id = cursor.fetchone()["tap_id"]
         db.commit()
-        response_dict = {"id": new_tap_id, "info": "Tap was successfully created", "entry_type": "tap"}
 
+        # DEPLOY VERCEL
+        vercel.deploy()
+
+        response_dict = {"id": new_tap_id, "info": "Tap was successfully created", "entry_type": "tap"}
         return g.respond(201, response_dict)
 
     except Exception as ex:

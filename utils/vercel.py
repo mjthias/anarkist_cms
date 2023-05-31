@@ -2,7 +2,7 @@
 import requests
 from utils import vars as var
 
-def _DEPLOY_VERCEL():
+def deploy():
     try:
         import production
         requests.get(var.VERCEL_DEPLOY_HOOK, timeout=5)
