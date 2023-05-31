@@ -183,15 +183,15 @@ def user_name(value):
 ##############################
 def brewery_name(value):
     missing_message = "Brewery name is missing."
-    invalid_min_message = "Brewery name must be at least 2 characters."
-    invalid_max_message = "Brewery name must be less than 100 characters."
+    invalid_min_message = f"Brewery name must be at least {var.NAME_MIN_LEN} characters."
+    invalid_max_message = f"Brewery name must be less than {var.NAME_MAX_LEN} characters."
     invalid_message = "Brewery name can only consist of alphabetic characters, spaces and '-'"
     if not value:
         return None, missing_message
     value = value.strip()
-    if len(value) < 2:
+    if len(value) < var.NAME_MIN_LEN:
         return None, invalid_min_message
-    if len(value) > 100:
+    if len(value) > var.NAME_MAX_LEN:
         return None, invalid_max_message
     pattern = "^[a-zA-Z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$"
     if not re.match(pattern, value):
@@ -199,22 +199,28 @@ def brewery_name(value):
     return str(value), None
 
 ##############################
-def brewery_menu_name(value):
-    missing_message = "Brewery menu name is missing."
-    invalid_min_message = "Brewery menu name must be at least 2 characters."
+def brewery_menu_name(value1, value2):
+    name_too_long_message = "Brewery name is too long for menu. Please provide a short menu name."
+    if not value2:
+        if len(value1) > 50:
+            return None, name_too_long_message
+        return value1, None
+
+    menu_name_too_long_message = "Menu name can't be longer than the actual name."
+    invalid_min_message = f"Brewery menu name must be at least {var.NAME_MIN_LEN} characters."
     invalid_max_message = "Brewery menu name must be less than 50 characters."
     invalid_message = "Brewery menu name can only consist of alphabetic characters, spaces and '-'"
-    if not value:
-        return None, missing_message
-    value = value.strip()
-    if len(value) < 2:
+    value2 = value2.strip()
+    if len(value2) > len(value1):
+        return None, menu_name_too_long_message
+    if len(value2) < var.NAME_MIN_LEN:
         return None, invalid_min_message
-    if len(value) > 100:
+    if len(value2) > 50:
         return None, invalid_max_message
     pattern = "^[a-zA-Z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$"
-    if not re.match(pattern, value):
+    if not re.match(pattern, value2):
         return None, invalid_message
-    return str(value), None
+    return str(value2), None
 
 ##############################
 def confirm_deletion(value):

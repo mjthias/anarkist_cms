@@ -17,19 +17,9 @@ def _():
         if error:
             return g.respond(400, {"info": error, "key": "brewery_name"})
 
-        # Menu_name only required if len(name) > 50
-        if not request.forms.get("brewery_menu_name"):
-            if len(brewery_name) > 50:
-                return g.respond(400, {"info": "Brewery name is too long for menu. Please provide a short menu name", "key": "brewery_menu_name"})
-            brewery_menu_name = brewery_name
-
-        else:
-            brewery_menu_name, error = validate.brewery_menu_name(request.forms.get("brewery_menu_name"))
-            if error:
-                return g.respond(400, {"info": error, "key": "brewery_menu_name"})
-
-            if len(brewery_menu_name) > len(brewery_name):
-                return g.respond(400, {"info": "Menu name can't be longer than the actual name", "key": "brewery_menu_name"})
+        brewery_menu_name, error = validate.brewery_menu_name(brewery_name, request.forms.get("brewery_menu_name"))
+        if error:
+            return g.respond(400, {"info": error, "key": "brewery_menu_name"})
 
     except Exception as ex:
         print(ex)

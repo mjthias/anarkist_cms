@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: May 30, 2023 at 11:48 AM
+-- Generation Time: May 31, 2023 at 12:09 PM
 -- Server version: 5.7.39
 -- PHP Version: 8.2.0
 
@@ -175,7 +175,7 @@ INSERT INTO `bar_access` (`fk_bar_id`, `fk_user_id`) VALUES
 
 CREATE TABLE `beers` (
   `beer_id` bigint(20) UNSIGNED NOT NULL,
-  `beer_name` varchar(50) NOT NULL,
+  `beer_name` varchar(100) NOT NULL,
   `fk_brewery_id` bigint(20) UNSIGNED NOT NULL,
   `beer_ebc` varchar(3) DEFAULT NULL,
   `beer_ibu` varchar(3) DEFAULT NULL,
@@ -201,7 +201,7 @@ INSERT INTO `beers` (`beer_id`, `beer_name`, `fk_brewery_id`, `beer_ebc`, `beer_
 (3, 'Bloody Weizen', 1, '12', '15', '5.20', 4, 55, 'c5702bd9-ff51-4c54-8c4c-b3cbea83d1e2.png', 'Hybrid wheatbeer with blood orange', 'Hybrid hvedeøl med blodappelsin', 1684620260, 1, 1684620260, 1),
 (4, 'Juicy Galaxy', 1, '17', '65', '7.50', 5, 55, 'cd41ae18-bfa3-41e7-8cb2-15e0f6c047a0.png', '', '', 1684621341, 1, 1684664585, 2),
 (9, 'Mojnerfucker', 2, '', '50', '10.00', 10, 85, '', '', '', 1685028684, 1, 1685028684, 1),
-(14, 'Motueka Lager', 1, '10', '40', '5.20', 14, 55, '9398c75f-6ff5-424f-9607-feede1495f78.png', '', '', 1685296121, 1, 1685300065, 1);
+(14, 'Motueka Lager', 1, '10', '40', '5.20', 14, 55, '9398c75f-6ff5-424f-9607-feede1495f78.png', '', '', 1685296121, 1, 1685466846, 2);
 
 -- --------------------------------------------------------
 
@@ -211,7 +211,7 @@ INSERT INTO `beers` (`beer_id`, `beer_name`, `fk_brewery_id`, `beer_ebc`, `beer_
 --
 CREATE TABLE `beers_list` (
 `beer_id` bigint(20) unsigned
-,`beer_name` varchar(50)
+,`beer_name` varchar(100)
 ,`fk_brewery_id` bigint(20) unsigned
 ,`beer_ebc` varchar(3)
 ,`beer_ibu` varchar(3)
@@ -226,7 +226,7 @@ CREATE TABLE `beers_list` (
 ,`beer_updated_at` int(10) unsigned
 ,`fk_beer_updated_by` bigint(20) unsigned
 ,`brewery_name` varchar(100)
-,`beer_style_name` varchar(50)
+,`beer_style_name` varchar(100)
 ,`beer_created_by_user_name` varchar(100)
 ,`beer_updated_by_user_name` varchar(100)
 );
@@ -239,7 +239,7 @@ CREATE TABLE `beers_list` (
 
 CREATE TABLE `beer_styles` (
   `beer_style_id` bigint(20) UNSIGNED NOT NULL,
-  `beer_style_name` varchar(50) NOT NULL
+  `beer_style_name` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -343,7 +343,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`session_id`, `fk_user_id`, `session_iat`) VALUES
-(142, 1, 1685444068);
+(152, 1, 1685534515);
 
 -- --------------------------------------------------------
 
@@ -380,7 +380,8 @@ INSERT INTO `taps` (`tap_id`, `tap_number`, `fk_beer_id`, `fk_bar_id`, `tap_unav
 (40, 7, 1, 1, 0),
 (41, 8, 14, 1, 0),
 (42, 3, 14, 2, 0),
-(43, 4, 4, 2, 0);
+(43, 4, 4, 2, 0),
+(44, 9, 1, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -395,14 +396,14 @@ CREATE TABLE `taps_list` (
 ,`fk_bar_id` bigint(20) unsigned
 ,`tap_unavailable` tinyint(1)
 ,`beer_id` bigint(20) unsigned
-,`beer_name` varchar(50)
+,`beer_name` varchar(100)
 ,`beer_ebc` varchar(3)
 ,`beer_ibu` varchar(3)
 ,`beer_alc` varchar(5)
 ,`beer_price` double unsigned
 ,`beer_image` varchar(41)
 ,`brewery_name` varchar(100)
-,`beer_style_name` varchar(50)
+,`beer_style_name` varchar(100)
 ,`beer_description_en` varchar(500)
 ,`beer_description_dk` varchar(500)
 );
@@ -605,25 +606,25 @@ ALTER TABLE `user_roles`
 -- AUTO_INCREMENT for table `bars`
 --
 ALTER TABLE `bars`
-  MODIFY `bar_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `bar_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `beers`
 --
 ALTER TABLE `beers`
-  MODIFY `beer_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `beer_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
 
 --
 -- AUTO_INCREMENT for table `beer_styles`
 --
 ALTER TABLE `beer_styles`
-  MODIFY `beer_style_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `beer_style_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `breweries`
 --
 ALTER TABLE `breweries`
-  MODIFY `brewery_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `brewery_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `ingredients`
@@ -641,19 +642,19 @@ ALTER TABLE `pizzas`
 -- AUTO_INCREMENT for table `sessions`
 --
 ALTER TABLE `sessions`
-  MODIFY `session_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=143;
+  MODIFY `session_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=153;
 
 --
 -- AUTO_INCREMENT for table `taps`
 --
 ALTER TABLE `taps`
-  MODIFY `tap_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `tap_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `user_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- Constraints for dumped tables
