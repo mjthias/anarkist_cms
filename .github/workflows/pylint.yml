@@ -22,5 +22,5 @@ jobs:
       run: |
         pylint $(git ls-files '*.py')
     - name: Run test.py
-        run: |
-          python test.py
+      run: |
+        python test.py
