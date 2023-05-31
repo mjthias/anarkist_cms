@@ -3,10 +3,10 @@
 <div id="spa" data-page_title="Breweries" data-page_url="/breweries">
     <header class="sub-menu">
         <h1>Breweries</h1>
-        <div class="flex gap-8 items-center">
-            <form class="flex items-center" onsubmit="return false;">
-                <input oninput="searchContentList()" type="text" class="sub-menu-search mr-2">
-                <i class="fa-solid fa-magnifying-glass"></i>
+        <div class="flex gap-4 items-center">
+            <form class="flex items-center relative" onsubmit="return false;">
+                <input oninput="searchContentList()" type="text" class="sub-menu-search" placeholder="Search...">
+                <i class="fa-solid fa-magnifying-glass absolute pointer-events-none text-secondary right-2"></i>
             </form>
             % include("components/href_plus", href="/breweries/create")
         </div>

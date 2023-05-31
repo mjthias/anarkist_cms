@@ -1,5 +1,9 @@
 % user_url = f"/users/{user['user_id']}"
-<a href="{{user_url}}" onclick="spa('{{user_url}}'); return false">
-    <p class="text-lg leading-none mb-1">{{user["user_name"]}}</p>
-    <p class="text-sm">{{user["user_email"]}}</p>
+<a 
+    href="{{user_url}}"
+    onclick="spa('{{user_url}}'); return false"
+    class="inline-flex flex-col"
+>
+    <span class="text-lg leading-none mb-1">{{user["user_name"]}}</span>
+    <span class="text-sm text-secondary">{{user["user_email"]}}</span>
 </a>

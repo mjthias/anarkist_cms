@@ -95,7 +95,7 @@ input:not([type="file"]):not([type="checkbox"]):not(.sub-menu-search):not(.inval
 }
 
 .sub-menu-search {
-    @apply w-full outline-none bg-input-bg border border-outline px-2 h-8 rounded focus:border-outline-focus transition-colors;
+    @apply w-full outline-none bg-input-bg border border-outline pl-2 pr-8 h-8 rounded focus:border-outline-focus transition-colors;
 }
 
 input[type='file'] {
