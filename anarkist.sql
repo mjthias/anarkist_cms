@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:8889
--- Generation Time: May 30, 2023 at 07:02 AM
+-- Generation Time: May 31, 2023 at 05:41 PM
 -- Server version: 5.7.39
 -- PHP Version: 8.2.0
 
@@ -50,16 +50,22 @@ CREATE DEFINER=`anarkist`@`%` PROCEDURE `delete_tap` (IN `_tap_id` BIGINT UNSIGN
     SELECT _max_tap_number;
 END$$
 
-CREATE DEFINER=`anarkist`@`%` PROCEDURE `get_beers_by_fuzzy_name` (IN `_beer_name` VARCHAR(50), IN `_limit` INT UNSIGNED, IN `_offset` INT UNSIGNED)   SELECT * FROM beers_list
+CREATE DEFINER=`anarkist`@`%` PROCEDURE `get_beers_by_fuzzy_name` (IN `_search_term` VARCHAR(100), IN `_limit` INT UNSIGNED, IN `_offset` INT UNSIGNED)   SELECT * FROM beers_list
 WHERE LOWER(SOUNDEX(beer_name))
-LIKE LOWER(REPLACE(CONCAT("%", SOUNDEX(_beer_name), "%"), " ", "%"))
+LIKE LOWER(REPLACE(CONCAT("%", SOUNDEX(_search_term), "%"), " ", "%"))
+
+OR LOWER(SOUNDEX(brewery_name))
+LIKE LOWER(REPLACE(CONCAT("%", SOUNDEX(_search_term), "%"), " ", "%"))
 
 OR LOWER(beer_name)
-LIKE LOWER(REPLACE(CONCAT("%", (_beer_name), "%"), " ", "%"))
+LIKE LOWER(REPLACE(CONCAT("%", (_search_term), "%"), " ", "%"))
+
+OR LOWER(brewery_name)
+LIKE LOWER(REPLACE(CONCAT("%", (_search_term), "%"), " ", "%"))
 
 LIMIT _offset,_limit$$
 
-CREATE DEFINER=`anarkist`@`%` PROCEDURE `get_beer_style_by_fuzzy_name` (IN `_beer_style_name` VARCHAR(50), IN `_offset` INT UNSIGNED, IN `_limit` INT)   SELECT * FROM beer_styles
+CREATE DEFINER=`anarkist`@`%` PROCEDURE `get_beer_style_by_fuzzy_name` (IN `_beer_style_name` VARCHAR(100), IN `_offset` INT UNSIGNED, IN `_limit` INT)   SELECT * FROM beer_styles
 WHERE LOWER(SOUNDEX(beer_style_name))
 LIKE LOWER(REPLACE(CONCAT("%", SOUNDEX(_beer_style_name), "%"), " ", "%"))
 OR LOWER(beer_style_name)
@@ -100,6 +106,26 @@ LIKE LOWER(REPLACE(CONCAT("%", (_search_term), "%"), " ", "%"))
 AND user_role_id >= _role_id AND user_id != _user_id
 
 LIMIT _offset,_limit$$
+
+CREATE DEFINER=`anarkist`@`%` PROCEDURE `insert_session` (IN `_user_id` BIGINT UNSIGNED, IN `_session_iat` INT UNSIGNED)   BEGIN
+
+IF (SELECT COUNT(*) FROM sessions
+WHERE sessions.fk_user_id = _user_id) = 0
+
+THEN
+INSERT INTO sessions (fk_user_id, session_iat)
+VALUES (_user_id, _session_iat);
+
+ELSE
+UPDATE sessions
+SET session_iat = _session_iat
+WHERE fk_user_id = _user_id;
+
+END IF;
+
+SELECT session_id FROM sessions
+WHERE fk_user_id = _user_id;
+END$$
 
 CREATE DEFINER=`anarkist`@`%` PROCEDURE `insert_tap` (IN `_is_off_wall` BOOLEAN, IN `_beer_id` BIGINT UNSIGNED, IN `_bar_id` BIGINT UNSIGNED)   BEGIN
     DECLARE _tap_number INT UNSIGNED;
@@ -142,7 +168,7 @@ CREATE TABLE `bars` (
 --
 
 INSERT INTO `bars` (`bar_id`, `bar_name`, `bar_street`, `bar_zip_code`, `bar_city`) VALUES
-(1, 'Anarkist Bars', 'Bernstorffsgade 7', '1786', 'København V'),
+(1, 'Anarkist Bar', 'Bernstorffsgade 7', '1786', 'København V'),
 (2, 'Anarkist Beer & Food Lab', 'Albanigade 20', '5000', 'Odense C');
 
 -- --------------------------------------------------------
@@ -172,7 +198,7 @@ INSERT INTO `bar_access` (`fk_bar_id`, `fk_user_id`) VALUES
 
 CREATE TABLE `beers` (
   `beer_id` bigint(20) UNSIGNED NOT NULL,
-  `beer_name` varchar(50) NOT NULL,
+  `beer_name` varchar(100) NOT NULL,
   `fk_brewery_id` bigint(20) UNSIGNED NOT NULL,
   `beer_ebc` varchar(3) DEFAULT NULL,
   `beer_ibu` varchar(3) DEFAULT NULL,
@@ -208,7 +234,7 @@ INSERT INTO `beers` (`beer_id`, `beer_name`, `fk_brewery_id`, `beer_ebc`, `beer_
 (135, 'Beer Geek Breakfast', 62, '', '', '7.50', 76, 75, 'd363e669-b81d-4f97-99ad-6d6e747eb8e3.jpeg', '', '', 1685386473, 22, 1685386986, 22),
 (136, 'Revision', 60, '', '', '6.40', 82, 65, '412660ad-0c38-4356-9b2d-9a8fefe4635e.jpeg', '', '', 1685386652, 22, 1685386652, 22),
 (137, 'Beer Geek Brunch', 62, '', '', '10.60', 76, 80, 'd9845512-9c03-412c-b51d-bc906dc3fd0b.jpeg', '', '', 1685386968, 22, 1685386968, 22),
-(138, 'Passion Pool', 62, '', '', '6.60', 83, 70, 'b7b6acee-7c2a-4b24-86da-3dbb5a796279.jpeg', '', '', 1685387039, 22, 1685387039, 22),
+(138, 'Passion Pool', 62, '', '', '6.60', 83, 70, 'b7b6acee-7c2a-4b24-86da-3dbb5a796279.jpeg', '', '', 1685387039, 22, 1685431861, 22),
 (139, 'CPHaze', 61, '', '', '6.50', 75, 60, '3355a444-fe0c-494f-ae26-180fc9a974c0.jpeg', '', '', 1685387097, 22, 1685387097, 22),
 (140, 'Quick n Dirty', 59, '', '', '7.40', 75, 65, 'b583b26a-58ee-4df8-8c52-1b6192ed49fd.jpeg', '', '', 1685387139, 22, 1685387284, 22),
 (141, 'All My Friends Are Drunk', 60, '', '', '11.20', 105, 80, 'aa78dcea-c824-4e78-8d4b-614f32720466.jpeg', '', '', 1685387361, 22, 1685387361, 22);
@@ -221,7 +247,7 @@ INSERT INTO `beers` (`beer_id`, `beer_name`, `fk_brewery_id`, `beer_ebc`, `beer_
 --
 CREATE TABLE `beers_list` (
 `beer_id` bigint(20) unsigned
-,`beer_name` varchar(50)
+,`beer_name` varchar(100)
 ,`fk_brewery_id` bigint(20) unsigned
 ,`beer_ebc` varchar(3)
 ,`beer_ibu` varchar(3)
@@ -236,7 +262,8 @@ CREATE TABLE `beers_list` (
 ,`beer_updated_at` int(10) unsigned
 ,`fk_beer_updated_by` bigint(20) unsigned
 ,`brewery_name` varchar(100)
-,`beer_style_name` varchar(50)
+,`brewery_menu_name` varchar(50)
+,`beer_style_name` varchar(100)
 ,`beer_created_by_user_name` varchar(100)
 ,`beer_updated_by_user_name` varchar(100)
 );
@@ -249,7 +276,7 @@ CREATE TABLE `beers_list` (
 
 CREATE TABLE `beer_styles` (
   `beer_style_id` bigint(20) UNSIGNED NOT NULL,
-  `beer_style_name` varchar(50) NOT NULL
+  `beer_style_name` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -411,7 +438,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`session_id`, `fk_user_id`, `session_iat`) VALUES
-(138, 22, 1685429766);
+(173, 22, 1685554522);
 
 -- --------------------------------------------------------
 
@@ -438,7 +465,7 @@ INSERT INTO `taps` (`tap_id`, `tap_number`, `fk_beer_id`, `fk_bar_id`, `tap_unav
 (61, 4, 138, 1, 0),
 (62, 5, 124, 1, 0),
 (63, 6, 130, 1, 0),
-(64, 7, 139, 1, 0),
+(64, 7, 139, 1, 1),
 (65, 8, 123, 1, 0),
 (66, 9, 136, 1, 0),
 (67, 10, 134, 1, 0),
@@ -450,8 +477,18 @@ INSERT INTO `taps` (`tap_id`, `tap_number`, `fk_beer_id`, `fk_bar_id`, `tap_unav
 (75, NULL, 133, 1, 0),
 (76, 14, 140, 1, 0),
 (77, 15, 126, 1, 0),
-(78, 16, NULL, 1, 0),
-(80, 17, 141, 1, 0);
+(78, 16, 138, 1, 0),
+(80, 17, 141, 1, 0),
+(93, 18, 131, 1, 0),
+(94, 19, 141, 1, 0),
+(95, 20, 123, 1, 0),
+(96, 21, 141, 1, 0),
+(97, 22, 129, 1, 0),
+(98, 23, 132, 1, 0),
+(99, 24, 123, 1, 0),
+(100, 25, 126, 1, 0),
+(101, 26, 124, 1, 0),
+(102, NULL, 133, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -466,14 +503,15 @@ CREATE TABLE `taps_list` (
 ,`fk_bar_id` bigint(20) unsigned
 ,`tap_unavailable` tinyint(1)
 ,`beer_id` bigint(20) unsigned
-,`beer_name` varchar(50)
+,`beer_name` varchar(100)
 ,`beer_ebc` varchar(3)
 ,`beer_ibu` varchar(3)
 ,`beer_alc` varchar(5)
 ,`beer_price` double unsigned
 ,`beer_image` varchar(41)
 ,`brewery_name` varchar(100)
-,`beer_style_name` varchar(50)
+,`brewery_menu_name` varchar(50)
+,`beer_style_name` varchar(100)
 ,`beer_description_en` varchar(500)
 ,`beer_description_dk` varchar(500)
 );
@@ -547,7 +585,7 @@ INSERT INTO `user_roles` (`user_role_id`, `user_role_title`) VALUES
 --
 DROP TABLE IF EXISTS `beers_list`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`anarkist`@`%` SQL SECURITY DEFINER VIEW `beers_list`  AS SELECT `beers`.`beer_id` AS `beer_id`, `beers`.`beer_name` AS `beer_name`, `beers`.`fk_brewery_id` AS `fk_brewery_id`, `beers`.`beer_ebc` AS `beer_ebc`, `beers`.`beer_ibu` AS `beer_ibu`, `beers`.`beer_alc` AS `beer_alc`, `beers`.`fk_beer_style_id` AS `fk_beer_style_id`, `beers`.`beer_price` AS `beer_price`, `beers`.`beer_image` AS `beer_image`, `beers`.`beer_description_en` AS `beer_description_en`, `beers`.`beer_description_dk` AS `beer_description_dk`, `beers`.`beer_created_at` AS `beer_created_at`, `beers`.`fk_beer_created_by` AS `fk_beer_created_by`, `beers`.`beer_updated_at` AS `beer_updated_at`, `beers`.`fk_beer_updated_by` AS `fk_beer_updated_by`, `breweries`.`brewery_name` AS `brewery_name`, `beer_styles`.`beer_style_name` AS `beer_style_name`, `c`.`user_name` AS `beer_created_by_user_name`, `u`.`user_name` AS `beer_updated_by_user_name` FROM ((((`beers` join `beer_styles` on((`beers`.`fk_beer_style_id` = `beer_styles`.`beer_style_id`))) join `breweries` on((`beers`.`fk_brewery_id` = `breweries`.`brewery_id`))) left join `users` `c` on((`beers`.`fk_beer_created_by` = `c`.`user_id`))) left join `users` `u` on((`beers`.`fk_beer_updated_by` = `u`.`user_id`))) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`anarkist`@`%` SQL SECURITY DEFINER VIEW `beers_list`  AS SELECT `beers`.`beer_id` AS `beer_id`, `beers`.`beer_name` AS `beer_name`, `beers`.`fk_brewery_id` AS `fk_brewery_id`, `beers`.`beer_ebc` AS `beer_ebc`, `beers`.`beer_ibu` AS `beer_ibu`, `beers`.`beer_alc` AS `beer_alc`, `beers`.`fk_beer_style_id` AS `fk_beer_style_id`, `beers`.`beer_price` AS `beer_price`, `beers`.`beer_image` AS `beer_image`, `beers`.`beer_description_en` AS `beer_description_en`, `beers`.`beer_description_dk` AS `beer_description_dk`, `beers`.`beer_created_at` AS `beer_created_at`, `beers`.`fk_beer_created_by` AS `fk_beer_created_by`, `beers`.`beer_updated_at` AS `beer_updated_at`, `beers`.`fk_beer_updated_by` AS `fk_beer_updated_by`, `breweries`.`brewery_name` AS `brewery_name`, `breweries`.`brewery_menu_name` AS `brewery_menu_name`, `beer_styles`.`beer_style_name` AS `beer_style_name`, `c`.`user_name` AS `beer_created_by_user_name`, `u`.`user_name` AS `beer_updated_by_user_name` FROM ((((`beers` join `beer_styles` on((`beers`.`fk_beer_style_id` = `beer_styles`.`beer_style_id`))) join `breweries` on((`beers`.`fk_brewery_id` = `breweries`.`brewery_id`))) left join `users` `c` on((`beers`.`fk_beer_created_by` = `c`.`user_id`))) left join `users` `u` on((`beers`.`fk_beer_updated_by` = `u`.`user_id`))) ;
 
 -- --------------------------------------------------------
 
@@ -556,7 +594,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`anarkist`@`%` SQL SECURITY DEFINER VIEW `bee
 --
 DROP TABLE IF EXISTS `taps_list`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`anarkist`@`%` SQL SECURITY DEFINER VIEW `taps_list`  AS SELECT `taps`.`tap_id` AS `tap_id`, `taps`.`tap_number` AS `tap_number`, `taps`.`fk_beer_id` AS `fk_beer_id`, `taps`.`fk_bar_id` AS `fk_bar_id`, `taps`.`tap_unavailable` AS `tap_unavailable`, `beers_list`.`beer_id` AS `beer_id`, `beers_list`.`beer_name` AS `beer_name`, `beers_list`.`beer_ebc` AS `beer_ebc`, `beers_list`.`beer_ibu` AS `beer_ibu`, `beers_list`.`beer_alc` AS `beer_alc`, `beers_list`.`beer_price` AS `beer_price`, `beers_list`.`beer_image` AS `beer_image`, `beers_list`.`brewery_name` AS `brewery_name`, `beers_list`.`beer_style_name` AS `beer_style_name`, `beers_list`.`beer_description_en` AS `beer_description_en`, `beers_list`.`beer_description_dk` AS `beer_description_dk` FROM (`taps` join `beers_list` on((`taps`.`fk_beer_id` = `beers_list`.`beer_id`))) ORDER BY (case when isnull(`taps`.`tap_number`) then 1 else 0 end) ASC, `taps`.`tap_number` ASC ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`anarkist`@`%` SQL SECURITY DEFINER VIEW `taps_list`  AS SELECT `taps`.`tap_id` AS `tap_id`, `taps`.`tap_number` AS `tap_number`, `taps`.`fk_beer_id` AS `fk_beer_id`, `taps`.`fk_bar_id` AS `fk_bar_id`, `taps`.`tap_unavailable` AS `tap_unavailable`, `beers_list`.`beer_id` AS `beer_id`, `beers_list`.`beer_name` AS `beer_name`, `beers_list`.`beer_ebc` AS `beer_ebc`, `beers_list`.`beer_ibu` AS `beer_ibu`, `beers_list`.`beer_alc` AS `beer_alc`, `beers_list`.`beer_price` AS `beer_price`, `beers_list`.`beer_image` AS `beer_image`, `beers_list`.`brewery_name` AS `brewery_name`, `beers_list`.`brewery_menu_name` AS `brewery_menu_name`, `beers_list`.`beer_style_name` AS `beer_style_name`, `beers_list`.`beer_description_en` AS `beer_description_en`, `beers_list`.`beer_description_dk` AS `beer_description_dk` FROM (`taps` join `beers_list` on((`taps`.`fk_beer_id` = `beers_list`.`beer_id`))) ORDER BY (case when isnull(`taps`.`tap_number`) then 1 else 0 end) ASC, `taps`.`tap_number` ASC ;
 
 -- --------------------------------------------------------
 
@@ -692,7 +730,7 @@ ALTER TABLE `beer_styles`
 -- AUTO_INCREMENT for table `breweries`
 --
 ALTER TABLE `breweries`
-  MODIFY `brewery_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=78;
+  MODIFY `brewery_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=79;
 
 --
 -- AUTO_INCREMENT for table `ingredients`
@@ -710,13 +748,13 @@ ALTER TABLE `pizzas`
 -- AUTO_INCREMENT for table `sessions`
 --
 ALTER TABLE `sessions`
-  MODIFY `session_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=139;
+  MODIFY `session_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=174;
 
 --
 -- AUTO_INCREMENT for table `taps`
 --
 ALTER TABLE `taps`
-  MODIFY `tap_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=93;
+  MODIFY `tap_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=103;
 
 --
 -- AUTO_INCREMENT for table `users`
