@@ -31,7 +31,7 @@ def _():
         beers = cursor.fetchall()
 
         # Return as rendered html
-        if request.headers.get("as_html"):
+        if request.headers.get("as-html"):
             return as_html(beers)
 
         return g.respond(200, beers)
