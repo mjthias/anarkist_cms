@@ -367,22 +367,27 @@ async function signIn(form) {
   }
 }
 
-async function selectLocation(form) {
+async function selectLocation() {
+  const barId = event.target.dataset.bar_id;
+  const form = new FormData();
   const errElm = document.querySelector(".hint-error");
+  
   errElm.classList.add("hidden");
   errElm.textContent = "";
+  form.append("bar_id", barId);
 
   const conn = await fetch('/select-location', {
     method: "POST",
-    body: new FormData(form)
+    body: form
   });
+
   if (!conn.ok) {
     const err = await conn.json();
     errElm.textContent = err.info;
     errElm.classList.remove("hidden");
-  } else {
-    window.location.href = "/";
+    return;
   }
+  window.location.href = "/";
 }
 
 async function searchBrewery() {
@@ -486,7 +491,7 @@ function selectSearchedItem(id=0, name="", target="", entryType="") {
 async function changeLocation() {
   const barId = event.target.dataset.bar_id
   const form = new FormData()
-  form.append("bars", barId)
+  form.append("bar_id", barId)
 
   const conn = await fetch("/select-location", {
     method: "POST",
