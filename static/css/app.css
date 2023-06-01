@@ -657,6 +657,10 @@ video {
   margin-bottom: 0.5rem;
 }
 
+.mb-4{
+  margin-bottom: 1rem;
+}
+
 .mb-6{
   margin-bottom: 1.5rem;
 }
@@ -699,10 +703,6 @@ video {
 
 .mt-\[var\(--menu-height\)\]{
   margin-top: var(--menu-height);
-}
-
-.mb-4{
-  margin-bottom: 1rem;
 }
 
 .block{
@@ -809,20 +809,16 @@ video {
   width: 100%;
 }
 
+.max-w-7xl{
+  max-width: 80rem;
+}
+
 .max-w-\[12rem\]{
   max-width: 12rem;
 }
 
 .max-w-\[12vw\]{
   max-width: 12vw;
-}
-
-.max-w-7xl{
-  max-width: 80rem;
-}
-
-.max-w-xl{
-  max-width: 36rem;
 }
 
 .flex-1{
@@ -881,10 +877,6 @@ video {
 
 .items-center{
   align-items: center;
-}
-
-.justify-start{
-  justify-content: flex-start;
 }
 
 .justify-center{
@@ -981,10 +973,6 @@ video {
   border-color: rgba(71,71,71,100);
 }
 
-.border-outline{
-  border-color: rgba(82,82,82,1);
-}
-
 .bg-\[rgb\(0\2c 0\2c 0\)\]{
   --tw-bg-opacity: 1;
   background-color: rgb(0 0 0 / var(--tw-bg-opacity));
@@ -1004,10 +992,6 @@ video {
 
 .bg-line{
   background-color: rgba(71,71,71,100);
-}
-
-.bg-input-bg{
-  background-color: rgba(45,45,45,1);
 }
 
 .bg-opacity-50{
@@ -1059,11 +1043,6 @@ video {
 .py-\[2vw\]{
   padding-top: 2vw;
   padding-bottom: 2vw;
-}
-
-.py-1{
-  padding-top: 0.25rem;
-  padding-bottom: 0.25rem;
 }
 
 .pb-\[2vw\]{
@@ -1329,7 +1308,14 @@ h2{
   margin-left: auto;
   margin-right: auto;
   max-width: 32rem;
-  padding: 1rem;
+  padding: 0.75rem;
+}
+
+@media (min-width: 768px){
+  .form-container{
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
 }
 
 .form-container-sm{
