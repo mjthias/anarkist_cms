@@ -1,5 +1,6 @@
-from bottle import post, request
+from bottle import post, request, response
 import pymysql
+import jwt
 from utils import g, validation as validate, vars as var
 
 ##############################
@@ -48,8 +49,19 @@ def _():
         bar_id = cursor.lastrowid
         db.commit()
 
-        response_dict = {"id": bar_id, "info": "Bar was successfully created", "entry_type": "bar"}
+        # Change bar in session
+        access_bar = {
+            "bar_id": bar_id,
+            "bar_name": bar_name,
+        }
+        session["bar_access"].append(access_bar)
+        session["bar_id"] = bar_id
+        session["bar_name"] = bar_name
 
+        encoded_jwt = jwt.encode(session, var.JWT_SECRET, algorithm="HS256")
+        response.set_cookie("anarkist", encoded_jwt, path="/")
+
+        response_dict = {"id": bar_id, "info": "Bar was successfully created", "entry_type": "bar"}
         return g.respond(201, response_dict)
 
     except Exception as ex:
