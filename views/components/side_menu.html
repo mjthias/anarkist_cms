@@ -1,4 +1,4 @@
-<aside id="side_menu" class="-translate-x-full md:translate-x-0 w-full fixed top-0 md:sticky col-span-12 md:col-span-3 md:top-[var(--menu-height)] xl:col-span-2 border border-line border-y-0 border-l-0 pt-2 mt-[var(--menu-height)] transition-transform bg-background">
+<aside id="side_menu" class="-translate-x-full md:translate-x-0 w-full fixed top-0 md:sticky col-span-12 md:col-span-3 md:top-[var(--menu-height)] xl:col-span-2 border border-line border-y-0 border-l-0 pt-2 mt-[var(--menu-height)] transition-transform bg-background z-20">
     % if not session["role_id"] == 3:
     <ul>
         % include("components/side_menu_item", href="/users", text="Users", icon="fa-solid fa-users")
