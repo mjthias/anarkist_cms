@@ -13,6 +13,8 @@
     <section class="form-container relative">
         <div class="message hidden"></div>
         % include("components/beer_form")
-        % include("components/deletion_form", id=beer['beer_id'], callBack='validateForm(deleteItem)', path='beers')
+        % if not beer["beer_on_tap"]:
+            % include("components/deletion_form", id=beer['beer_id'], callBack='validateForm(deleteItem)', path='beers')
+        % end
     </section>
 </div>
