@@ -17,7 +17,7 @@
         <span class="hint">Min. 2 and max. 50 characters.</span>
     </div>
     <div class="form-action-bar">
-        % if defined('beer_style'):
+        % if defined('beer_style') and not beer_style["style_on_beer"]:
             <input
                 type="hidden"
                 value="{{ beer_style['beer_style_id'] }}"
@@ -38,7 +38,17 @@
                     <div class="caret"></div>
                 </div>
             </div>
-            % else:
+
+        % elif defined('beer_style'):  
+        <input
+            type="hidden"
+            value="{{ beer_style['beer_style_id'] }}"
+            name="beer_style_id"
+            pattern="[1-9][0-9]" 
+            required
+        /> 
+        <button class="btn-primary" onclick="validateForm(updateItem)" data-path="beer-styles">Update beer style</button>
+        % else:
             <button class="btn-primary" onclick="validateForm(postItem)" data-path="beer-styles">Create beer style</button>
         % end
     </div>

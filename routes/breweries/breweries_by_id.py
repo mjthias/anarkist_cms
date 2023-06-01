@@ -26,7 +26,8 @@ def _(brewery_id):
         db = pymysql.connect(**var.DB_CONFIG)
         cursor = db.cursor()
         cursor.execute("""
-        SELECT breweries.*, taps_list.brewery_name AS brewery_on_tap FROM breweries
+        SELECT breweries.*, taps_list.brewery_name AS brewery_on_tap
+        FROM breweries
         LEFT JOIN taps_list 
         ON breweries.brewery_name = taps_list.brewery_name
         WHERE brewery_id = %s

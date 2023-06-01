@@ -24,7 +24,14 @@ def _(beer_id=""):
     try:
         db_connect = pymysql.connect(**var.DB_CONFIG)
         cursor = db_connect.cursor()
-        cursor.execute("SELECT * FROM beers_list WHERE beer_id = %s LIMIT 1", (beer_id,))
+        cursor.execute("""
+        SELECT beers_list.*, tap_id AS beer_on_tap
+        FROM beers_list
+        LEFT JOIN taps_list
+        ON beers_list.beer_id = taps_list.fk_beer_id
+        WHERE beers_list.beer_id = %s 
+        LIMIT 1
+        """, (beer_id,))
         beer = cursor.fetchone()
         if not beer:
             return g.error_view(404)

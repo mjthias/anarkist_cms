@@ -195,7 +195,7 @@
         <i onclick="removePreviewImage()" data-input-id="#beer_image" class="fa-solid fa-circle-xmark text-secondary hover:text-primary transition-colors cursor-pointer text-xl absolute top-0 right-0 mr-1"></i>
     </div>
     <div class="form-action-bar">
-        % if defined('beer'):
+        % if defined('beer') and not beer['beer_on_tap']:
             <input 
                 type="hidden" 
                 value="{{ beer['beer_id'] }}"
@@ -216,6 +216,15 @@
                     <div class="caret"></div>
                 </div>
             </div>
+        % elif defined('beer'):
+            <input 
+                type="hidden" 
+                value="{{ beer['beer_id'] }}"
+                name="beer_id" 
+                pattern="[1-9][0-9]*" 
+                required 
+            />
+            <button class="btn-primary" onclick="validateForm(updateItem)" data-path="beers">Update beer</button>
         % else:
             <button class="btn-primary" onclick="validateForm(postItem)" data-path="beers">Create beer</button>
         % end

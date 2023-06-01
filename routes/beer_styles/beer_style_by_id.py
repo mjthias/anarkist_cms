@@ -22,13 +22,17 @@ def _(beer_style_id):
         cursor = db_connect.cursor()
 
         cursor.execute("""
-            SELECT * FROM beer_styles 
-            WHERE beer_style_id = %s 
-            LIMIT 1
+        SELECT beer_styles.*, beer_id AS style_on_beer
+        FROM beer_styles 
+        LEFT JOIN beers
+        ON fk_beer_style_id = beer_style_id
+        WHERE beer_style_id = %s 
+        LIMIT 1
         """, (beer_style_id,))
         beer_style = cursor.fetchone()
         if not beer_style:
             return g.error_view(404)
+        print(beer_style)
 
         return dict(session=session, beer_style=beer_style)
 
