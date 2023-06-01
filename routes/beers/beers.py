@@ -47,7 +47,7 @@ def _():
         beers = cursor.fetchall()
 
         # Render beer_list.html only?
-        if request.headers.get("as_chunk"):
+        if request.headers.get("as-chunk"):
             return as_chunk(beers)
 
         return dict(beers = beers, session=session)

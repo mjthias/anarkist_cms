@@ -87,7 +87,7 @@ async function fetchChunck(endpoint, offset) {
   if (currentTopic) url += `&current-topic=${currentTopic}`
   
   const conn = await fetch(url, {
-    headers: {as_chunk: true}
+    headers: {"as-chunk": true}
   })
 
   if (!conn.ok) {
@@ -436,7 +436,7 @@ async function searchItem(name, path, searchList) {
 
   const conn = await fetch(`/api/v1/${path}/${name}?offset=0&limit=5`, {
     method: "GET",
-    headers: {as_html: true}
+    headers: {"as-html": true}
   });
   
   if (!conn.ok) {
@@ -463,7 +463,7 @@ async function searchBeers(){
   searchList.classList.remove("hidden")
 
   const conn = await fetch(`/api/v1/beers?name=${beerName}`, {
-    headers: {as_html : true}
+    headers: {"as-html" : true}
   })
 
   if (conn.status != 200) return
@@ -531,7 +531,7 @@ async function searchContentList() {
     return
   }
   const conn = await fetch(`${location.pathname}?name=${searchQuery}&limit=25`, {
-    headers: {as_chunk: true}
+    headers: {"as-chunk": true}
   })
   if (!conn.ok) {
     hideSearchContent()

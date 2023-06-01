@@ -37,7 +37,7 @@ def _(brewery_name=""):
         """, (brewery_name, offset, limit))
         breweries = cursor.fetchall()
 
-        if request.headers.get("as_html"):
+        if request.headers.get("as-html"):
             return as_html(breweries, brewery_name)
 
         if not breweries:

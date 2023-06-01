@@ -60,7 +60,7 @@ def _(bar_id, page_nr):
         taps = cursor.fetchall()
 
         # Return menu_content only
-        if request.headers.get("as_chunk"):
+        if request.headers.get("as-chunk"):
             return as_chunk(taps)
 
         return dict(taps = taps)

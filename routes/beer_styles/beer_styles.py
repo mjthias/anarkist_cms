@@ -43,7 +43,7 @@ def _():
         beer_styles = cursor.fetchall()
 
         # Render beer_styles_list.html only?
-        if request.headers.get("as_chunk"):
+        if request.headers.get("as-chunk"):
             return as_chunk(beer_styles)
 
         return dict(session=session, beer_styles=beer_styles)

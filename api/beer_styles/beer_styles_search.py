@@ -38,7 +38,7 @@ def _(beer_style_name=""):
         beer_styles = cursor.fetchall()
 
         # Return as rendered html
-        if request.headers.get("as_html"):
+        if request.headers.get("as-html"):
             return as_html(beer_styles, beer_style_name)
 
         if not beer_styles:
