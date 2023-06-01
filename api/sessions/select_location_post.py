@@ -1,5 +1,6 @@
 from bottle import post, request, response
 import jwt
+import pymysql
 from utils import g, vars as var, validation as validate
 
 ##############################
@@ -11,9 +12,27 @@ def _():
         if not session:
             return g.respond(401)
 
-        bar_id, error = validate.id(request.forms.get("bars"))
+        bar_id, error = validate.id(request.forms.get("bar_id"))
         if error:
             return g.respond(400, error)
+
+    except Exception as ex:
+        print(str(ex))
+        return g.respond(500)
+
+    try:
+        # Check if bar exists in DB
+        db_conn = pymysql.connect(**var.DB_CONFIG)
+        cursor = db_conn.cursor()
+
+        cursor.execute("""
+            SELECT * FROM bars 
+            WHERE bar_id = %s
+            LIMIT 1
+        """, bar_id)
+        bar = cursor.fetchone()
+        if not bar:
+            return g.respond(400, "Bar does not exist.")
 
         # Append bar id to session dict
         session["bar_id"] = bar_id
@@ -40,3 +59,7 @@ def _():
     except Exception as ex:
         print(str(ex))
         return g.respond(500)
+
+    finally:
+        cursor.close()
+        db_conn.close()
