@@ -20,10 +20,10 @@ def _():
         db_connect = pymysql.connect(**var.DB_CONFIG)
         cursor = db_connect.cursor()
         if role_id == 1:
-            cursor.execute("SELECT bar_id, bar_name FROM bars")
+            cursor.execute("SELECT * FROM bars")
         else:
             cursor.execute("""
-                SELECT bar_id, bar_name FROM bar_access
+                SELECT bar.* FROM bar_access
                 JOIN bars WHERE fk_user_id = %s AND fk_bar_id = bar_id;
                 """, (user_id))
         bars = cursor.fetchall()
