@@ -216,6 +216,8 @@ async function postItem(form, path) {
     return;
   }
 
+  if (path == "bars") return window.location.href = "/"
+
   const resp = await conn.json();
   form.reset();
 
