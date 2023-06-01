@@ -35,8 +35,6 @@ def _(beer_id=""):
         beer = cursor.fetchone()
         if not beer:
             return g.error_view(404)
-        
-        print(beer)
 
         beer['beer_price'] = g.format_price(beer["beer_price"])
         beer['beer_alc'] = g.format_price(float(beer['beer_alc']))
