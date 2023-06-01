@@ -348,6 +348,23 @@ async function postBarAccess() {
   spa(`/users/${userId}`);
 }
 
+async function deleteSignedInBar(form) {
+  const id = form.id.value;
+  const conn = await fetch(`/api/v1/bars/${id}`, {
+    method: "DELETE",
+    body: new FormData(form)
+  });
+
+  if (!conn.ok) {
+    const err = await conn.json();
+    handleResponse(conn, err);
+    return;
+  }
+
+  // Success
+  window.location.href = "/select-location"
+}
+
 async function signIn(form) {
   const errElm = document.querySelector(".hint-error");
   errElm.classList.add("hidden");
