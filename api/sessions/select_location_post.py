@@ -19,7 +19,7 @@ def _():
     except Exception as ex:
         print(str(ex))
         return g.respond(500)
-    
+
     try:
         # Check if bar exists in DB
         db_conn = pymysql.connect(**var.DB_CONFIG)
