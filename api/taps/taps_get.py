@@ -22,7 +22,7 @@ def _():
         limit_clause = ""
 
         # exlude limits if limit=-1
-        if limit != "-1":
+        if limit != -1:
             limit_clause = "LIMIT %(limit)s OFFSET %(offset)s"
             params["limit"] = limit
             params["offset"] = offset
