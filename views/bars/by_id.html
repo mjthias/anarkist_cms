@@ -8,6 +8,10 @@
     <section class="form-container relative">
         <div class="message hidden"></div>
         % include("components/bar_form")
-        % include("components/deletion_form", id=bar['bar_id'], callBack='validateForm(deleteItem)', path='bars')
+        % if session["bar_id"] == bar["bar_id"]:
+            % include("components/deletion_form", id=bar['bar_id'], callBack='validateForm(deleteSignedInBar)', path='bars')
+        % else:
+            % include("components/deletion_form", id=bar['bar_id'], callBack='validateForm(deleteItem)', path='bars')
+        % end
     </section>
 </div>
