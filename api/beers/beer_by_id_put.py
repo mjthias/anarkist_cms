@@ -141,7 +141,7 @@ def _(beer_id):
             vercel.deploy()
 
         # REMOVE OLD BEER IMAGE FROM SYSTEM
-        if not beer_image_old == None and not beer_image_old == beer_image:
+        if not beer_image_old is None and not beer_image_old == beer_image:
             os.remove(f"{var.IMAGE_PATH}{beer_image_old}")
 
         response_dict = {"name": beer_name, "info": "Beer was successfully updated."}
