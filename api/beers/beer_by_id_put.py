@@ -62,6 +62,8 @@ def _(beer_id):
                 return g.respond(400, {"info": error, "key": "beer_image"})
         else:
             beer_image = request.forms.get("beer_image_name")
+        if not beer_image:
+            beer_image = None
 
         brewery_id, error = validate.id(request.forms.get("brewery_id"))
         if error:
@@ -139,7 +141,7 @@ def _(beer_id):
             vercel.deploy()
 
         # REMOVE OLD BEER IMAGE FROM SYSTEM
-        if not beer_image_old == "" and not beer_image_old == beer_image:
+        if not beer_image_old is None and not beer_image_old == beer_image:
             os.remove(f"{var.IMAGE_PATH}{beer_image_old}")
 
         response_dict = {"name": beer_name, "info": "Beer was successfully updated."}

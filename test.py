@@ -337,7 +337,7 @@ class UnitTest(unittest.TestCase):
     # EBC
     def test_valid_ebc(self):
         cases = [
-            ("", ""),
+            ("", None),
             ("1", "1"),
             ("500", "500"),
             ("100", "100"),
@@ -360,7 +360,7 @@ class UnitTest(unittest.TestCase):
     # IBU
     def test_valid_ibu(self):
         cases = [
-            ("", ""),
+            ("", None),
             ("1", "1"),
             ("500", "500"),
             ("100", "100"),
@@ -405,7 +405,7 @@ class UnitTest(unittest.TestCase):
     # DESCRIPTIONS
     def test_valid_descriptions(self):
         cases = [
-            ("", ""),
+            ("", None),
             (" This is a re4lly nice b33r #!%", " This is a re4lly nice b33r #!%"),
         ]
         for input, expected_value in cases:
