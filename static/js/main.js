@@ -285,6 +285,13 @@ async function updateItem(form, path) {
     body: new FormData(form)
   });
 
+  if (!conn.ok) {
+    const error = await conn.json();
+    console.log(error)
+    handleResponse(conn, error);
+    return;
+  }
+
   if (conn.status === 204) return;
   const resp = await conn.json();
   handleResponse(conn, resp);
@@ -341,16 +348,16 @@ async function updateUserPassword(form) {
       method: "PUT",
       body: new FormData(form)
   })
+  console.logI()
 
-  if (conn.status != 200) {
+  if (!conn.ok) {
     const err = await conn.json()
-    console.log(err)
+    handleResponse(conn, err)
     return
   }
 
   const res = await conn.json();
-  console.log(res)
-
+  handleResponse(conn, res)
 }
 
 async function deleteBarAccess() {

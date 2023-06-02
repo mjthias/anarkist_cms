@@ -51,7 +51,7 @@ def _():
         user_password_bytes = user_password.encode("utf-8")
         user_new_password_bytes = user_new_password.encode("utf-8")
         if not bcrypt.checkpw(user_password_bytes, str(user["user_password"]).encode("utf-8")):
-            return g.respond(400, "Incorrect password.")
+            return g.respond(400, {"info": "Incorrect password", "key": "user_password"})
 
         # GENERATE NEW HASHED PASSWORD
         salt = bcrypt.gensalt()
@@ -71,7 +71,7 @@ def _():
             return g.respond(204)
 
         db_connect.commit()
-        return g.respond(200, "Password was successfully updated.")
+        return g.respond(200, "Password updated.")
 
     except Exception as ex:
         print(str(ex))
