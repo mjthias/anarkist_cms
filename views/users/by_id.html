@@ -120,10 +120,12 @@
                                 </button>
                             % end
                         % end
-                        <button class="px-4 text-sm transition-colors text-secondary hover:text-primary" onclick="toggleDeleteModal()">
-                            <i class="fa-solid fa-trash-can mr-2"></i>
-                            Delete user
-                        </button>
+                        % if user["deletable"]:
+                            <button class="px-4 text-sm transition-colors text-secondary hover:text-primary" onclick="toggleDeleteModal()">
+                                <i class="fa-solid fa-trash-can mr-2"></i>
+                                Delete user
+                            </button>
+                        % end
                         <div class="caret"></div>
                     </div>
                 </div>
