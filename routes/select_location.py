@@ -23,10 +23,12 @@ def _():
             cursor.execute("SELECT * FROM bars")
         else:
             cursor.execute("""
-                SELECT bar.* FROM bar_access
-                JOIN bars WHERE fk_user_id = %s AND fk_bar_id = bar_id;
+                SELECT * FROM bar_access
+                JOIN bars WHERE fk_user_id = %s 
+                AND fk_bar_id = bar_id;
                 """, (user_id))
         bars = cursor.fetchall()
+        print(bars)
 
     except Exception as ex:
         print(str(ex))
