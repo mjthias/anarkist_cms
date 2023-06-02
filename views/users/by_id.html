@@ -97,7 +97,7 @@
                         <i class="fa-solid fa-ellipsis"></i>
                     </button>
                     <div class="action-bar-sub-menu hidden">
-                        % if not session['user_id'] == user['user_id']:
+                        % if not session['user_id'] == user['user_id'] and user["user_role_id"] != 1:
                             % if session['bar_id'] in bar_ids:
                                 <button 
                                     onclick="deleteBarAccess()"
@@ -120,10 +120,12 @@
                                 </button>
                             % end
                         % end
-                        <button class="px-4 text-sm transition-colors text-secondary hover:text-primary" onclick="toggleDeleteModal()">
-                            <i class="fa-solid fa-trash-can mr-2"></i>
-                            Delete user
-                        </button>
+                        % if user["deletable"]:
+                            <button class="px-4 text-sm transition-colors text-secondary hover:text-primary" onclick="toggleDeleteModal()">
+                                <i class="fa-solid fa-trash-can mr-2"></i>
+                                Delete user
+                            </button>
+                        % end
                         <div class="caret"></div>
                     </div>
                 </div>

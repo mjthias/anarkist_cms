@@ -31,7 +31,6 @@ def _(search_user_id):
     try:
         db = pymysql.connect(**var.DB_CONFIG)
         cursor = db.cursor()
-        bars = None # Init, not needed if selected user is super_user
 
         # SELECT THE USER
         # FOR SUPER USERS
@@ -55,7 +54,7 @@ def _(search_user_id):
         if not user:
             return g.error_view(404)
 
-        # Select users bar_access
+        # Select users bar_access if user != 1
         if user and user["user_role_id"] != "1":
             cursor.execute("""
                 SELECT bar_id, bar_name, bar_city, bar_street
@@ -67,15 +66,19 @@ def _(search_user_id):
             bar_access = cursor.fetchall()
             user["bar_access"] = bar_access
 
-            # Select all bars
-            cursor.execute("SELECT * FROM BARS")
-            bars = cursor.fetchall()
+        # User deleteable?
+        user["deletable"] = False
+        if session["role_id"] == 1:
+            user["deletable"] = True
+        else:
+            for bar in bar_access:
+                if bar["bar_id"] == session["bar_id"]:
+                    user["deletable"] = True
 
         return dict(
                 user = user,
                 search_user_id = search_user_id,
                 session = session,
-                bars=bars,
                 )
 
     except Exception as ex:
