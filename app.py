@@ -28,6 +28,7 @@ import api.beers.beer_by_id_put
 import api.beers.beer_by_id_delete
 import api.beers.beers_by_name_get
 import api.taps.taps_get
+import api.taps.taps_notification
 import api.taps.taps_post
 import api.taps.taps_by_id_put
 import api.taps.taps_by_id_delete

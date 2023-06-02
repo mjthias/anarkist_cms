@@ -1,4 +1,4 @@
-from bottle import get
+from bottle import get, request, view
 import pymysql
 from utils import g, vars as var, validation as validate
 
@@ -32,6 +32,10 @@ def _():
         """, (bar_id))
         taps = cursor.fetchall()
         db.commit()
+
+        if request.headers.get("as-html"):
+            return as_html(taps)
+
         return g.respond(200, taps)
 
     except Exception as ex:
@@ -41,4 +45,8 @@ def _():
     finally:
         cursor.close()
         db.close()
+
+@view("components/taps_notifications_list")
+def as_html(taps):
+    return dict(taps=taps)
     

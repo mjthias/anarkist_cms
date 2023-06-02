@@ -578,6 +578,10 @@ video {
   position: relative;
 }
 
+.-right-10{
+  right: -2.5rem;
+}
+
 .-top-\[1vw\]{
   top: -1vw;
 }
@@ -608,6 +612,26 @@ video {
 
 .top-\[49px\]{
   top: 49px;
+}
+
+.top-\[50\%\]{
+  top: 50%;
+}
+
+.top-full{
+  top: 100%;
+}
+
+.top-\[54px\]{
+  top: 54px;
+}
+
+.top-\[53px\]{
+  top: 53px;
+}
+
+.top-\[46px\]{
+  top: 46px;
 }
 
 .z-10{
@@ -691,6 +715,10 @@ video {
 
 .mt-1{
   margin-top: 0.25rem;
+}
+
+.mt-2{
+  margin-top: 0.5rem;
 }
 
 .mt-\[1\.85vw\]{
@@ -781,6 +809,10 @@ video {
   width: 5rem;
 }
 
+.w-56{
+  width: 14rem;
+}
+
 .w-6{
   width: 1.5rem;
 }
@@ -807,6 +839,14 @@ video {
 
 .w-full{
   width: 100%;
+}
+
+.w-44{
+  width: 11rem;
+}
+
+.w-40{
+  width: 10rem;
 }
 
 .max-w-7xl{
@@ -852,6 +892,11 @@ video {
 
 .-translate-y-1{
   --tw-translate-y: -0.25rem;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.-translate-y-1\/2{
+  --tw-translate-y: -50%;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
@@ -941,12 +986,20 @@ video {
   border-bottom-width: 0px;
 }
 
+.border-b{
+  border-bottom-width: 1px;
+}
+
 .border-l-0{
   border-left-width: 0px;
 }
 
 .border-r-0{
   border-right-width: 0px;
+}
+
+.border-t{
+  border-top-width: 1px;
 }
 
 .border-t-0{
@@ -1009,6 +1062,10 @@ video {
 
 .p-4{
   padding: 1rem;
+}
+
+.p-5{
+  padding: 1.25rem;
 }
 
 .p-\[2vw\]{
@@ -1136,6 +1193,10 @@ video {
   line-height: 1rem;
 }
 
+.font-bold{
+  font-weight: 700;
+}
+
 .font-medium{
   font-weight: 500;
 }
@@ -1158,6 +1219,10 @@ video {
 
 .leading-none{
   line-height: 1;
+}
+
+.\!text-background{
+  color: rgba(14,14,14, var(--tw-bg-opacity)) !important;
 }
 
 .text-\[rgb\(255\2c 255\2c 0\)\]{
@@ -1226,7 +1291,7 @@ h2{
 
 .top-sub-menu{
   max-height: 0px;
-  overflow: hidden;
+  overflow: scroll;
   transition: max-height .2s ease-in-out;
 }
 
@@ -1816,6 +1881,10 @@ input.invalid {
 
   .md\:col-start-3{
     grid-column-start: 3;
+  }
+
+  .md\:inline{
+    display: inline;
   }
 
   .md\:hidden{
