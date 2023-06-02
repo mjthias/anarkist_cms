@@ -1266,7 +1266,7 @@ h2{
 
 .top-sub-menu{
   max-height: 0px;
-  overflow: scroll;
+  overflow: hidden;
   transition: max-height .2s ease-in-out;
 }
 

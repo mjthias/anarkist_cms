@@ -158,19 +158,21 @@ function toggleTopSubMenu() {
   target.classList.toggle("text-secondary")
   if (caret) caret.classList.toggle("rotate");
 
-  try {
-    const boxHeight = Number(subMenu.dataset.box_height)
-    const liHeight = Number(subMenu.dataset.li_height)
-    const childElems = subMenu.querySelectorAll(`li`).length;
-    const height = boxHeight + liHeight * childElems
-    console.log(childElems)
-    if (subMenu.getAttribute("style")) {
-      subMenu.removeAttribute("style");
-    } else {
-      subMenu.style.maxHeight = height > 400 ? "400px" : height + "px";
-    }
+
+  const boxHeight = Number(subMenu.dataset.box_height)
+  const liHeight = Number(subMenu.dataset.li_height)
+  const childElems = subMenu.querySelectorAll(`li`).length;
+  const height = boxHeight + liHeight * childElems
+  console.log(childElems)
+  if (subMenu.getAttribute("style")) {
+    subMenu.removeAttribute("style");
+  } else if (height > 400) {
+    subMenu.style.maxHeight = "400px";
+    subMenu.style.overflowY = "scroll"
+  } else {
+    subMenu.style.maxHeight = height + "px";
+    subMenu.style.overflowY = "hidden"
   }
-  catch{}
 }
 
 function toggleSideMenu() {
