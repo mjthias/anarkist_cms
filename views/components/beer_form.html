@@ -149,14 +149,14 @@
         <label for="beer_description_en">Description (English)</label>
         <span class="hint-error block hidden"></span>
         % if defined('beer'):
-        % desc_en = beer['beer_description_en']
+        % desc_en = beer['beer_description_en'] or ""
         % end
         <textarea id="beer_description_en" name="beer_description_en" minlength="0" maxlength="500" placeholder=" ">{{ desc_en }}</textarea>
         <span class="hint">Min. 2 and max. 500 characters.</span>
     </div>
     <div class="input-container-full">
         % if defined('beer'):
-        % desc_dk = beer['beer_description_dk']
+        % desc_dk = beer['beer_description_dk'] or ""
         % end
         <label for="beer_description_dk">Description (Danish)</label>
         <span class="hint-error block hidden"></span>

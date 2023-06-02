@@ -299,7 +299,7 @@ def zip_code(value):
 ##############################
 def ebc(value):
     if not value:
-        return "", None
+        return None, None
     pattern = '^[0-9]*$'
     invalid_message = "EBC must be an integer between 1 and 600."
     if not re.match(pattern, value):
@@ -313,7 +313,7 @@ def ebc(value):
 ##############################
 def ibu(value):
     if not value:
-        return "", None
+        return None, None
     pattern = '^[0-9]*$'
     invalid_message = "IBU must be an integer between 1 and 600."
     if not re.match(pattern, value):
@@ -355,7 +355,7 @@ def price(value):
 ##############################
 def description(value):
     if not value:
-        return "", None
+        return None, None
     min_len = 2
     max_len = 500
     invalid_min_message = f"Description must be more than {min_len} characters."

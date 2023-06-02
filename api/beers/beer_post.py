@@ -55,7 +55,7 @@ def _():
             if error:
                 return g.respond(400, {"info": error, "key": "beer_image"})
         else:
-            beer_image = ""
+            beer_image = None
 
         # Create beer tuple
         beer = (
