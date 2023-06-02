@@ -112,6 +112,38 @@ async function fetchChunck(endpoint, offset) {
   isLoading = false
 }
 
+// Start notofications if exist
+if (document.querySelector("#notifications") && window.innerWidth > 600) {
+  getNotifications()
+  setInterval(getNotifications, 10000)
+}
+async function getNotifications() {
+  const conn = await fetch("/api/v1/taps/notifications", {
+    headers: {"as-html" : true}
+  })
+
+  if (!conn.ok) return
+
+  const bellContainer = document.querySelector("#notifications")
+  const subMenu = document.querySelector("#notifications-sub-menu")
+  const ul = subMenu.querySelector("ul")
+
+  if (conn.status == 204) {
+    bellContainer.classList.add("hidden")
+    subMenu.classList.add("hidden")
+    ul.innerHTML = ""
+    return
+  }
+  const html = await conn.text()
+  ul.innerHTML = html
+  const issues = ul.querySelectorAll("li").length
+  const bellText = bellContainer.querySelector("p")
+  bellText.textContent = issues
+  bellContainer.classList.remove("hidden")
+  subMenu.classList.remove("hidden")
+
+}
+
 // ##############################
 // ##############################
 // ##############################
@@ -120,18 +152,25 @@ async function fetchChunck(endpoint, offset) {
 
 function toggleTopSubMenu() {
   const target = event.target;
+  console.log(target)
   const caret = target.querySelector(`.fa-caret-down`);
   const subMenu = document.querySelector(target.dataset.target);
   target.classList.toggle("text-secondary")
-  caret.classList.toggle("rotate");
+  if (caret) caret.classList.toggle("rotate");
 
-  const childElems = subMenu.querySelectorAll(`li`);
-  if (subMenu.getAttribute("style")) {
-    subMenu.removeAttribute("style");
-  } else {
-    subMenu.style.maxHeight = `${childElems.length * 50}px`;
+  try {
+    const boxHeight = Number(subMenu.dataset.box_height)
+    const liHeight = Number(subMenu.dataset.li_height)
+    const childElems = subMenu.querySelectorAll(`li`).length;
+    const height = boxHeight + liHeight * childElems
+    console.log(childElems)
+    if (subMenu.getAttribute("style")) {
+      subMenu.removeAttribute("style");
+    } else {
+      subMenu.style.maxHeight = height > 400 ? "400px" : height + "px";
+    }
   }
-  
+  catch{}
 }
 
 function toggleSideMenu() {

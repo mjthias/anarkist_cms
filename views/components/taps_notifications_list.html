@@ -1,0 +1,9 @@
+% for tap in taps:
+    % href = f'/beers/{tap["beer_id"]}'
+    <li 
+        class="text-secondary hover:text-primary cursor-pointer text-sm mt-2"
+        onclick="spa('{{href}}')"
+        >
+        {{tap["beer_name"]}}
+    </li>
+% end

@@ -23,7 +23,7 @@ h2 {
 }
 
 .top-sub-menu {
-    @apply max-h-0 overflow-hidden;
+    @apply max-h-0 overflow-scroll;
     transition: max-height .2s ease-in-out;
 }
 

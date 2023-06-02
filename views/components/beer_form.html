@@ -121,7 +121,7 @@
             id="beer_ibu" 
             name="beer_ibu" 
             % if defined('beer'):
-                value="{{ beer['beer_ibu'] }}" 
+                value="{{ beer['beer_ibu'] or '' }}" 
             % end
             min="0" 
             step="1" 
@@ -137,7 +137,7 @@
             id="beer_ebc" 
             name="beer_ebc"
             % if defined('beer'): 
-                value="{{ beer['beer_ebc'] }}" 
+                value="{{ beer['beer_ebc'] or '' }}" 
             % end
             min="0" 
             step="1" 

@@ -27,54 +27,97 @@
             </a>
         </div>
 
-    
-        <div class="relative">
-            <a onclick="toggleTopSubMenu()" data-target="#user_sub_menu" class="py-3  flex flex-nowrap items-center transition-colors text-secondary cursor-pointer hover:text-primary">
-                <div class="pointer-events-none w-6 h-6 inline-flex items-center justify-center mr-3">
-                    <i class="fa-solid fa-circle-user text-2xl"></i>
+       
+        <div class="flex items-center gap-4 h-full">
+            <div id="notifications" class="relative h-full flex items-center hidden">
+                <button
+                    class="relative text-secondary hover:text-primary"
+                    onclick="toggleTopSubMenu()"
+                    data-target="#notifications-sub-menu"
+                    >
+                    <i class="fa-solid fa-bell text-xl pointer-events-none"></i>
+                    <p
+                        class="!text-background absolute top-[50%] -translate-y-1/2 w-full text-center text-xs font-bold pointer-events-none"
+                        >
+                        10
+                    </p>
+                </button>
+                <div
+                    id="notifications-sub-menu"
+                    data-box_height="70"
+                    data-li_height="28"
+                    class="absolute bg-background -right-10 top-full top-sub-menu border border-line border-t-0 w-56"
+                    >
+                    <div class="border-t border-line fixed w-full"></div>
+                    <div class="p-5">
+                        <p class="border-b border-line">Info missing for:</p>
+                        <ul class="mt-2">
+                        </ul>
+                    </div>
                 </div>
-                <span class="pointer-events-none">{{ session["user_name"] }}</span>
-                <div class="pointer-events-none w-6 h-6 inline-flex items-center justify-center pt-1">
-                    <i class="fa-solid fa-caret-down text-xs transition-transform"></i>
-                </div>
-            </a>
+            </div>
+
+            <div class="relative">
+                <a onclick="toggleTopSubMenu()" data-target="#user_sub_menu" class="py-3 flex flex-nowrap items-center transition-colors text-secondary cursor-pointer hover:text-primary">
+                    <div class="pointer-events-none w-6 h-6 inline-flex items-center justify-center mr-3">
+                        <i class="fa-solid fa-circle-user text-2xl"></i>
+                    </div>
+                    <span class="pointer-events-none hidden md:inline">{{ session["user_name"] }}</span>
+                    <div class="pointer-events-none w-6 h-6 inline-flex items-center justify-center pt-1">
+                        <i class="fa-solid fa-caret-down text-xs transition-transform"></i>
+                    </div>
+                </a>
+            </div>
         </div>
 
     </div>
-
-    <ul id="location_sub_menu" class="bg-background top-sub-menu border-l-0 border border-line border-t-0 transition-colors fixed top-[49px] left-0">
-        % for bar in session["bar_access"]:
-            % if not session["bar_id"] == bar["bar_id"]:
-                <li class="h-[40px] flex items-center">
-                    <button
-                        onclick="changeLocation()"
-                        data-bar_id="{{bar['bar_id']}}"
-                        class="px-4 py-2 text-sm transition-colors text-secondary cursor-pointer hover:text-primary">
-                        {{ bar["bar_name"] }}
-                    </button>
-                </li>
+    <div 
+        id="location_sub_menu" 
+        class="bg-background top-sub-menu border-l-0 border border-line border-t-0 transition-colors fixed top-[46px] left-0 w-56"
+        data-box_height="40"
+        data-li_height="32"
+        >
+        <ul class="p-5">
+            % for bar in session["bar_access"]:
+                % if not session["bar_id"] == bar["bar_id"]:
+                    <li class="mt-2">
+                        <button
+                            onclick="changeLocation()"
+                            data-bar_id="{{bar['bar_id']}}"
+                            class="text-sm transition-colors text-secondary cursor-pointer hover:text-primary">
+                            {{ bar["bar_name"] }}
+                        </button>
+                    </li>
+                % end
             % end
-        % end
-    </ul>
+        </ul>
+    </div>
 
-    <ul id="user_sub_menu" class="bg-background top-sub-menu border-r-0 border border-line border-t-0 transition-colors fixed top-[49px] right-0">
-        <li>
-            <a class="px-4 py-2 flex flex-nowrap items-center transition-colors text-secondary cursor-pointer hover:text-primary" href="/users/{{ session['user_id'] }}" onclick="{{ spaHref }}; return false">
-                <div class="w-6 h-6 inline-flex items-center justify-center mr-2">
-                    <i class="fa-solid fa-gear"></i>
-                </div>
-                <span class="text-sm">Settings</span>
-            </a>
-        </li>
-        <li>
-            <a class="px-4 py-2 flex flex-nowrap items-center transition-colors text-secondary cursor-pointer hover:text-primary" href="/sign-out">
-                <div class="w-6 h-6 inline-flex items-center justify-center mr-2">
-                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
-                </div>
-                <span class="text-sm">Sign out</span>
-            </a>
-        </li>
-    </ul>
+    <div 
+        id="user_sub_menu" 
+        class="bg-background top-sub-menu border-r-0 border border-line border-t-0 transition-colors fixed top-[46px] right-0 w-40"
+        data-box_height="40"
+        data-li_height="32"
+        >
+        <ul class="p-5">
+            <li>
+                <a class="mt-2 flex flex-nowrap items-center transition-colors text-secondary cursor-pointer hover:text-primary" href="/users/{{ session['user_id'] }}" onclick="{{ spaHref }}; return false">
+                    <div class="w-6 h-6 inline-flex items-center justify-center mr-2">
+                        <i class="fa-solid fa-gear"></i>
+                    </div>
+                    <span class="text-sm">Settings</span>
+                </a>
+            </li>
+            <li>
+                <a class="mt-2 flex flex-nowrap items-center transition-colors text-secondary cursor-pointer hover:text-primary" href="/sign-out">
+                    <div class="w-6 h-6 inline-flex items-center justify-center mr-2">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    </div>
+                    <span class="text-sm">Sign out</span>
+                </a>
+            </li>
+        </ul>
+    </div>
     
 </nav>
 
