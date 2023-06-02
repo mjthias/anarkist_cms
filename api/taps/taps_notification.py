@@ -34,6 +34,8 @@ def _():
         db.commit()
 
         if request.headers.get("as-html"):
+            if not taps:
+                return g.error_view(204)
             return as_html(taps)
 
         return g.respond(200, taps)
