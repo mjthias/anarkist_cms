@@ -2,11 +2,18 @@
 
 % for user in users:
 
+    % if user["user_role_id"] == 1:
+        % user["bar_id"] = 0
+        % user["bar_name"] = "Super users"
+    % end
+
     % if not user["bar_id"] == current_topic:
         % current_topic = user["bar_id"]
         <li class="list-topic">
             <h2 class="text-2xl font-medium">{{user["bar_name"]}}</h2>
-            <p class="text-base font-normal text-secondary">{{user["bar_street"]}}, {{user["bar_city"]}}</p>
+            % if user["user_role_id"] != 1:
+                <p class="text-base font-normal text-secondary">{{user["bar_street"]}}, {{user["bar_city"]}}</p>
+            % end
         </li>
     % end
 
