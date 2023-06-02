@@ -31,7 +31,6 @@ def _(search_user_id):
     try:
         db = pymysql.connect(**var.DB_CONFIG)
         cursor = db.cursor()
-        bars = None # Init, not needed if selected user is super_user
 
         # SELECT THE USER
         # FOR SUPER USERS
@@ -66,7 +65,7 @@ def _(search_user_id):
                 """, (search_user_id))
             bar_access = cursor.fetchall()
             user["bar_access"] = bar_access
-        
+
         # User deleteable?
         user["deletable"] = False
         if session["role_id"] == 1:
