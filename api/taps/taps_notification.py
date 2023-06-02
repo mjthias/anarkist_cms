@@ -9,7 +9,7 @@ def _():
     try:
         # VALIDATE SESSION
         session = validate.session()
-        if not session or session["role_id"] == 3:
+        if not session:
             return g.respond(401)
         bar_id = session["bar_id"]
 
