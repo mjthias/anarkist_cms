@@ -26,7 +26,6 @@ def _():
     try:
         # POST TO DB
         db_connect = pymysql.connect(**var.DB_CONFIG)
-        db_connect.begin()
         cursor = db_connect.cursor()
 
         # Get users from db
@@ -64,7 +63,6 @@ def _():
 
     except Exception as ex:
         print(ex)
-        db_connect.rollback()
         return g.respond(500)
 
     finally:
