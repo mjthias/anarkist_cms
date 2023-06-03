@@ -25,14 +25,24 @@ def _():
         db_conn = pymysql.connect(**var.DB_CONFIG)
         cursor = db_conn.cursor()
 
-        cursor.execute("""
-            SELECT * FROM bars 
+        if session["role_id"] == 1:
+            cursor.execute("""
+            SELECT * FROM bars
             WHERE bar_id = %s
             LIMIT 1
-        """, bar_id)
+            """, (bar_id))
+        else:
+            cursor.execute("""
+            SELECT bars.* FROM bars
+            JOIN bar_access
+            WHERE bar_id = %s 
+            AND fk_bar_id = bar_id 
+            AND fk_user_id = %s
+            LIMIT 1
+            """, (bar_id, session["user_id"]))
         bar = cursor.fetchone()
         if not bar:
-            return g.respond(400, "Bar does not exist.")
+            return g.respond(401)
 
         # Append bar id to session dict
         session["bar_id"] = bar_id
