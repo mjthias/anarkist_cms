@@ -144,10 +144,13 @@ def password(value):
     pattern = '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$'
     missing_message = "Password is missing."
     invalid_message = "Password must contain at least one uppercase letter, one lowercase letter, one digit, and a special character (#?!@$%^&*-)."
+    invalid_max_message = "Passwords can't extend 72 characters"
     if not value:
         return None, missing_message
     if not re.match(pattern, value):
         return None, invalid_message
+    if len(value) > 72:
+        return None, invalid_max_message
     return str(value), None
 
 ##############################
