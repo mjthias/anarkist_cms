@@ -115,7 +115,7 @@ class UnitTest(unittest.TestCase):
             ("ASDddd1!", "ASDddd1!"),
             ("ASDasd123!", "ASDasd123!"),
             ("SDJKkjs12?#@-%&!", "SDJKkjs12?#@-%&!"),
-            (f"A!1" + 69 * "a", f"A!1" + 69 * "a"),
+            ("A!1" + 69 * "a", "A!1" + 69 * "a"),
         ]
         for input, expected_value in cases:
             value, error = validate.password(input)
@@ -123,7 +123,7 @@ class UnitTest(unittest.TestCase):
             self.assertEqual(error, None)
 
     def test_invalid_passwords(self):
-        cases = ["", "ASDd1!", "asdasd1!", "ASDASD1!", "ASDasd123", "ASDasd!!!!", f"A!1" + 70 * "a"]
+        cases = ["", "ASDd1!", "asdasd1!", "ASDASD1!", "ASDasd123", "ASDasd!!!!", "A!1" + 70 * "a"]
         for input in cases:
             value, error = validate.password(input)
             self.assertEqual(value, None)
