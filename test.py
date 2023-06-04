@@ -115,7 +115,7 @@ class UnitTest(unittest.TestCase):
             ("ASDddd1!", "ASDddd1!"),
             ("ASDasd123!", "ASDasd123!"),
             ("SDJKkjs12?#@-%&!", "SDJKkjs12?#@-%&!"),
-            ("A!1" + 69 * "a", "A!1" + 69 * "a"),
+            ("A!1" + 69 * "a", "A!1" + 70 * "a"),
         ]
         for input, expected_value in cases:
             value, error = validate.password(input)
