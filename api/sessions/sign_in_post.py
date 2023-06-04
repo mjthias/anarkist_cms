@@ -43,7 +43,7 @@ def _():
         # Create session
         session = {
             "user_id": user["user_id"],
-            "session_iat": int(time.time()),
+            "session_iat": int(time.time()), 
         }
 
         # Insert to DB
