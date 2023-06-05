@@ -165,7 +165,7 @@ class UnitTest(unittest.TestCase):
             self.assertEqual(error, None)
 
     def test_invalid_user_names(self):
-        cases = ["", "A", 123, "jørgen de ælbek"]
+        cases = ["", "A", 123, "jørgen de ælbek", "a"*101]
         for input in cases:
             value, error = validate.user_name(input)
             self.assertEqual(value, None)
@@ -189,7 +189,7 @@ class UnitTest(unittest.TestCase):
             self.assertEqual(error, None)
 
     def test_invalid_brewery_names(self):
-        cases = ["", "A", "#%!"]
+        cases = ["", "A", "#%!", "a"*101]
         for input in cases:
             value, error = validate.brewery_name(input)
             self.assertEqual(value, None)
@@ -260,7 +260,7 @@ class UnitTest(unittest.TestCase):
             self.assertEqual(error, None)
 
     def test_invalid_name(self):
-        cases = ["", "A"]
+        cases = ["", "A", "a"*101]
         for input in cases:
             value, error = validate.name(input)
             self.assertEqual(value, None)
@@ -303,7 +303,7 @@ class UnitTest(unittest.TestCase):
             self.assertEqual(error, None)
 
     def test_invalid_street(self):
-        cases = ["", "a", "7", "Bernstorffgade", "78", "Bernstorffgade 0", "7 bernstorffsgade", "Bernstorffsgade7"]
+        cases = ["", "a", "7", "Bernstorffgade", "78", "Bernstorffgade 0", "7 bernstorffsgade", "Bernstorffsgade7", "a"*100 + " 7"]
         for input in cases:
             result, error = validate.street(input)
             self.assertEqual(result, None)
@@ -326,7 +326,7 @@ class UnitTest(unittest.TestCase):
             self.assertEqual(error, None)
 
     def test_invalid_city(self):
-        cases = ["a", "København4", "33", "Amagerbro 4", "asd asd asd"]
+        cases = ["a", "København4", "33", "Amagerbro 4", "asd asd asd", "a"*101]
         for input in cases:
             result, error = validate.city(input)
             self.assertEqual(result, None)
@@ -387,6 +387,7 @@ class UnitTest(unittest.TestCase):
             ("55", 55.0),
             ("55.5", 55.5),
             ("55.56", 55.56),
+            ("55,56", 55.56)
         ]
         for input, expected_value in cases:
             value, error = validate.price(input)
@@ -406,7 +407,12 @@ class UnitTest(unittest.TestCase):
     def test_valid_descriptions(self):
         cases = [
             ("", None),
-            (" This is a re4lly nice b33r #!%", " This is a re4lly nice b33r #!%"),
+            ("This is a really nice beer.", "This is a really nice beer."),
+            (" This is a really nice beer.  ", "This is a really nice beer."),
+            ("THIS IS A REALLY NICE BEER.", "THIS IS A REALLY NICE BEER."),
+            ("Th1s 1s a r3ally n1ce b33r.", "Th1s 1s a r3ally n1ce b33r."),
+            ("This sentence contains a ',' and also the apostrofe symbol.", "This sentence contains a ',' and also the apostrofe symbol."),
+            ("And this sentence contains a '-' and the apostrofe symbol.", "And this sentence contains a '-' and the apostrofe symbol.")
         ]
         for input, expected_value in cases:
             value, error = validate.description(input)
@@ -414,7 +420,12 @@ class UnitTest(unittest.TestCase):
             self.assertEqual(error, None)
 
     def test_invalid_descriptions(self):
-        cases = ["a"*501]
+        cases = [
+            "a",
+            "a"*501,
+            "This is a re4lly nice b33r #!%",
+            "This is a really nice beer!"
+        ]
         for input in cases:
             value, error = validate.description(input)
             self.assertEqual(value, None)
