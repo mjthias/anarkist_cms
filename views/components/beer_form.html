@@ -89,12 +89,12 @@
                 value="{{ beer['beer_alc'] }}" 
             % end
             min="0" 
-            max="99" 
+            max="100" 
             step=".1" 
             placeholder=" "
             required 
         />
-        <span class="hint">Enter a value of min. 0.</span>
+        <span class="hint">Min. 0 and max. 100.</span>
     </div>
     <div class="input-container">
         <label for="beer_price">Price <span class="text-danger">*</span></label>
@@ -123,11 +123,12 @@
             % if defined('beer'):
                 value="{{ beer['beer_ibu'] or '' }}" 
             % end
-            min="0" 
+            min="1" 
+            max="600"
             step="1" 
             placeholder=" "
         />
-        <span class="hint">Enter a value of min. 0.</span>
+        <span class="hint">Min. 1 and max. 600.</span>
     </div>
     <div class="input-container">
         <label for="beer_ebc">EBC</label>
@@ -139,11 +140,12 @@
             % if defined('beer'): 
                 value="{{ beer['beer_ebc'] or '' }}" 
             % end
-            min="0" 
+            min="1" 
+            max="600"
             step="1" 
             placeholder=" "
         />
-        <span class="hint">Enter a value of min. 0.</span>
+        <span class="hint">Min. 1 and max. 600.</span>
     </div>
     <div class="input-container-full">
         <label for="beer_description_en">Description (English)</label>
