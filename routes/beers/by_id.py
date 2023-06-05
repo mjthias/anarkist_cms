@@ -38,6 +38,8 @@ def _(beer_id=""):
 
         beer['beer_price'] = g.format_price(beer["beer_price"])
         beer['beer_alc'] = g.format_price(float(beer['beer_alc']))
+        print("*"*30)
+        print(beer['beer_image'])
         return dict(session = session, beer = beer)
 
     except Exception as ex:

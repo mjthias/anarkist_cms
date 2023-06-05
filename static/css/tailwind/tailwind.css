@@ -184,7 +184,7 @@ input.invalid {
 }
 
 .image-preview {
-    @apply input-container-half relative;
+    @apply input-container-full relative;
 }
 
 .search-list {
