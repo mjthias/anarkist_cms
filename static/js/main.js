@@ -340,8 +340,8 @@ async function postSearchItem() {
     return;
   }
 
-  const id = await conn.json();
-  selectSearchedItem(id, name, target, entryType);
+  const resp = await conn.json();
+  selectSearchedItem(resp.id, name, target, entryType);
 }
 
 async function updateUserPassword(form) {
