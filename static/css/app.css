@@ -721,14 +721,6 @@ video {
   margin-top: var(--menu-height);
 }
 
-.mt-8{
-  margin-top: 2rem;
-}
-
-.mt-40{
-  margin-top: 10rem;
-}
-
 .mt-20{
   margin-top: 5rem;
 }
@@ -853,20 +845,8 @@ video {
   max-width: 12vw;
 }
 
-.max-w-xl{
-  max-width: 36rem;
-}
-
-.max-w-2xl{
-  max-width: 42rem;
-}
-
 .max-w-3xl{
   max-width: 48rem;
-}
-
-.max-w-4xl{
-  max-width: 56rem;
 }
 
 .flex-1{
@@ -958,10 +938,6 @@ video {
 
 .gap-8{
   gap: 2rem;
-}
-
-.gap-9{
-  gap: 2.25rem;
 }
 
 .self-end{
