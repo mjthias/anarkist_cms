@@ -406,7 +406,12 @@ class UnitTest(unittest.TestCase):
     def test_valid_descriptions(self):
         cases = [
             ("", None),
-            (" This is a re4lly nice b33r #!%", " This is a re4lly nice b33r #!%"),
+            ("This is a really nice beer.", "This is a really nice beer."),
+            (" This is a really nice beer.  ", "This is a really nice beer."),
+            ("THIS IS A REALLY NICE BEER.", "THIS IS A REALLY NICE BEER."),
+            ("Th1s 1s a r3ally n1ce b33r.", "Th1s 1s a r3ally n1ce b33r."),
+            ("This sentence contains a ',' and also the apostrofe symbol.", "This sentence contains a ',' and also the apostrofe symbol."),
+            ("And this sentence contains a '-' and the apostrofe symbol.", "And this sentence contains a '-' and the apostrofe symbol.")
         ]
         for input, expected_value in cases:
             value, error = validate.description(input)
@@ -414,7 +419,11 @@ class UnitTest(unittest.TestCase):
             self.assertEqual(error, None)
 
     def test_invalid_descriptions(self):
-        cases = ["a"*501]
+        cases = [
+            "a",
+            "a"*501,
+            "This is a re4lly nice b33r #!%"
+        ]
         for input in cases:
             value, error = validate.description(input)
             self.assertEqual(value, None)
