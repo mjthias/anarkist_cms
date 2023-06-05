@@ -1,6 +1,6 @@
 <form onsubmit="return false" novalidate="true" class="form-grid" autocomplete="off">
     <div class="input-container">
-        <label for="beer-name">Beer name</label>
+        <label for="beer-name">Beer name <span class="text-danger">*</span></label>
         <input
             oninput="searchBeers()"
             type="text" 
@@ -28,7 +28,7 @@
         <div class="search-list hidden"></div>
     </div>
 
-    <div class="beer-info grid flex-1 items-center input-container">
+    <div class="beer-info grid flex-1 !self-center input-container">
         % if defined('tap'):
         <div class="text-sm leading-none">
             <p>{{ tap['beer_style_name'] }}</p>

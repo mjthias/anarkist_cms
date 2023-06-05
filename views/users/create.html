@@ -8,7 +8,7 @@
         <div class="message hidden"></div>
         <form onsubmit="return false" novalidate="true" class="form-grid">
             <div class="input-container-full">
-                <label for="user_name">Name</label>
+                <label for="user_name">Name <span class="text-danger">*</span></label>
                 <span class="hint-error block hidden"></span>
                 <input
                     type="text"
@@ -23,7 +23,7 @@
                 <span class="hint">Min. 2 and max. 100 characters.</span>
             </div>
             <div class="input-container-full">
-                <label for="user_email">Email</label>
+                <label for="user_email">E-mail <span class="text-danger">*</span></label>
                 <span class="hint-error block hidden"></span>
                 <input
                     type="email"
@@ -36,7 +36,7 @@
                 <span class="hint">Enter a valid e-mail.</span>
             </div>
             <div class="input-container-full">
-                <label for="user_role_id">User role</label>
+                <label for="user_role_id">User role <span class="text-danger">*</span></label>
                 <span class="hint-error block hidden"></span>
                 <select
                     name="user_role_id" 
@@ -53,7 +53,7 @@
                 <span class="hint">Select a user role.</span>
             </div>
             <div class="input-container-full">
-                <label for="user_password">Password</label>
+                <label for="user_password">Password <span class="text-danger">*</span></label>
                 <span class="hint-error block hidden"></span>
                 <input 
                     type="password" 
@@ -65,7 +65,7 @@
                 <span class="hint">Must include one uppercase letter, one lowercase letter, one digit, and a special character (#?!@$%^&*-).</span>
             </div>
             <div class="input-container-full">
-                <label for="user_confirm_password">Repeat password</label>
+                <label for="user_confirm_password">Repeat password <span class="text-danger">*</span></label>
                 <span class="hint-error block hidden"></span>
                 <input 
                     type="password"

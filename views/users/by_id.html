@@ -19,7 +19,7 @@
             <h2>User info</h2>
             <input type="text" hidden name="user_id" value="{{user['user_id']}}">
             <div class="input-container-full">
-                <label for="user_name">Name</label>
+                <label for="user_name">Name <span class="text-danger">*</span></label>
                 <span class="hint-error block hidden"></span>
                 <input
                     type="text" 
@@ -35,7 +35,7 @@
                 <span class="hint">Min. 2 and max. 100 characters.</span>    
             </div>
             <div class="input-container-full">
-                <label for="user_email">Email</label>
+                <label for="user_email">E-mail <span class="text-danger">*</span></label>
                 <span class="hint-error block hidden"></span>
                 <input
                     type="text"
@@ -50,7 +50,7 @@
             </div>
             % if session["role_id"] != 3 and session["user_id"] != user["user_id"]:
                 <div class="input-container-full">
-                    <label for="user_role_id">User role</label>
+                    <label for="user_role_id">User role <span class="text-danger">*</span></label>
                     <span class="hint-error block hidden"></span>
                     <select 
                         name="user_role_id"
@@ -143,7 +143,7 @@
             <h2>Reset password</h2>
             <input type="text" hidden name="user_id" value="{{user['user_id']}}">
             <div class="input-container-full">
-                <label for="user_password">Old password</label>
+                <label for="user_password">Old password <span class="text-danger">*</span></label>
                 <span class="hint-error block hidden"></span>
                 <input
                     type="password"
@@ -156,7 +156,7 @@
                 <span class="hint">Enter your current password.</span>
             </div>
             <div class="input-container-full">
-                <label for="user_new_password">New password</label>
+                <label for="user_new_password">New password <span class="text-danger">*</span></label>
                 <span class="hint-error block hidden"></span>
                 <input
                     type="password"
@@ -169,7 +169,7 @@
                 <span class="hint">Must include one uppercase letter, one lowercase letter, one digit, and a special character (#?!@$%^&*-).</span>
             </div>
             <div class="input-container-full">
-                <label for="user_confirm_new_password">Repeat password</label>
+                <label for="user_confirm_new_password">Repeat password <span class="text-danger">*</span></label>
                 <span class="hint-error block hidden"></span>
                 <input
                     type="password"
@@ -182,7 +182,7 @@
                 <span class="hint">Repeat your chosen password.</span>
             </div>
             <div>
-                <button onclick="validateForm( updateUserPassword )">Reset password</button>
+                <button class="btn-primary" onclick="validateForm( updateUserPassword )">Reset password</button>
             </div>    
         </form>
     </section>

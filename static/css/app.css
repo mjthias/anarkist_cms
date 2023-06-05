@@ -908,6 +908,10 @@ video {
   align-items: center;
 }
 
+.\!items-center{
+  align-items: center !important;
+}
+
 .justify-center{
   justify-content: center;
 }
@@ -938,6 +942,10 @@ video {
 
 .self-end{
   align-self: flex-end;
+}
+
+.\!self-center{
+  align-self: center !important;
 }
 
 .overflow-hidden{
