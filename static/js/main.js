@@ -214,6 +214,7 @@ function removePreviewImage() {
 }
 
 function toggleDeleteModal() {
+  window.scrollTo(0,0);  
   document.querySelector("body").classList.toggle("overflow-y-hidden");
   document.querySelector("#delete_modal").classList.toggle("hidden");
   document.querySelector(".action-bar-sub-menu").classList.add("hidden");
