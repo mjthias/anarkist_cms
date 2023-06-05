@@ -13,12 +13,12 @@
             required
             placeholder=" "
             minlength="2"
-            maxlength="50"
+            maxlength="100"
             % if defined('brewery'):
                 value="{{brewery['brewery_name']}}"
             % end
         >
-        <span class="hint">Min. 2 and max. 50 characters.</span>
+        <span class="hint">Min. 2 and max. 100 characters.</span>
     </div>
     <div class="input-container-full">
         <label for="brewery_menu_name">Menu name</label>

@@ -6,7 +6,7 @@
             type="text" 
             name="beer_name"
             minlength="2"
-            maxlength="50"
+            maxlength="100"
             id="beer-name"
             % if defined("tap"):
                 value="{{tap['beer_name']}}"
@@ -14,7 +14,7 @@
             placeholder=" "
             required
         >
-        <span class="hint">Min. 2 and max. 50 characters.</span>
+        <span class="hint">Min. 2 and max. 100 characters.</span>
         <input
             type="hidden" 
             name="beer_id"
