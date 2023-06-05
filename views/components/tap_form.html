@@ -1,12 +1,12 @@
 <form onsubmit="return false" novalidate="true" class="form-grid" autocomplete="off">
     <div class="input-container">
-        <label for="beer-name">Beer name</label>
+        <label for="beer-name">Beer name <span class="text-danger">*</span></label>
         <input
             oninput="searchBeers()"
             type="text" 
             name="beer_name"
             minlength="2"
-            maxlength="50"
+            maxlength="100"
             id="beer-name"
             % if defined("tap"):
                 value="{{tap['beer_name']}}"
@@ -14,7 +14,7 @@
             placeholder=" "
             required
         >
-        <span class="hint">Min. 2 and max. 50 characters.</span>
+        <span class="hint">Min. 2 and max. 100 characters.</span>
         <input
             type="hidden" 
             name="beer_id"
@@ -28,7 +28,7 @@
         <div class="search-list hidden"></div>
     </div>
 
-    <div class="beer-info grid flex-1 items-center input-container">
+    <div class="beer-info grid flex-1 !self-center input-container">
         % if defined('tap'):
         <div class="text-sm leading-none">
             <p>{{ tap['beer_style_name'] }}</p>

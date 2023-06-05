@@ -908,6 +908,10 @@ video {
   align-items: center;
 }
 
+.\!items-center{
+  align-items: center !important;
+}
+
 .justify-center{
   justify-content: center;
 }
@@ -938,6 +942,10 @@ video {
 
 .self-end{
   align-self: flex-end;
+}
+
+.\!self-center{
+  align-self: center !important;
 }
 
 .overflow-hidden{
@@ -1109,8 +1117,28 @@ video {
   padding-top: 3vw;
 }
 
+.pr-4{
+  padding-right: 1rem;
+}
+
+.pr-8{
+  padding-right: 2rem;
+}
+
+.pr-\[2vw\]{
+  padding-right: 2vw;
+}
+
+.pr-\[4vw\]{
+  padding-right: 4vw;
+}
+
 .text-center{
   text-align: center;
+}
+
+.text-right{
+  text-align: right;
 }
 
 .font-pixel{

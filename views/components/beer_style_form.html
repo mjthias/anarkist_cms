@@ -1,6 +1,6 @@
 <form onsubmit="return false" novalidate="true" autocomplete="off">
     <div class="input-container-full">
-        <label for="beer_style_name">Name</label>
+        <label for="beer_style_name">Name <span class="text-danger">*</span></label>
         <span class="hint-error block hidden"></span>
         <input 
             type="text"
@@ -10,11 +10,11 @@
                 value="{{ beer_style['beer_style_name'] }}"
             % end
             minlength="2"
-            maxlength="50"
+            maxlength="100"
             placeholder=" "
             required
         />
-        <span class="hint">Min. 2 and max. 50 characters.</span>
+        <span class="hint">Min. 2 and max. 100 characters.</span>
     </div>
     <div class="form-action-bar">
         % if defined('beer_style') and not beer_style["style_on_beer"] and not session['role_id'] == 3:

@@ -1,6 +1,6 @@
 <form onsubmit="return false;" novalidate="true" class="form-grid" autocomplete="off">
     <div class="input-container">
-        <label for="bar_name">Name</label>
+        <label for="bar_name">Name <span class="text-danger">*</span></label>
         <span class="hint-error block hidden"></span>
         <input 
             type="text" 
@@ -10,14 +10,14 @@
                 value="{{bar['bar_name']}}"
             % end
             minlength="2" 
-            maxlength="50"
+            maxlength="100"
             placeholder=" "
             required 
         >
-        <span class="hint">Min. 2 and max. 50 characters.</span>
+        <span class="hint">Min. 2 and max. 100 characters.</span>
     </div>
     <div class="input-container">
-        <label for="bar_street">Street</label>
+        <label for="bar_street">Street <span class="text-danger">*</span></label>
         <span class="hint-error block hidden"></span>
         <input 
             type="text" 
@@ -28,14 +28,14 @@
             % end
             pattern="^^[A-Za-zÆØÅæøå]{0,}[ ]{1}[1-9]{1}[0-9A-Za-z \\,\\.]{0,}$"
             minlength="2" 
-            maxlength="50"
+            maxlength="100"
             placeholder=" "
             required 
         >
         <span class="hint">Street name and number.</span>
     </div>
     <div class="input-container">
-        <label for="bar_zip_code">Zip code</label>
+        <label for="bar_zip_code">Zip code <span class="text-danger">*</span></label>
         <span class="hint-error block hidden"></span>
         <input 
             type="number" 
@@ -53,7 +53,7 @@
         <span class="hint">Enter a valid Danish postalcode.</span>
     </div>
     <div class="input-container">
-        <label for="bar_city">City</label>
+        <label for="bar_city">City <span class="text-danger">*</span></label>
         <span class="hint-error block hidden"></span>
         <input 
             type="text" 
@@ -64,7 +64,7 @@
             % end
             pattern="^[A-Za-zÆØÅæøå]{0,}[\s]?[A-Za-zÆØÅæøå]{0,}"
             minlength="2" 
-            maxlength="50"
+            maxlength="100"
             placeholder=" "
             required 
         >

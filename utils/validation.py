@@ -330,13 +330,16 @@ def ibu(value):
 ##############################
 def alc(value):
     missing_message = "Alcohol percentage is missing"
-    invalid_message = "Alcohol percentage must be a positive value."
+    invalid_min_message = "Alcohol percentage must be a positive value."
+    invalid_max_message = "Alcohol percentage must be less than 100."
     if not value:
         return None, missing_message
     value = str(value).replace(",", ".")
     value = float(value)
     if value < 0:
-        return None, invalid_message
+        return None, invalid_min_message
+    if value > 100:
+        return None, invalid_max_message
     return format(value, '.2f'), None
 
 ##############################
