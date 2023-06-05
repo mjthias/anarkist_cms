@@ -364,7 +364,7 @@ def description(value):
     max_len = 500
     invalid_min_message = f"Description must be more than {min_len} characters."
     invalid_max_message = f"Description must be less than {max_len} characters."
-    invalid_message = f'Description can only have alphanumeric characters, and the special characters ",.-\'".'
+    invalid_message = 'Description can only have alphanumeric characters, and the special characters ",.-\'".'
     value = value.strip()
     if len(value) < min_len:
         return None, invalid_min_message
