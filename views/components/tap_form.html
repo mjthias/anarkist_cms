@@ -69,21 +69,6 @@
             pattern="[1-9][0-9]*"
             required
         />
-        <div class="form-action-bar">
-            <div class="btn-container">
-                <button class="btn-primary" onclick="validateForm( updateItem )" data-path="taps">Update tap</button>
-                <button class="btn-secondary" onclick="toggleActionBarSubMenu()">
-                    <i class="fa-solid fa-ellipsis"></i>
-                </button>
-                <div class="action-bar-sub-menu hidden">
-                    <button class="px-4 text-sm transition-colors text-secondary hover:text-primary" onclick="toggleDeleteModal()">
-                        <i class="fa-solid fa-trash-can mr-2"></i>
-                        Delete tap
-                    </button>
-                    <div class="caret"></div>
-                </div>
-            </div>
-        </div>
     % else:
         <div class="input-container-full">
             <label for="tap-off-the-wall" class="checkbox">
@@ -95,9 +80,28 @@
                 Off the wall
             </label>
         </div>
-        <div class="form-action-bar">
-            <button class="btn-primary" onclick="validateForm(postItem)" data-path="taps">Create tap</button>
-        </div>
     % end
+    <div class="form-action-bar">
+    % if defined('tap') and not session['role_id'] == 3:
+        <div class="btn-container">
+            <button class="btn-primary" onclick="validateForm( updateItem )" data-path="taps">Update tap</button>
+            <button class="btn-secondary" onclick="toggleActionBarSubMenu()">
+                <i class="fa-solid fa-ellipsis"></i>
+            </button>
+            <div class="action-bar-sub-menu hidden">
+                <button class="px-4 text-sm transition-colors text-secondary hover:text-primary" onclick="toggleDeleteModal()">
+                    <i class="fa-solid fa-trash-can mr-2"></i>
+                    Delete tap
+                </button>
+                <div class="caret"></div>
+            </div>
+        </div>
+    % elif defined('tap'):
+        <button class="btn-primary" onclick="validateForm(updateItem)" data-path="taps">Update tap</button>
+    % else:
+        <button class="btn-primary" onclick="validateForm(postItem)" data-path="taps">Create tap</button>
+    % end
+    </div>
+    
 
 </form>

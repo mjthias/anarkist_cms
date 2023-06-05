@@ -13,18 +13,20 @@
                     <i class="fa-solid fa-xmark text-xl -translate-y-1"></i>
                 </span>
             </div>
+            % if len(session['bar_access']) > 1:
             <a
                 onclick="toggleTopSubMenu()" 
                 data-target="#location_sub_menu" 
                 class="py-3  flex flex-nowrap items-center transition-colors text-secondary cursor-pointer hover:text-primary"
                 >
                 <span class="pointer-events-none">{{ session["bar_name"] }}</span>
-                % if len(session["bar_access"]) > 1:
                 <div class="pointer-events-none w-6 h-6 inline-flex items-center justify-center pt-1">
                     <i class="fa-solid fa-caret-down text-xs transition-transform"></i>    
                 </div>
-                % end
             </a>
+            % else:
+            <a class="text-secondary">{{ session['bar_name'] }}</a>
+            % end
         </div>
 
        
@@ -71,6 +73,8 @@
         </div>
 
     </div>
+
+    % if len(session['bar_access']) > 1:
     <div 
         id="location_sub_menu" 
         class="bg-background top-sub-menu border-l-0 border border-line border-t-0 transition-colors fixed top-[46px] left-0 w-56"
@@ -92,6 +96,7 @@
             % end
         </ul>
     </div>
+    % end
 
     <div 
         id="user_sub_menu" 

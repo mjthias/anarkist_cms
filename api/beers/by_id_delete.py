@@ -9,7 +9,7 @@ def _(beer_id=""):
     try:
         # VALIDATE
         session = validate.session()
-        if not session:
+        if not session or session['role_id'] == 3:
             return g.respond(401)
 
         # Input values

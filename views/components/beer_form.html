@@ -195,7 +195,7 @@
         <i onclick="removePreviewImage()" data-input-id="#beer_image" class="fa-solid fa-circle-xmark text-secondary hover:text-primary transition-colors cursor-pointer text-xl absolute top-0 right-0 mr-1"></i>
     </div>
     <div class="form-action-bar">
-        % if defined('beer') and not beer['beer_on_tap']:
+        % if defined('beer') and not beer['beer_on_tap'] and not session['role_id'] == 3:
             <input 
                 type="hidden" 
                 value="{{ beer['beer_id'] }}"
