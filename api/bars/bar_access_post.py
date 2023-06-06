@@ -27,9 +27,22 @@ def _():
         return g.respond(500)
 
     try:
-        # POST TO DB
+        # CONNECT TO DB
         db = pymysql.connect(**var.DB_CONFIG)
         cursor = db.cursor()
+
+        # Select user to prevent role_id 1 in bar_access
+        cursor.execute("""
+        SELECT fk_role_id FROM users
+        WHERE user_id = %s
+        """, (user_id))
+        user = cursor.fetchone()
+        if not user:
+            return g.respond(204)
+        if user["fk_role_id"] == 1:
+            return g.respond(400, "Super users have access to all bars")
+
+        # Post to DB
         cursor.execute("""
         INSERT INTO bar_access
         SET fk_user_id = %s, fk_bar_id = %s

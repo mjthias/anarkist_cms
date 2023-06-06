@@ -99,15 +99,17 @@
                     <div class="action-bar-sub-menu hidden">
                         % if not session['user_id'] == user['user_id'] and user["user_role_id"] != 1:
                             % if session['bar_id'] in bar_ids:
-                                <button 
-                                    onclick="deleteBarAccess()"
-                                    data-user_id="{{ user['user_id'] }}" 
-                                    data-bar_id="{{ session['bar_id']}}"
-                                    class="block px-4 mb-2 text-sm transition-colors text-secondary hover:text-primary whitespace-nowrap"
-                                >
-                                    <i class="fa-solid fa-circle-exclamation mr-2 pointer-events-none"></i>
-                                    Remove bar access
-                                </button>
+                                % if len(bar_ids) > 1:
+                                    <button 
+                                        onclick="deleteBarAccess()"
+                                        data-user_id="{{ user['user_id'] }}" 
+                                        data-bar_id="{{ session['bar_id']}}"
+                                        class="block px-4 mb-2 text-sm transition-colors text-secondary hover:text-primary whitespace-nowrap"
+                                    >
+                                        <i class="fa-solid fa-circle-exclamation mr-2 pointer-events-none"></i>
+                                        Remove bar access
+                                    </button>
+                                % end
                             % else:
                                 <button
                                     onclick="postBarAccess()"
@@ -132,7 +134,9 @@
                 % end
             </div>
         </form>
-        % if user["user_id"] == session["user_id"] or session["role_id"] != 3:
+        % if user["user_id"] == session["user_id"]:
+            % include("components/deletion_form", id=user['user_id'], callBack='validateForm(deleteItem)', path='users', redir='sign-in')
+        % elif session["role_id"] != 3:
             % include("components/deletion_form", id=user['user_id'], callBack='validateForm(deleteItem)', path='users')
         % end
     </section>

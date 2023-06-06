@@ -234,10 +234,12 @@ function validateForm(callback) {
   event.preventDefault()
   const form = event.target.form
   let path = "";
+  let redir = "";
   if (event.target.dataset.path) path = event.target.dataset.path;
+  if (event.target.dataset.redir) redir = event.target.dataset.redir;
   const isValid = form.checkValidity()
   if (!isValid) return
-  callback(form, path);
+  callback(form, path, redir);
 }
 
 async function postItem(form, path) {
@@ -298,7 +300,7 @@ async function updateItem(form, path) {
   handleResponse(conn, resp);
 }
 
-async function deleteItem(form, path) {
+async function deleteItem(form, path, redir) {
   const id = form.id.value;
 
   const conn = await fetch(`/api/v1/${path}/${id}`, {
@@ -313,6 +315,7 @@ async function deleteItem(form, path) {
   }
 
   // Success
+  if (redir) return window.location.href = `/${redir}`
   toggleDeleteModal();
   spa(`/${path}`);
 }
