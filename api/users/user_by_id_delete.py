@@ -36,10 +36,12 @@ def _(user_id):
         db = pymysql.connect(**var.DB_CONFIG)
         cursor = db.cursor()
 
-        # Admins can only delete users within bar
-        if session["role_id"] == 2:
+        # Admins can only delete other users within bar where access_count = 1
+        if session["role_id"] == 2 and session["user_id"] != user_id:
             cursor.execute("""
-            SELECT bar_id FROM users_list
+            SELECT users_list.bar_id, COUNT(bar_access.fk_bar_id) AS access_count
+            FROM users_list
+            JOIN bar_access ON fk_user_id = user_id
             WHERE user_id = %s
             AND bar_id = %s
             LIMIT 1
@@ -47,6 +49,8 @@ def _(user_id):
             user = cursor.fetchone()
             if not user:
                 g.respond(204)
+            if user["access_count"] > 1:
+                return g.request(401)
 
         cursor.execute("""
             DELETE FROM users 

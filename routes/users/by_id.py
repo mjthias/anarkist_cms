@@ -68,12 +68,10 @@ def _(search_user_id):
 
         # User deleteable?
         user["deletable"] = False
-        if session["role_id"] == 1:
+        if session["role_id"] == 1 or search_user_id == user_id:
             user["deletable"] = True
-        else:
-            for bar in bar_access:
-                if bar["bar_id"] == session["bar_id"]:
-                    user["deletable"] = True
+        elif session["role_id"] == 2 and len(bar_access) == 1 and bar_access[0]["bar_id"] == session["bar_id"]:
+            user["deletable"] = True
 
         return dict(
                 user = user,
