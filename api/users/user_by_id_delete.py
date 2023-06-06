@@ -50,7 +50,7 @@ def _(user_id):
             if not user:
                 g.respond(204)
             if user["access_count"] > 1:
-                return g.request(401)
+                return g.respond(401)
 
         cursor.execute("""
             DELETE FROM users 

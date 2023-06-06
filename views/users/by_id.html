@@ -134,7 +134,9 @@
                 % end
             </div>
         </form>
-        % if user["user_id"] == session["user_id"] or session["role_id"] != 3:
+        % if user["user_id"] == session["user_id"]:
+            % include("components/deletion_form", id=user['user_id'], callBack='validateForm(deleteItem)', path='users', redir='sign-in')
+        % elif session["role_id"] != 3:
             % include("components/deletion_form", id=user['user_id'], callBack='validateForm(deleteItem)', path='users')
         % end
     </section>
