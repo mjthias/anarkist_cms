@@ -21,7 +21,7 @@ def _(search_user_id):
 
         # role = staffs can only access their own user
         if role_id == 3 and user_id != search_user_id:
-            return redirect("/")
+            return g.error_view(401)
 
     except Exception as ex:
         print(str(ex))
