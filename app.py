@@ -6,7 +6,7 @@ from utils import g
 ##############################
 
 # API
-import api.sessions.session_post
+import api.sessions.post
 import api.sessions.location_post
 import api.users.users_get
 import api.users.user_post
