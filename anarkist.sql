@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:8889
--- Generation Time: Jun 01, 2023 at 07:20 AM
+-- Generation Time: Jun 09, 2023 at 04:28 PM
 -- Server version: 5.7.39
 -- PHP Version: 8.2.0
 
@@ -109,22 +109,14 @@ LIMIT _offset,_limit$$
 
 CREATE DEFINER=`anarkist`@`%` PROCEDURE `insert_session` (IN `_user_id` BIGINT UNSIGNED, IN `_session_iat` INT UNSIGNED)   BEGIN
 
-IF (SELECT COUNT(*) FROM sessions
-WHERE sessions.fk_user_id = _user_id) = 0
-
-THEN
-INSERT INTO sessions (fk_user_id, session_iat)
-VALUES (_user_id, _session_iat);
-
-ELSE
-UPDATE sessions
-SET session_iat = _session_iat
+DELETE FROM sessions
 WHERE fk_user_id = _user_id;
 
-END IF;
+INSERT INTO sessions (session_iat, fk_user_id)
+VALUES (_session_iat, _user_id);
 
-SELECT session_id FROM sessions
-WHERE fk_user_id = _user_id;
+SELECT LAST_INSERT_ID() as session_id;
+
 END$$
 
 CREATE DEFINER=`anarkist`@`%` PROCEDURE `insert_tap` (IN `_is_off_wall` BOOLEAN, IN `_beer_id` BIGINT UNSIGNED, IN `_bar_id` BIGINT UNSIGNED)   BEGIN
@@ -187,11 +179,28 @@ CREATE TABLE `bar_access` (
 --
 
 INSERT INTO `bar_access` (`fk_bar_id`, `fk_user_id`) VALUES
-(1, 2),
-(2, 2),
-(1, 3),
-(1, 21),
-(2, 26);
+(1, 23),
+(1, 24),
+(2, 24);
+
+--
+-- Triggers `bar_access`
+--
+DELIMITER $$
+CREATE TRIGGER `delete_user_if_acceess_is_zero` AFTER DELETE ON `bar_access` FOR EACH ROW BEGIN
+    DECLARE user_count BIGINT UNSIGNED;
+    
+    SELECT COUNT(*) INTO user_count
+    FROM bar_access
+    WHERE fk_user_id = OLD.fk_user_id;
+    
+    IF user_count = 0 THEN
+        DELETE FROM users 
+        WHERE user_id = OLD.fk_user_id;
+    END IF;
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -222,12 +231,37 @@ CREATE TABLE `beers` (
 --
 
 INSERT INTO `beers` (`beer_id`, `beer_name`, `fk_brewery_id`, `beer_ebc`, `beer_ibu`, `beer_alc`, `fk_beer_style_id`, `beer_price`, `beer_image`, `beer_description_en`, `beer_description_dk`, `beer_created_at`, `fk_beer_created_by`, `beer_updated_at`, `fk_beer_updated_by`) VALUES
-(1, 'American Haze', 1, '9', '20', '4.00', 2, 55, '824c0c05-120b-49b4-9661-85f5bc7b74f3.png', '', '', 1683627451, 3, 1685347082, 1),
-(2, 'Great Grandpa', 2, '50', '15', '5.20', 1, 75, '', 'Very nice beer', 'Rigtig god øl', 1683627451, 2, 1683627451, 2),
-(3, 'Bloody Weizen', 1, '12', '15', '5.20', 4, 55, 'c5702bd9-ff51-4c54-8c4c-b3cbea83d1e2.png', 'Hybrid wheatbeer with blood orange', 'Hybrid hvedeøl med blodappelsin', 1684620260, 1, 1684620260, 1),
-(4, 'Juicy Galaxy', 1, '17', '65', '7.50', 5, 55, 'cd41ae18-bfa3-41e7-8cb2-15e0f6c047a0.png', '', '', 1684621341, 1, 1684664585, 2),
-(9, 'Mojnerfucker', 2, '', '50', '10.00', 10, 85, '', '', '', 1685028684, 1, 1685028684, 1),
-(14, 'Motueka Lager', 1, '10', '40', '5.20', 14, 55, '31f423f4-c6eb-420a-ba96-09fea6c99b1a.png', '', '', 1685296121, 1, 1685538758, 1);
+(123, 'Fizzy Lime Fusion', 59, '12', '15', '5.00', 75, 55, 'd2db70d4-4adb-4109-aeac-436bd4661aaf.jpeg', 'Sweetness and acidity in perfect balance with a clear taste of lychee and lime, but without losing the character of beer. Full-bodied, mouth-watering and refreshingly acidic with a light finishing bitterness.', 'Sødme og syre i perfekt balance med klar smag af lychee og lime, dog uden at miste karatér af øl. Fyldig, læskende og forfriskende syrlig med en let afsluttende bitterhed.', 1685380959, 22, 1685610302, 22),
+(124, 'Mighty Mild Ale', 59, '30', '30', '0.50', 138, 55, '47982e34-3ef6-475e-93cc-ca96a2f6c810.jpeg', 'A malt-driven beer with notes of grain, caramel, toast and fruitiness from the rye. A beer with a full body, a hint of sweetness and mild carbonation.', 'En maltdrevet øl med noter af korn, karamel, ristet brød og frugtighed fra rugen. En øl med en fyldig krop, en anelse sødme og mild karbonering.', 1685381706, 22, 1685381706, 22),
+(125, 'Pina Colada Milkshake IPA', 59, '12', '25', '6.70', 139, 65, '453c45e6-9b0d-45f6-9872-b4587293dfa3.jpeg', 'Explosion of vanilla and pineapple balanced with a light bitterness and high sweetness. A full-bodied, mouth-watering, satiating and lush beer.', 'Eksplosion af vanilje og ananas balanceret med en let bitterhed og høj sødme. En fyldig, læskende, mættende og frodig øl.', 1685382011, 22, 1685382035, 22),
+(126, 'Red Noses', 59, '35', '25', '5.50', 89, 55, '71953751-8ca5-46a6-addd-ed148e7bdbce.jpeg', 'This year we are making a Christmas beer in a more classic sense, created to match the Danish Christmas food. However, we have kept the anarchist twist. We\'ve done that by giving this rye-based Red Ale a shot of cranberry. The use of rye is as if created to accompany rye bread, and the general malt and hop composition means that this beer is going to be absolutely perfect for the Danish Christmas meal.', 'I år laver vi en juleøl i mere klassisk forstand, skabt til at passe til den danske julemad. Vi har dog bevaret det anarkistiske twist. Det har vi gjort ved at give denne rug baserede Red Ale et skud tranebær. Brugen af rug er som skabt til at ledsage rugbrød, og den generelle malt og humlesammensætning gør, at denne øl, kommer til at være helt perfekt til den danske julemad.', 1685382260, 22, 1685382260, 22),
+(127, 'Expelled Club 27 Member', 60, '30', '20', '9.20', 76, 75, '4d1fa4e0-2475-419d-8ed4-a6fdf5ef54a3.jpeg', 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English.', 'Det er en kendsgerning, at man bliver distraheret af læsbart indhold på en side, når man betragter dens layout. Meningen med at bruge Lorem Ipsum er, at teksten indeholder mere eller mindre almindelig tekstopbygning i modsætning til Tekst her - og mere tekst her, mens det samtidigt ligner almindelig tekst', 1685382950, 22, 1686300334, 22),
+(128, 'Heineken', 65, '10', '5', '5.00', 96, 50, NULL, 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English.', 'Det er en kendsgerning, at man bliver distraheret af læsbart indhold på en side, når man betragter dens layout. Meningen med at bruge Lorem Ipsum er, at teksten indeholder mere eller mindre almindelig tekstopbygning i modsætning til Tekst her - og mere tekst her, mens det samtidigt ligner almindelig tekst', 1685383170, 22, 1686300493, 22),
+(129, 'Weiss Dragon', 60, '15', '20', '5.20', 75, 55, '15717f63-afcc-409a-a32e-c045a4b2d8a2.jpeg', 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English.', 'Det er en kendsgerning, at man bliver distraheret af læsbart indhold på en side, når man betragter dens layout. Meningen med at bruge Lorem Ipsum er, at teksten indeholder mere eller mindre almindelig tekstopbygning i modsætning til Tekst her - og mere tekst her, mens det samtidigt ligner almindelig tekst', 1685384007, 22, 1686301271, 22),
+(130, 'Ginger Pale Ale', 59, '18', '35', '5.00', 107, 55, 'c634d4a7-c3d8-4f7b-af27-73b08de5847a.jpeg', 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English.', 'Det er en kendsgerning, at man bliver distraheret af læsbart indhold på en side, når man betragter dens layout. Meningen med at bruge Lorem Ipsum er, at teksten indeholder mere eller mindre almindelig tekstopbygning i modsætning til Tekst her - og mere tekst her, mens det samtidigt ligner almindelig tekst', 1685384120, 22, 1686301307, 22),
+(131, 'Juicy Galaxy', 59, '40', '20', '6.40', 74, 55, 'd4a30a21-dc30-49fb-8aee-ba8144fcf049.jpeg', 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English.', 'Det er en kendsgerning, at man bliver distraheret af læsbart indhold på en side, når man betragter dens layout. Meningen med at bruge Lorem Ipsum er, at teksten indeholder mere eller mindre almindelig tekstopbygning i modsætning til Tekst her - og mere tekst her, mens det samtidigt ligner almindelig tekst', 1685384187, 22, 1686305748, 22),
+(132, 'Organic Pilsner', 64, NULL, NULL, '4.60', 77, 50, NULL, NULL, NULL, 1685384704, 22, 1686301081, 22),
+(133, 'Organic Classic', 64, NULL, NULL, '5.70', 96, 50, NULL, NULL, NULL, 1685384733, 22, 1686300972, 22),
+(134, 'Resting Brew Face', 62, '20', '25', '7.60', 98, 65, '65489303-a8b3-48f8-ba71-69a6007c9f99.jpeg', 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English.', 'Det er en kendsgerning, at man bliver distraheret af læsbart indhold på en side, når man betragter dens layout. Meningen med at bruge Lorem Ipsum er, at teksten indeholder mere eller mindre almindelig tekstopbygning i modsætning til Tekst her - og mere tekst her, mens det samtidigt ligner almindelig tekst', 1685386378, 22, 1686305916, 22),
+(135, 'Beer Geek Breakfast', 62, '20', '25', '7.50', 76, 75, 'd363e669-b81d-4f97-99ad-6d6e747eb8e3.jpeg', 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English.', 'Det er en kendsgerning, at man bliver distraheret af læsbart indhold på en side, når man betragter dens layout. Meningen med at bruge Lorem Ipsum er, at teksten indeholder mere eller mindre almindelig tekstopbygning i modsætning til Tekst her - og mere tekst her, mens det samtidigt ligner almindelig tekst', 1685386473, 22, 1686305784, 22),
+(136, 'Revision', 60, '20', '10', '6.40', 82, 65, '412660ad-0c38-4356-9b2d-9a8fefe4635e.jpeg', 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English.', 'Det er en kendsgerning, at man bliver distraheret af læsbart indhold på en side, når man betragter dens layout. Meningen med at bruge Lorem Ipsum er, at teksten indeholder mere eller mindre almindelig tekstopbygning i modsætning til Tekst her - og mere tekst her, mens det samtidigt ligner almindelig tekst', 1685386652, 22, 1686305801, 22),
+(137, 'Beer Geek Brunch', 62, '10', '35', '10.60', 76, 80, 'd9845512-9c03-412c-b51d-bc906dc3fd0b.jpeg', 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English.', 'Det er en kendsgerning, at man bliver distraheret af læsbart indhold på en side, når man betragter dens layout. Meningen med at bruge Lorem Ipsum er, at teksten indeholder mere eller mindre almindelig tekstopbygning i modsætning til Tekst her - og mere tekst her, mens det samtidigt ligner almindelig tekst', 1685386968, 22, 1686305840, 22),
+(138, 'Passion Pool', 62, '10', '15', '6.60', 83, 70, 'b7b6acee-7c2a-4b24-86da-3dbb5a796279.jpeg', 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English.', 'Det er en kendsgerning, at man bliver distraheret af læsbart indhold på en side, når man betragter dens layout. Meningen med at bruge Lorem Ipsum er, at teksten indeholder mere eller mindre almindelig tekstopbygning i modsætning til Tekst her - og mere tekst her, mens det samtidigt ligner almindelig tekst', 1685387039, 22, 1686301324, 22),
+(139, 'CPHaze', 61, '30', '50', '6.50', 75, 60, '3355a444-fe0c-494f-ae26-180fc9a974c0.jpeg', 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English.', 'Det er en kendsgerning, at man bliver distraheret af læsbart indhold på en side, når man betragter dens layout. Meningen med at bruge Lorem Ipsum er, at teksten indeholder mere eller mindre almindelig tekstopbygning i modsætning til Tekst her - og mere tekst her, mens det samtidigt ligner almindelig tekst', 1685387097, 22, 1686305861, 22),
+(141, 'All My Friends Are Dead', 60, '5', '10', '11.20', 105, 80, 'aa78dcea-c824-4e78-8d4b-614f32720466.jpeg', 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English.', 'Det er en kendsgerning, at man bliver distraheret af læsbart indhold på en side, når man betragter dens layout. Meningen med at bruge Lorem Ipsum er, at teksten indeholder mere eller mindre almindelig tekstopbygning i modsætning til Tekst her - og mere tekst her, mens det samtidigt ligner almindelig tekst', 1685387361, 22, 1686310103, 22),
+(143, 'Mosaic IPA', 118, '20', '45', '5.70', 72, 55, NULL, 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English.', 'Det er en kendsgerning, at man bliver distraheret af læsbart indhold på en side, når man betragter dens layout. Meningen med at bruge Lorem Ipsum er, at teksten indeholder mere eller mindre almindelig tekstopbygning i modsætning til Tekst her - og mere tekst her, mens det samtidigt ligner almindelig tekst', 1686306088, 22, 1686306088, 22),
+(144, 'Motueka Lager', 59, '10', '40', '5.50', 96, 55, '8cf6986c-a052-4d5a-b269-8a624ba37f39.jpeg', 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English.', 'Det er en kendsgerning, at man bliver distraheret af læsbart indhold på en side, når man betragter dens layout. Meningen med at bruge Lorem Ipsum er, at teksten indeholder mere eller mindre almindelig tekstopbygning i modsætning til Tekst her - og mere tekst her, mens det samtidigt ligner almindelig tekst', 1686306157, 22, 1686308927, 22),
+(145, 'Brown Ale', 59, '70', '25', '6.30', 141, 55, '822be5a2-cd9f-442f-a642-1d154c411110.jpeg', 'Det er en kendsgerning, at man bliver distraheret af læsbart indhold på en side, når man betragter dens layout. Meningen med at bruge Lorem Ipsum er, at teksten indeholder mere eller mindre almindelig tekstopbygning i modsætning til Tekst her - og mere tekst her, mens det samtidigt ligner almindelig tekst', 'Det er en kendsgerning, at man bliver distraheret af læsbart indhold på en side, når man betragter dens layout. Meningen med at bruge Lorem Ipsum er, at teksten indeholder mere eller mindre almindelig tekstopbygning i modsætning til Tekst her - og mere tekst her, mens det samtidigt ligner almindelig tekst', 1686306264, 22, 1686308684, 22),
+(146, 'Vacation Forever', 59, '11', '60', '6.30', 142, 55, 'ba296d69-dc04-467a-a7f0-c0bdb43c7d3b.jpeg', 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English.', 'Det er en kendsgerning, at man bliver distraheret af læsbart indhold på en side, når man betragter dens layout. Meningen med at bruge Lorem Ipsum er, at teksten indeholder mere eller mindre almindelig tekstopbygning i modsætning til Tekst her - og mere tekst her, mens det samtidigt ligner almindelig tekst', 1686306439, 22, 1686309415, 22),
+(147, 'Bloody Weizen', 59, '12', '15', '5.20', 143, 55, '12889176-7297-45f2-983a-f0e10b8e5e9d.jpeg', 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English.', 'Det er en kendsgerning, at man bliver distraheret af læsbart indhold på en side, når man betragter dens layout. Meningen med at bruge Lorem Ipsum er, at teksten indeholder mere eller mindre almindelig tekstopbygning i modsætning til Tekst her - og mere tekst her, mens det samtidigt ligner almindelig tekst', 1686306568, 22, 1686309045, 22),
+(148, 'Great Grandpa', 60, '10', '25', '5.90', 144, 65, '58e63ef0-9beb-4d0e-8cec-94ee7a00cec9.png', 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English.', 'Det er en kendsgerning, at man bliver distraheret af læsbart indhold på en side, når man betragter dens layout. Meningen med at bruge Lorem Ipsum er, at teksten indeholder mere eller mindre almindelig tekstopbygning i modsætning til Tekst her - og mere tekst her, mens det samtidigt ligner almindelig tekst', 1686306618, 22, 1686309204, 22),
+(149, 'Into the Black', 72, '150', '70', '7.00', 145, 60, 'bb61d416-4666-41b8-a38a-57820ef4bfd1.jpeg', 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English.', 'Det er en kendsgerning, at man bliver distraheret af læsbart indhold på en side, når man betragter dens layout. Meningen med at bruge Lorem Ipsum er, at teksten indeholder mere eller mindre almindelig tekstopbygning i modsætning til Tekst her - og mere tekst her, mens det samtidigt ligner almindelig tekst', 1686306755, 22, 1686309598, 22),
+(150, 'Tro Håb og Kærlighed', 119, '20', '25', '3.90', 146, 75, '9bbcf888-2b8c-4990-b09e-1ffe8e47ba29.jpeg', 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English.', 'Det er en kendsgerning, at man bliver distraheret af læsbart indhold på en side, når man betragter dens layout. Meningen med at bruge Lorem Ipsum er, at teksten indeholder mere eller mindre almindelig tekstopbygning i modsætning til Tekst her - og mere tekst her, mens det samtidigt ligner almindelig tekst', 1686306822, 22, 1686309816, 22),
+(151, 'Double', 120, '65', '21', '6.80', 147, 55, 'aef31dbe-83dc-4bdf-ab6a-95e36505099a.jpeg', 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English.', 'Det er en kendsgerning, at man bliver distraheret af læsbart indhold på en side, når man betragter dens layout. Meningen med at bruge Lorem Ipsum er, at teksten indeholder mere eller mindre almindelig tekstopbygning i modsætning til Tekst her - og mere tekst her, mens det samtidigt ligner almindelig tekst', 1686306924, 22, 1686309764, 22),
+(152, 'Blonde', 120, '11', '24', '6.80', 117, 55, '8cecd082-d4d4-4c21-bb8d-3d36bbe61adb.jpeg', 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English.', 'Det er en kendsgerning, at man bliver distraheret af læsbart indhold på en side, når man betragter dens layout. Meningen med at bruge Lorem Ipsum er, at teksten indeholder mere eller mindre almindelig tekstopbygning i modsætning til Tekst her - og mere tekst her, mens det samtidigt ligner almindelig tekst', 1686307022, 22, 1686309786, 22),
+(153, 'Mumbo Jumbo #1', 66, '12', '20', '6.00', 148, 85, '86612bdb-2c3f-48e4-810c-410dfc35ab1e.jpeg', 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English.', 'Det er en kendsgerning, at man bliver distraheret af læsbart indhold på en side, når man betragter dens layout. Meningen med at bruge Lorem Ipsum er, at teksten indeholder mere eller mindre almindelig tekstopbygning i modsætning til Tekst her - og mere tekst her, mens det samtidigt ligner almindelig tekst', 1686307122, 22, 1686309675, 22),
+(154, 'Red Rye', 59, '35', '65', '7.30', 149, 85, '00130b5e-8ffa-44bc-a66b-f6979f05672c.jpeg', 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English.', 'Det er en kendsgerning, at man bliver distraheret af læsbart indhold på en side, når man betragter dens layout. Meningen med at bruge Lorem Ipsum er, at teksten indeholder mere eller mindre almindelig tekstopbygning i modsætning til Tekst her - og mere tekst her, mens det samtidigt ligner almindelig tekst', 1686307226, 22, 1686309927, 22),
+(155, 'Kölsch-style Ale', 59, '8', '28', '4.80', 150, 55, 'f6349937-6c88-42bf-870b-acb0634aff42.jpeg', 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English.', 'Det er en kendsgerning, at man bliver distraheret af læsbart indhold på en side, når man betragter dens layout. Meningen med at bruge Lorem Ipsum er, at teksten indeholder mere eller mindre almindelig tekstopbygning i modsætning til Tekst her - og mere tekst her, mens det samtidigt ligner almindelig tekst', 1686307301, 22, 1686309904, 22);
 
 -- --------------------------------------------------------
 
@@ -274,20 +308,81 @@ CREATE TABLE `beer_styles` (
 --
 
 INSERT INTO `beer_styles` (`beer_style_id`, `beer_style_name`) VALUES
-(18, 'Black IPA'),
-(11, 'Blonde'),
-(5, 'Double IPA'),
-(13, 'Gose'),
-(2, 'Hazy IPA'),
-(1, 'IPA'),
-(14, 'Lager'),
-(6, 'New England IPA'),
-(17, 'Pilsner'),
-(3, 'Sour'),
-(12, 'Stout'),
-(10, 'Triple IPA'),
-(4, 'Weissbier'),
-(15, 'West Coast IPA');
+(88, 'Ale'),
+(130, 'Amber Ale'),
+(106, 'Amercian Style Cream Ale'),
+(103, 'American Amber Ale'),
+(116, 'American Barley Wine'),
+(134, 'American Lager'),
+(99, 'American Pale Ale'),
+(86, 'American Wild Ale'),
+(119, 'Baltic Porter'),
+(117, 'Belgian Blond Ale'),
+(147, 'Belgian Double'),
+(81, 'Berliner Weisse'),
+(128, 'Bière de garde'),
+(120, 'Bitter'),
+(124, 'Black IPA'),
+(108, 'Blonde Ale'),
+(141, 'Brown Ale'),
+(109, 'California Common'),
+(125, 'Cask Ale'),
+(111, 'Chocolate Beer'),
+(110, 'Coffee Beer'),
+(123, 'Cream Ale'),
+(98, 'Dobbelbock'),
+(127, 'Dortmunder Export'),
+(76, 'Double IPA'),
+(136, 'Dubbel'),
+(104, 'English Style Brown Ale'),
+(93, 'Framboise'),
+(114, 'Fruit Lambic'),
+(148, 'Fruited Goose'),
+(146, 'Fruited Sour'),
+(100, 'German Style Dunkel'),
+(90, 'Gose'),
+(118, 'Grodziskie'),
+(91, 'Gueuze'),
+(75, 'Hazy IPA'),
+(144, 'Hazy NEIPA'),
+(112, 'Honey Beer'),
+(137, 'Imperial Stout'),
+(72, 'IPA'),
+(74, 'Juicy IPA'),
+(87, 'Kettle Sour'),
+(95, 'Kölsch'),
+(150, 'Kölsch-ish'),
+(135, 'Kriek Lambic'),
+(96, 'Lager'),
+(94, 'Lambic'),
+(126, 'Märzen'),
+(138, 'Mild Ale'),
+(139, 'Milkshake IPA'),
+(80, 'New England IPA'),
+(129, 'Oatmeal Stout'),
+(107, 'Pale Ale'),
+(97, 'Pale Lager'),
+(77, 'Pilsner'),
+(78, 'Porter'),
+(115, 'Pumpkin Beer'),
+(133, 'Rauchbier'),
+(89, 'Red Ale'),
+(149, 'Red Rye Ale'),
+(92, 'Saison'),
+(122, 'Schwarzbier'),
+(132, 'Scotch Ale'),
+(73, 'Session IPA'),
+(79, 'Smoke Porter'),
+(83, 'Sour'),
+(82, 'Sour IPA'),
+(105, 'Stout'),
+(131, 'Sweet Stout'),
+(145, 'US style Black IPA'),
+(140, 'Weissbier'),
+(143, 'Weizen'),
+(121, 'Weizenbock'),
+(142, 'West Coast IPA'),
+(113, 'Witbier');
 
 -- --------------------------------------------------------
 
@@ -306,16 +401,67 @@ CREATE TABLE `breweries` (
 --
 
 INSERT INTO `breweries` (`brewery_id`, `brewery_name`, `brewery_menu_name`) VALUES
-(1, 'Anarkist', 'Anarkist'),
-(2, 'Too Old To Die Young', 'TOTDY'),
-(4, 'People Like Us', 'People Like Us'),
-(5, 'Ugly Duck Brewing Company', 'Ugly Duck Brewing Co.'),
-(10, 'Aaben', 'Aaben'),
-(11, 'Royal', 'Royal'),
-(12, 'Heineken', 'Heineken'),
-(13, 'To Øl', 'To Øl'),
-(15, 'Edelweiss', 'Edelweiss'),
-(16, 'Amager Bryghus', 'Amager Bryghus');
+(59, 'Anarkist', 'Anarkist'),
+(60, 'Too Old To Die Young', 'TOTDY'),
+(61, 'To Øl', 'To Øl'),
+(62, 'Mikkeller', 'Mikkeller'),
+(63, 'Warpigs', 'Warpigs'),
+(64, 'Royal', 'Royal'),
+(65, 'Heineken', 'Heineken'),
+(66, 'Aaben', 'Aaben'),
+(67, 'Hancock', 'Hancock'),
+(68, 'Baghaven', 'Baghaven'),
+(69, 'Carlsberg', 'Carlsberg'),
+(70, 'Tuborg', 'Tuborg'),
+(71, 'Thisted Bryghus', 'Thisted Bryghus'),
+(72, 'Kissmeyer', 'Kissmeyer'),
+(73, 'Aarhus Bryghus', 'Aarhus Bryghus'),
+(74, 'Ugly Duck', 'Ugly Duck'),
+(75, 'Sour Feet', 'Sour Feet'),
+(76, 'Pleasanti Street', 'Pleasanti Street'),
+(77, 'Y Not Brewing', 'Y Not Brewing'),
+(78, 'Baghaven Brewing and Blending', 'BBB'),
+(79, 'Penyllan', 'Penyllan'),
+(80, 'Copenhagen Mead Company', 'CPC'),
+(82, 'Alefarm Brewing', 'Alefarm Brewing'),
+(83, 'Observatoriet', 'Observatoriet'),
+(84, 'Gamma', 'Gamma'),
+(85, 'The Many Worlds', 'The Many Worlds'),
+(86, 'Ghost Brewing', 'Ghost Brewing'),
+(87, 'Bicycle Brewing', 'Bicycle Brewing'),
+(88, 'Mad Viking', 'Mad Viking'),
+(89, 'Caleidoskope', 'Caleidoskope'),
+(90, 'Brewsketeers', 'Brewsketeers'),
+(91, 'Hornbeer', 'Hornbeer'),
+(92, 'Bad Seed Brewing', 'Bad Seed Brewing'),
+(93, 'Two Heads Behind', 'Two Heads Behind'),
+(94, 'Strange Weather', 'Strange Weather'),
+(95, 'Christiania Bryghus', 'Christiania Bryghus'),
+(96, 'Flying Couch Brewing', 'Flying Couch Brewing'),
+(97, 'Slowburn Brewing Co-op', 'Slowburn Brewing Co-op'),
+(98, 'Det Gamle Hundebad', 'Det Gamle Hundebad'),
+(99, 'Beer Here', 'Beer Here'),
+(100, 'Kasper Brew Co.', 'Kasper Brew Co.'),
+(101, 'Ebeltoft Gårdbryggeri', 'Ebeltoft Gårdbryggeri'),
+(102, 'Rockabilly Brew', 'Rockabilly Brew'),
+(103, 'Det Lille Bryggeri', 'Det Lille Bryggeri'),
+(104, 'Fanø Bryghus', 'Fanø Bryghus'),
+(105, 'Pips Meadery', 'Pips Meadery'),
+(106, 'Willow Park Brewing', 'Willow Park Brewing'),
+(107, 'nebuleus', 'nebuleus'),
+(108, 'Side Project Brewing', 'Side Project Brewing'),
+(109, 'Mindful Ales', 'Mindful Ales'),
+(110, 'Smooj', 'Smooj'),
+(111, 'Troon Brewing', 'Troon Brewing'),
+(112, 'Manic Meadery', 'Manic Meadery'),
+(113, 'Freak Folk Bier', 'Freak Folk Bier'),
+(114, 'CLAG Brewing Company', 'CLAG Brewing Company'),
+(115, 'Wax Wings', 'Wax Wings'),
+(116, 'Ceiba', 'Ceiba'),
+(117, 'de Garde Brewing', 'de Garde Brewing'),
+(118, 'Albani', 'Albani'),
+(119, 'Løkken Bryghus', 'Løkken Bryghus'),
+(120, 'Affligem', 'Affligem');
 
 -- --------------------------------------------------------
 
@@ -370,7 +516,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`session_id`, `fk_user_id`, `session_iat`) VALUES
-(155, 1, 1685550069);
+(205, 22, 1686314078);
 
 -- --------------------------------------------------------
 
@@ -391,24 +537,49 @@ CREATE TABLE `taps` (
 --
 
 INSERT INTO `taps` (`tap_id`, `tap_number`, `fk_beer_id`, `fk_bar_id`, `tap_unavailable`) VALUES
-(14, 1, 2, 2, 0),
-(19, 1, 1, 1, 0),
-(20, NULL, 1, 1, 0),
-(24, NULL, 2, 1, 0),
-(30, NULL, 1, 1, 0),
-(31, 2, 14, 1, 0),
-(32, 3, 1, 1, 0),
-(33, NULL, 1, 2, 0),
-(34, 2, 1, 2, 0),
-(35, 4, 1, 1, 0),
-(36, NULL, 1, 1, 0),
-(37, 5, 1, 1, 0),
-(38, 6, 1, 1, 0),
-(40, 7, 1, 1, 0),
-(41, 8, 14, 1, 0),
-(42, 3, 14, 2, 0),
-(43, 4, 4, 2, 0),
-(44, 9, 1, 1, 0);
+(57, 1, 143, 1, 0),
+(59, 2, 144, 1, 0),
+(60, 3, 145, 1, 0),
+(61, 4, 146, 1, 0),
+(62, 5, 147, 1, 0),
+(63, 6, 148, 1, 0),
+(64, 7, 149, 1, 1),
+(65, 8, 150, 1, 0),
+(66, 9, 151, 1, 0),
+(67, 10, 152, 1, 0),
+(68, 11, 153, 1, 0),
+(69, 12, 131, 1, 0),
+(70, 13, 154, 1, 0),
+(72, NULL, 128, 1, 0),
+(75, NULL, 132, 1, 0),
+(76, 14, 155, 1, 0),
+(77, 15, 126, 1, 0),
+(78, 16, 138, 1, 0),
+(80, 17, 141, 1, 0),
+(93, 18, 123, 1, 0),
+(94, 19, 139, 1, 0),
+(95, 20, 125, 1, 0),
+(96, 21, 134, 1, 0),
+(97, 22, 136, 1, 0),
+(98, 23, 130, 1, 0),
+(99, 24, 127, 1, 0),
+(100, 25, 137, 1, 0),
+(101, 26, 135, 1, 0),
+(102, NULL, 133, 1, 0),
+(103, NULL, 128, 2, 0),
+(104, NULL, 133, 2, 0),
+(105, NULL, 132, 2, 0),
+(106, NULL, 143, 2, 0),
+(107, 1, 123, 2, 0),
+(108, 2, 145, 2, 0),
+(109, 3, 141, 2, 0),
+(110, 4, 149, 2, 0),
+(111, 5, 131, 2, 0),
+(112, 6, 138, 2, 0),
+(113, 7, 154, 2, 0),
+(114, 8, 150, 2, 0),
+(115, 9, 135, 2, 0),
+(116, 10, 137, 2, 0);
 
 -- --------------------------------------------------------
 
@@ -463,11 +634,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `user_email`, `user_name`, `user_password`, `fk_user_role_id`) VALUES
-(1, 'super@user.dk', 'Super user', '$2b$12$mcZKnS0.O9TtbUXSQSWqv.A2EWofo3mC740IXRWRc1g3AEH3pGEGe', 1),
-(2, 'bar@admin.dk', 'Bar admin', '$2b$12$mcZKnS0.O9TtbUXSQSWqv.A2EWofo3mC740IXRWRc1g3AEH3pGEGe', 2),
-(3, 'bar@staff.dk', 'Bar staff', '$2b$12$mcZKnS0.O9TtbUXSQSWqv.A2EWofo3mC740IXRWRc1g3AEH3pGEGe', 3),
-(21, 'test@test.dk', 'test', '$2b$12$vja/VumOmsT5DhT9ro3abu0pYPuu6KIka9Mr8BU4mCV5Bt/ObmPfi', 3),
-(26, 'math@jens.dk', 'Mathias Dahl Jensen', '$2b$12$oZBUfnDzLx9u3nxXS4.dlOiUnn1uziFzXEYvGEttXIxTXt2ehCRtK', 3);
+(22, 'super@user.dk', 'Morthias Gross Dahl', '$2b$12$mcZKnS0.O9TtbUXSQSWqv.A2EWofo3mC740IXRWRc1g3AEH3pGEGe', 1),
+(23, 'bar@admin.dk', 'Mathias Gross', '$2b$12$SUwvvmTUM6mYVJTxynO6Be4JZ/Zrq5kUHYhVH2r0NoI7354u920Qa', 2),
+(24, 'bar@staff.dk', 'Morten Dahl', '$2b$12$CU9IZMYR1mTkMYxb3zxOfuLOGM2xUpRnoETHmNJQl6kRtW4PG4VLW', 3);
 
 -- --------------------------------------------------------
 
@@ -642,55 +811,55 @@ ALTER TABLE `user_roles`
 -- AUTO_INCREMENT for table `bars`
 --
 ALTER TABLE `bars`
-  MODIFY `bar_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `bar_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `beers`
 --
 ALTER TABLE `beers`
-  MODIFY `beer_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
+  MODIFY `beer_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=156;
 
 --
 -- AUTO_INCREMENT for table `beer_styles`
 --
 ALTER TABLE `beer_styles`
-  MODIFY `beer_style_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `beer_style_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=151;
 
 --
 -- AUTO_INCREMENT for table `breweries`
 --
 ALTER TABLE `breweries`
-  MODIFY `brewery_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `brewery_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=121;
 
 --
 -- AUTO_INCREMENT for table `ingredients`
 --
 ALTER TABLE `ingredients`
-  MODIFY `ingredient_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ingredient_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `pizzas`
 --
 ALTER TABLE `pizzas`
-  MODIFY `pizza_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `pizza_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `sessions`
 --
 ALTER TABLE `sessions`
-  MODIFY `session_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=156;
+  MODIFY `session_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=206;
 
 --
 -- AUTO_INCREMENT for table `taps`
 --
 ALTER TABLE `taps`
-  MODIFY `tap_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+  MODIFY `tap_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=117;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `user_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- Constraints for dumped tables
@@ -707,7 +876,7 @@ ALTER TABLE `bar_access`
 -- Constraints for table `beers`
 --
 ALTER TABLE `beers`
-  ADD CONSTRAINT `brewery_on_fk_brewery` FOREIGN KEY (`fk_brewery_id`) REFERENCES `breweries` (`brewery_id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `brewery_on_fk_brewery` FOREIGN KEY (`fk_brewery_id`) REFERENCES `breweries` (`brewery_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `set_null_user_on_created_by` FOREIGN KEY (`fk_beer_created_by`) REFERENCES `users` (`user_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `set_null_user_on_updated_by` FOREIGN KEY (`fk_beer_updated_by`) REFERENCES `users` (`user_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `style_on_fk_style` FOREIGN KEY (`fk_beer_style_id`) REFERENCES `beer_styles` (`beer_style_id`) ON UPDATE CASCADE;
