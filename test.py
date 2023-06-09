@@ -412,7 +412,7 @@ class UnitTest(unittest.TestCase):
             ("THIS IS A REALLY NICE BEER.", "THIS IS A REALLY NICE BEER."),
             ("Th1s 1s a r3ally n1ce b33r.", "Th1s 1s a r3ally n1ce b33r."),
             ("This sentence contains a ',' and also the apostrofe symbol.", "This sentence contains a ',' and also the apostrofe symbol."),
-            ("And this sentence contains a '-' and the apostrofe symbol.", "And this sentence contains a '-' and the apostrofe symbol.")
+            ("And this sentence contains a '-' and the apostrofe symbol. æøå", "And this sentence contains a '-' and the apostrofe symbol. æøå")
         ]
         for input, expected_value in cases:
             value, error = validate.description(input)

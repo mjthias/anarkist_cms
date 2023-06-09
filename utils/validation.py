@@ -362,7 +362,7 @@ def price(value):
 def description(value):
     if not value:
         return None, None
-    pattern = "^[a-zA-Z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$"
+    pattern = "^[a-zA-Z0-9àáâäãåæąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÆÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$"
     min_len = 2
     max_len = 500
     invalid_min_message = f"Description must be more than {min_len} characters."
