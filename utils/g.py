@@ -100,4 +100,8 @@ def format_price(value):
     if str(value)[seperator_index+1:] == "0":
         return format(value, ".0f")
     return format(value, ".2f")
+
+##############################
+def to_menu_name(value):
+    return value.replace("å", "aa").replace("Å", "Aa").replace("ø", "oe").replace("Ø", "Oe").replace("æ", "ae").replace("Æ", "Ae").replace("ö", "o").replace("Ö", "O")
     

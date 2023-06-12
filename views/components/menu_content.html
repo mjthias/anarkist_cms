@@ -1,3 +1,4 @@
+% from utils.g import to_menu_name as x
 % if taps[0]["tap_number"]:
 <div class="flex text-[1.5vw] mb-[0.5vw] text-[rgba(0,247,247)]">
     <p class="flex-[10] text-center">TAP</p>
@@ -22,11 +23,11 @@
             <div class="border-t-[0.25vw] border-[rgba(255,255,255,0.3)] border-dashed flex h-[10.8vw] items-center">
                 <p class="text-[4.6vw] w-[9vw] text-center text-[rgb(255,255,0)]">{{tap["tap_number"]}}</p>
                 <div class="pl-[1.2vw] w-full flex-1">
-                    <p class="text-[2.3vw]">{{tap["beer_name"]}}</p>
+                    <p class="text-[2.3vw]">{{x(tap["beer_name"])}}</p>
                     <div class="flex items-end">
                         <div class="flex-[47]">
-                            <p class="text-[1.5vw]">{{tap["beer_style_name"]}}</p>
-                            <p class="text-[1.5vw]">{{tap["brewery_menu_name"]}}</p>
+                            <p class="text-[1.5vw]">{{x(tap["beer_style_name"])}}</p>
+                            <p class="text-[1.5vw]">{{x(tap["brewery_menu_name"])}}</p>
                         </div>
                         <p class="flex-[10] text-[1.5vw] text-center">{{tap["beer_ebc"] or "-"}}</p>
                         <p class="flex-[10] text-[1.5vw] text-center">{{tap["beer_ibu"] or "-"}}</p>
@@ -57,7 +58,7 @@
         <div class="ml-[2vw] grid gap-[0.7vw] bg-[rgba(0,0,0,1)] p-[2vw] flex-1">
         % for tap in off_the_walls:
             <div class="flex text-[1.5vw]">
-                <p class="w-[52.37vw]">{{tap["beer_name"]}}</p>
+                <p class="w-[52.37vw]">{{x(tap["beer_name"])}}</p>
                 <p class="w-[14vw] text-right pr-[4vw]">{{tap["beer_alc"][:-1]}}%</p>
                 <p class="text-right">{{int(tap["beer_price"])}}</p>
             </div>
