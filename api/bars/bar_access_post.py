@@ -33,13 +33,13 @@ def _():
 
         # Select user to prevent role_id 1 in bar_access
         cursor.execute("""
-        SELECT fk_role_id FROM users
+        SELECT fk_user_role_id FROM users
         WHERE user_id = %s
         """, (user_id))
         user = cursor.fetchone()
         if not user:
             return g.respond(204)
-        if user["fk_role_id"] == 1:
+        if user["fk_user_role_id"] == 1:
             return g.respond(400, "Super users have access to all bars")
 
         # Post to DB
