@@ -23,10 +23,10 @@
     </div>  
 
     <script>
-        // setInterval(getTaps, 3000)
+        setInterval(getTaps, 3000)
         async function getTaps() {
             const conn = await fetch(location.pathname, {
-                headers: {as_chunk: true}
+                headers: {"as-chunk": true}
             })
             if (!conn.ok) return
             const html = await conn.text()
