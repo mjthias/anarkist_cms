@@ -35,4 +35,8 @@ NAME_MIN_LEN = 2
 NAME_MAX_LEN = 100
 
 # Image path
-IMAGE_PATH = "./static/images/"
+try:
+    import production
+    IMAGE_PATH = "src/static/images/"
+except:
+    IMAGE_PATH = "./static/images/"
